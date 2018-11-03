@@ -25,11 +25,11 @@ a {
 
 #container {
     padding: 10px;
-    width: 485px;
+    width: 440px;
 }
 
 #login {
-  width: 485px;
+  width: 440px;
   height: 100px;
 }
 
@@ -41,9 +41,7 @@ a {
     grid-template-columns: repeat(auto-fill, 85px);
     grid-template-rows: repeat(auto-fill, 115px);
     margin-bottom: 25px;
-    min-width: 0;
     padding: 20px;
-    width: 100%;
 }
 
 .cover {
@@ -59,6 +57,7 @@ a {
     background-color: rgba(var(--color-overlay), .7);
     height: 30%;
     width: 100%;
+    text-align: center;
     position: absolute;
     bottom: 0;
 }
@@ -66,10 +65,8 @@ a {
 .overlay-text {
     color: rgba(var(--color-text-bright), .91);
     padding: 8px;
-    text-align: center;
+    top: 5px;
     position: relative;
-    width: 100%;
-    font-size: 0.85rem;
 }
 
 .overlay-text .is-behind {
@@ -97,4 +94,16 @@ a {
     display: inline-flex;
     margin: 10px;
     padding: 10px 15px;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgb(var(--color-overlay));
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgb(var(--color-blue));
 }

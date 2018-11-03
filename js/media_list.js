@@ -25,7 +25,7 @@ const anilistCall = (query, variables, token) =>
       .then(viewerRes => viewerRes.json())
       .then(viewerRes => viewerRes.data.Viewer)
       .then(viewerRes => {
-        document.getElementById("login-name").insertAdjacentHTML("afterbegin", "Logged in as <a href='" + viewerRes.siteUrl + "'  target='_blank'>" + viewerRes.name + "</a>");
+        document.getElementById("login-name").insertAdjacentHTML("afterbegin", "Logged in as <a href='" + viewerRes.siteUrl + "' style='color:rgb(var(--color-text-bright));font-weight:bold;' target='_blank'>" + viewerRes.name + "</a>");
         handleList(viewerRes.id, accessToken);
       });
   }
