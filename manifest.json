@@ -1,0 +1,34 @@
+{
+  "name": "AniMouto",
+  "version": "1.0",
+  "description": "A little sister to enhance your AniList experience.",
+  "permissions": [
+    "storage",
+    "declarativeContent",
+    "identity",
+    "*://*.anilist.co/*"
+  ],
+  "background": {
+    "scripts": ["js/background.js"],
+    "persistent": false
+  },
+  "page_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "img/anilist_icon.png",
+      "32": "img/anilist_icon.png",
+      "48": "img/anilist_icon.png",
+      "128": "img/anilist_icon.png"
+    }
+  },
+  "icons": {
+    "16": "img/anilist_icon.png",
+    "32": "img/anilist_icon.png",
+    "48": "img/anilist_icon.png",
+    "128": "img/anilist_icon.png"
+  },
+  "web_accessible_resources": [
+    "/oauth2/*"
+  ],
+  "manifest_version": 2
+}
