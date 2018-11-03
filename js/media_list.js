@@ -31,20 +31,20 @@ const anilistCall = (query, variables, token) =>
   }
 
   function handleList(userId, token) {
-    anilistCall(anilistQuery, {
+    anilistCall(mediaListQuery, {
         user: userId
       }, token)
       .then(res => res.json())
       .then(res => {console.log(res); return res.data})
       .then(res => {
         let animeEntries = res.anime.lists[0].entries;
-        handleEntries("airing-anime", animeEntries.filter(entry => entry.media.nextAiringEpisode), (o1, o2) => o1.media.nextAiringEpisode.timeUntilAiring - o2.media.nextAiringEpisode.timeUntilAiring);
-        handleEntries("anime", animeEntries.filter(entry => !entry.media.nextAiringEpisode), (o1, o2) => o2.updatedAt - o1.updatedAt);
-        handleEntries("manga", res.manga.lists[0].entries, (o1, o2) => o2.updatedAt - o1.updatedAt);
+        handleEntries("airing-anime", animeEntries.filter(entry => entry.media.nextAiringEpisode), (o1, o2) => o1.media.nextAiringEpisode.timeUntilAiring - o2.media.nextAiringEpisode.timeUntilAiring, token);
+        handleEntries("anime", animeEntries.filter(entry => !entry.media.nextAiringEpisode), (o1, o2) => o2.updatedAt - o1.updatedAt, token);
+        handleEntries("manga", res.manga.lists[0].entries, (o1, o2) => o2.updatedAt - o1.updatedAt, token);
       });
   }
 
-  function handleEntries(listType, list, sortFunction) {
+  function handleEntries(listType, list, sortFunction, token) {
     list.sort(sortFunction);
     for (let media in list.slice(0, 20)) {
       let entry = list[media];
@@ -53,21 +53,49 @@ const anilistCall = (query, variables, token) =>
       let spinner = document.getElementById("spinner-" + listType);
       if (spinner)
         listElement.removeChild(spinner);
-      listElement.insertAdjacentHTML('beforeend', getHtml(media, entry.progress));
+      listElement.insertAdjacentHTML('beforeend', getHtml(media, entry.progress, listType));
+
+      let card = document.getElementById(listType + "-" + media.id);
+      card.addEventListener("mouseover", e => {
+        let timeUntilElement = document.getElementById(listType + "-" + media.id + "-time-until");
+        let progressElement = document.getElementById(listType + "-" + media.id + "-progress");
+
+        if (timeUntilElement)
+          timeUntilElement.style.display = "none";
+        progressElement.style.display = "inline-block"
+        progressElement.addEventListener("onclick", e => {
+          e.preventDefault();
+          anilistCall(listEntryMutation, {
+            ids: [media.id],
+            progress: entry.progress + 1
+          }, token).then(res => res.json()).then(res => res.data[0]).then(res => progressElement.innerHTML = res.progress + "+");
+        })
+      });
+
+      card.addEventListener("mouseout", e => {
+        let timeUntilElement = document.getElementById(listType + "-" + media.id + "-time-until");
+        let progressElement = document.getElementById(listType + "-" + media.id + "-progress");
+
+        if (timeUntilElement)
+          timeUntilElement.style.display = "inline-block";
+        progressElement.style.display = "none"
+      })
     }
   }
 
-  function getHtml(media, progress) {
+  function getHtml(media, progress, listType) {
     let addedContent = "";
-    let ret = showHtml.replace("#{img}", media.coverImage.large).replace("#{is_airing}", media.nextAiringEpisode ? "initial" : "none").replace("#{site_url}", media.siteUrl);
+    let ret = showHtml.replace("#{id}", listType + "-" + media.id).replace("#{img}", media.coverImage.large).replace("#{is_airing}", media.nextAiringEpisode ? "initial" : "none").replace("#{site_url}", media.siteUrl);
 
     addedContent += "<span style='display: none;'>" + media.title.romaji + "</span>";
     if (media.nextAiringEpisode) {
       let date = new Date(1970, 0, 1);
       date.setSeconds(media.nextAiringEpisode.timeUntilAiring);
       let isBehind = media.nextAiringEpisode.episode - 1 > progress;
-      addedContent += "<span class='overlay-text" + (isBehind ? " is-behind" : "") + "'>Ep " + media.nextAiringEpisode.episode + " - " + parseTime(media.nextAiringEpisode.timeUntilAiring) + "</span>"
+      ret = ret.replace("#{is_behind}", isBehind ? "is-behind": "")
+      addedContent += "<span id='" + listType + "-" + media.id + "-time-until" + "' class='overlay-text'>Ep " + media.nextAiringEpisode.episode + " - " + parseTime(media.nextAiringEpisode.timeUntilAiring) + "</span>";
     }
+    addedContent += "<span id='" + listType + "-" + media.id + "-progress" + "' style='display:none;' class='overlay-text'>" + progress + " +</span>";
 
     return ret.replace("#{content}", addedContent);
   }

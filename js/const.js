@@ -1,40 +1,48 @@
-const anilistQuery = `
-    query ($user: Int) {
-      anime: MediaListCollection(userId: $user, status: CURRENT, type: ANIME) {
-        ...active
-      }
-      manga: MediaListCollection(userId: $user, status: CURRENT, type: MANGA) {
-        ...active
-      }
+const mediaListQuery = `
+  query ($user: Int) {
+    anime: MediaListCollection(userId: $user, status: CURRENT, type: ANIME) {
+      ...active
     }
+    manga: MediaListCollection(userId: $user, status: CURRENT, type: MANGA) {
+      ...active
+    }
+  }
 
-    fragment active on MediaListCollection {
-      lists {
-        entries {
-          media {
-            siteUrl
-            title {
-              romaji
-            }
-            coverImage {
-              large
-            }
-            nextAiringEpisode {
-              episode
-              airingAt
-              timeUntilAiring
-            }
+  fragment active on MediaListCollection {
+    lists {
+      entries {
+        media {
+          id
+          siteUrl
+          title {
+            romaji
           }
-          progress
-          updatedAt
+          coverImage {
+            large
+          }
+          nextAiringEpisode {
+            episode
+            airingAt
+            timeUntilAiring
+          }
         }
+        progress
+        updatedAt
       }
     }
+  }
+`
+const listEntryMutation = `
+  mutation ($ids: [Int], $progress: Int) {
+    UpdateMediaListEntries(ids: $ids, progress: $progress) {
+      id
+    }
+  }
 `
 const showHtml = `
-  <a href="#{site_url}" target="_blank">
+  <a id="#{id}" href="#{site_url}" target="_blank">
   	<div class="cover" style="background-image: url('#{img}');">
-  		<div class="cover-overlay" style="display: #{is_airing};">
+  		<div class="cover-overlay #{is_behind}" style="display: #{is_airing};">
   			#{content}
   		</div>
   	</div>
