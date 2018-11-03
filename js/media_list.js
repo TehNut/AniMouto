@@ -20,7 +20,7 @@ function beginMediaList(accessToken) {
     .then(viewerRes => viewerRes.json())
     .then(viewerRes => viewerRes.data.Viewer)
     .then(viewerRes => {
-      chrome.storage.local.set({user_info: { name: viewerRes.name, id: viewerRes.id, site_url: viewerRes.siteUrl}});
+      chrome.storage.local.set({ user_info: { name: viewerRes.name, id: viewerRes.id, site_url: viewerRes.siteUrl } });
       handleList(viewerRes.id, accessToken);
     });
 }
@@ -51,34 +51,11 @@ function handleEntries(listType, list, sortFunction, token) {
     listElement.insertAdjacentHTML('beforeend', getHtml(media, entry.progress, listType));
 
     let card = document.getElementById(listType + "-" + media.id);
-    card.addEventListener("mouseover", e => {
-      let timeUntilElement = document.getElementById(listType + "-" + media.id + "-time-until");
-      let progressElement = document.getElementById(listType + "-" + media.id + "-progress");
+    card.removeEventListener("mouseover", handleCardMouseOver);
+    card.addEventListener("mouseover", e => handleCardMouseOver(e, listType, entry, media, token));
 
-      if (timeUntilElement)
-        timeUntilElement.style.display = "none";
-      progressElement.style.display = "inline-block"
-      if (listType !== "airing-anime")
-        progressElement.parentElement.style.display = "initial"
-      progressElement.addEventListener("onclick", e => {
-        e.preventDefault();
-        anilistCall(listEntryMutation, {
-          listId: entry.id,
-          progress: entry.progress + 1
-        }, token).then(res => res.json()).then(res => res.data[0]).then(res => progressElement.innerHTML = res.progress + "+");
-      })
-    });
-
-    card.addEventListener("mouseout", e => {
-      let timeUntilElement = document.getElementById(listType + "-" + media.id + "-time-until");
-      let progressElement = document.getElementById(listType + "-" + media.id + "-progress");
-
-      if (timeUntilElement)
-        timeUntilElement.style.display = "inline-block";
-      progressElement.style.display = "none"
-      if (listType !== "airing-anime")
-        progressElement.parentElement.style.display = "none"
-    })
+    card.removeEventListener("mouseout", handleCardMouseOff);
+    card.addEventListener("mouseout", e => handleCardMouseOff(listType, media))
   }
 }
 
@@ -96,9 +73,41 @@ function getHtml(media, progress, listType) {
   } else {
     ret = ret.replace("#{is_behind}", "")
   }
-  addedContent += "<span id='" + listType + "-" + media.id + "-progress" + "' style='display:none;' class='overlay-text'>" + progress + " +</span>";
+  addedContent += "<span id='" + listType + "-" + media.id + "-progress" + "' style='display:none;font-weight:bold;' class='overlay-text'>" + progress + " +</span>";
 
   return ret.replace("#{content}", addedContent);
+}
+
+function handleCardMouseOver(mouseOverEvent, listType, entry, media, token) {
+  let timeUntilElement = document.getElementById(listType + "-" + media.id + "-time-until");
+  let progressElement = document.getElementById(listType + "-" + media.id + "-progress");
+
+  if (timeUntilElement)
+    timeUntilElement.style.display = "none";
+  progressElement.style.display = "inline-block"
+  if (listType !== "airing-anime")
+    progressElement.parentElement.style.display = "initial"
+  progressElement.removeEventListener("click", incrementMediaProgress);
+  progressElement.addEventListener("click", e => incrementMediaProgress(e, entry, token));
+}
+
+function handleCardMouseOff(listType, media) {
+  let timeUntilElement = document.getElementById(listType + "-" + media.id + "-time-until");
+  let progressElement = document.getElementById(listType + "-" + media.id + "-progress");
+
+  if (timeUntilElement)
+    timeUntilElement.style.display = "inline-block";
+  progressElement.style.display = "none"
+  if (listType !== "airing-anime")
+    progressElement.parentElement.style.display = "none"
+}
+
+function incrementMediaProgress(clickEvent, entry, token) {
+  clickEvent.preventDefault();
+  anilistCall(listEntryMutation, {
+    listId: entry.id,
+    progress: entry.progress + 1
+  }, token).then(res => res.json()).then(res => data.SaveMediaListEntry).then(res => progressElement.innerHTML = res.progress + "+");
 }
 
 function parseTime(secs) {
