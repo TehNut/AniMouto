@@ -63,6 +63,8 @@ const anilistCall = (query, variables, token) =>
         if (timeUntilElement)
           timeUntilElement.style.display = "none";
         progressElement.style.display = "inline-block"
+        if (listType !== "airing-anime")
+          progressElement.parentElement.style.display = "initial"
         progressElement.addEventListener("onclick", e => {
           e.preventDefault();
           anilistCall(listEntryMutation, {
@@ -79,6 +81,8 @@ const anilistCall = (query, variables, token) =>
         if (timeUntilElement)
           timeUntilElement.style.display = "inline-block";
         progressElement.style.display = "none"
+        if (listType !== "airing-anime")
+          progressElement.parentElement.style.display = "none"
       })
     }
   }
@@ -94,6 +98,8 @@ const anilistCall = (query, variables, token) =>
       let isBehind = media.nextAiringEpisode.episode - 1 > progress;
       ret = ret.replace("#{is_behind}", isBehind ? "is-behind": "")
       addedContent += "<span id='" + listType + "-" + media.id + "-time-until" + "' class='overlay-text'>Ep " + media.nextAiringEpisode.episode + " - " + parseTime(media.nextAiringEpisode.timeUntilAiring) + "</span>";
+    } else {
+      ret = ret.replace("#{is_behind}", "")
     }
     addedContent += "<span id='" + listType + "-" + media.id + "-progress" + "' style='display:none;' class='overlay-text'>" + progress + " +</span>";
 
