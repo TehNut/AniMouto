@@ -30,10 +30,7 @@ function handleList(userId, token) {
       user: userId
     }, token)
     .then(res => res.json())
-    .then(res => {
-      console.log(res);
-      return res.data
-    })
+    .then(res => res.data)
     .then(res => {
       let animeEntries = res.anime.lists[0].entries;
       handleEntries("airing-anime", animeEntries.filter(entry => entry.media.nextAiringEpisode), (o1, o2) => o1.media.nextAiringEpisode.timeUntilAiring - o2.media.nextAiringEpisode.timeUntilAiring, token);
