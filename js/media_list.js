@@ -50,9 +50,9 @@ const anilistCall = (query, variables, token) =>
       let entry = list[media];
       media = entry.media;
       let listElement = document.getElementById(listType);
-      let spinner = document.getElementById("spinner-" + listType);
-      if (spinner)
-        listElement.removeChild(spinner);
+      let loadingElement = document.getElementById("loading-" + listType);
+      if (loadingElement)
+        listElement.removeChild(loadingElement);
       listElement.insertAdjacentHTML('beforeend', getHtml(media, entry.progress, listType));
 
       let card = document.getElementById(listType + "-" + media.id);
