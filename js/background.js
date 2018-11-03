@@ -41,7 +41,7 @@ function tradeForToken(oAuthCode) {
         body: JSON.stringify({
             grant_type: "authorization_code",
             client_id: "1299",
-            client_secret: "${client_secret}",
+            client_secret: "e7qcv8eDlB8tSo7ShzTMcKKKj988MsczIKeQLi7d", // FIXME: Need to query remote to mask this secret
             redirect_uri: chrome.identity.getRedirectURL("oauth"),
             code: oAuthCode,
         })

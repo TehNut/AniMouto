@@ -12,6 +12,24 @@ const anilistCall = (query, variables, token) =>
     }),
   });
 
+  function beginMediaList(accessToken) {
+    if (document.getElementById("login"))
+      document.getElementsByTagName("body")[0].removeChild(document.getElementById("login"));
+
+    document.getElementById("logout-button").addEventListener("click", () => {
+      chrome.storage.local.remove(["access_token", "refresh_token"], value => {});
+      window.close();
+    });
+
+    anilistCall("{Viewer{id name siteUrl}}", {}, accessToken)
+      .then(viewerRes => viewerRes.json())
+      .then(viewerRes => viewerRes.data.Viewer)
+      .then(viewerRes => {
+        document.getElementById("login-name").insertAdjacentHTML("afterbegin", "Logged in as <a href='" + viewerRes.siteUrl + "'  target='_blank'>" + viewerRes.name + "</a>");
+        handleList(viewerRes.id, accessToken);
+      });
+  }
+
   function handleList(userId, token) {
     anilistCall(anilistQuery, {
         user: userId
