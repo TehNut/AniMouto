@@ -11,6 +11,7 @@ const mediaListQuery = `
   fragment active on MediaListCollection {
     lists {
       entries {
+        id
         media {
           id
           siteUrl
@@ -33,9 +34,10 @@ const mediaListQuery = `
   }
 `
 const listEntryMutation = `
-  mutation ($ids: [Int], $progress: Int) {
-    UpdateMediaListEntries(ids: $ids, progress: $progress) {
+  mutation UpdateMedia($listId: Int, $progress: Int) {
+    SaveMediaListEntry(id: $listId, progress: $progress) {
       id
+      progress
     }
   }
 `

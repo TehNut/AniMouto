@@ -68,7 +68,7 @@ const anilistCall = (query, variables, token) =>
         progressElement.addEventListener("onclick", e => {
           e.preventDefault();
           anilistCall(listEntryMutation, {
-            ids: [media.id],
+            listId: entry.id,
             progress: entry.progress + 1
           }, token).then(res => res.json()).then(res => res.data[0]).then(res => progressElement.innerHTML = res.progress + "+");
         })
