@@ -14,7 +14,7 @@ const anilistCall = (query, variables, token) =>
 
   function beginMediaList(accessToken) {
     if (document.getElementById("login"))
-      document.getElementsByTagName("body")[0].removeChild(document.getElementById("login"));
+      document.body.removeChild(document.getElementById("login"));
 
     document.getElementById("logout-button").addEventListener("click", () => {
       chrome.storage.local.remove(["access_token", "refresh_token"], value => {});
@@ -49,7 +49,8 @@ const anilistCall = (query, variables, token) =>
     for (let media in list.slice(0, 20)) {
       let entry = list[media];
       media = entry.media;
-      document.getElementById(listType).insertAdjacentHTML('beforeend', getHtml(media, entry.progress));
+      let listElement = document.getElementById(listType);
+      listElement.insertAdjacentHTML('beforeend', getHtml(media, entry.progress));
     }
   }
 

@@ -32,9 +32,11 @@ const anilistQuery = `
     }
 `
 const showHtml = `
+  <a href="#{site_url}" target="_blank">
   	<div class="cover" style="background-image: url('#{img}');">
   		<div class="cover-overlay" style="display: #{is_airing};">
   			#{content}
   		</div>
   	</div>
+  </a>
 `;
