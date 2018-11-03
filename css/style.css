@@ -55,7 +55,6 @@ a {
 
 .cover-overlay {
     background-color: rgba(var(--color-overlay), .7);
-    height: 30%;
     width: 100%;
     text-align: center;
     position: absolute;
@@ -65,8 +64,9 @@ a {
 .overlay-text {
     color: rgba(var(--color-text-bright), .91);
     padding: 8px;
-    top: 5px;
+    display: inline-block;
     position: relative;
+    transition: .3s;
 }
 
 .overlay-text .is-behind {
