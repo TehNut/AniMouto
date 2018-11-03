@@ -1,11 +1,20 @@
 :root {
-  --color-background: 39, 44, 56;
-  --color-foreground: 31, 35, 45;
+  /* Theme modifiable */
+  --color-background: 237, 241, 245;
+  --color-foreground: 250, 250, 250;
+  --color-foreground-grey: 245, 246, 246;
+  --color-foreground-grey-dark: 234, 236, 237;
+  --color-foreground-blue: 246, 248, 251;
+  --color-foreground-blue-dark: 241, 243, 247;
+  --color-text: 92, 114, 138;
+  --color-text-light: 122, 133, 143;
+  --color-text-lighter: 146, 153, 161;
+
+  /* No theming */
   --color-overlay: 31, 38, 49;
   --color-text-bright: 237, 241, 245;
-  --color-text: 159, 173, 189;
+  --color-blue: 61,180, 242;
   --color-red: 232, 93, 117;
-  --color-blue: 61, 180, 242;
 }
 
 html {
@@ -33,44 +42,20 @@ a {
   height: 100px;
 }
 
-.media-container {
+.section {
   background: rgb(var(--color-foreground));
   border-radius: 4px;
-  display: grid;
-  grid-gap: 20px;
-  grid-template-columns: repeat(auto-fill, 85px);
-  grid-template-rows: repeat(auto-fill, 115px);
-  margin-bottom: 25px;
   padding: 20px;
 }
 
-.cover {
-  height: 115px;
-  max-height: 115px;
-  width: 85px;
-  background-size: cover;
-  border-radius: 3px;
-  position: relative;
-}
-
-.cover-overlay {
-  background-color: rgba(var(--color-overlay), .7);
-  width: 100%;
-  text-align: center;
-  position: absolute;
-  bottom: 0;
-}
-
-.overlay-text {
-  color: rgba(var(--color-text-bright), .91);
-  padding: 8px;
-  display: inline-block;
-  position: relative;
-  transition: .3s;
-}
-
-.is-behind {
-  border-bottom: rgb(var(--color-red)) medium inset;
+.section h2 {
+  color: rgb(var(--color-text));
+  margin: 0;
+  padding: 0;
+  padding-left: 20px;
+  padding-bottom: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .section-title {
@@ -99,7 +84,7 @@ a {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgb(var(--color-overlay));
+  background: rgb(var(--color-background));
 }
 
 ::-webkit-scrollbar-thumb {
