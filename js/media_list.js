@@ -16,16 +16,11 @@ function beginMediaList(accessToken) {
   if (document.getElementById("login"))
     document.body.removeChild(document.getElementById("login"));
 
-  document.getElementById("logout-button").addEventListener("click", () => {
-    chrome.storage.local.remove(["access_token", "refresh_token"], value => {});
-    window.close();
-  });
-
   anilistCall("{Viewer{id name siteUrl}}", {}, accessToken)
     .then(viewerRes => viewerRes.json())
     .then(viewerRes => viewerRes.data.Viewer)
     .then(viewerRes => {
-      document.getElementById("login-name").insertAdjacentHTML("afterbegin", "Logged in as <a href='" + viewerRes.siteUrl + "' style='color:rgb(var(--color-text-bright));font-weight:bold;' target='_blank'>" + viewerRes.name + "</a>");
+      chrome.storage.local.set({user_info: { name: viewerRes.name, id: viewerRes.id, site_url: viewerRes.siteUrl}});
       handleList(viewerRes.id, accessToken);
     });
 }

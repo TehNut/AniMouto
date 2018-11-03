@@ -3,13 +3,31 @@ body {
   height: 600px;
 }
 
+li {
+  list-style-type: none;
+  padding: 8;
+  padding-bottom: 26px;
+}
+
 #sidebar {
   height: 100%;
   width: 40px;
   float: left;
   background-color: rgb(var(--color-foreground));
+  border-right: rgb(var(--color-blue)) medium inset;
+  color: rgb(var(--color-text));
+}
+
+#navigation {
+  padding: 0;
 }
 
 #viewport {
 
+}
+
+.icon {
+  width: 20px;
+  float: left;
+  cursor: pointer;
 }

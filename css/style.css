@@ -70,9 +70,7 @@ a {
 }
 
 .is-behind {
-  border-bottom-color: rgb(var(--color-red));
-  border-bottom-width: medium;
-  border-bottom-style: inset;
+  border-bottom: rgb(var(--color-red)) medium inset;
 }
 
 .section-title {
