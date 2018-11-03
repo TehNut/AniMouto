@@ -1,0 +1,15 @@
+body {
+  width: 515px;
+  height: 600px;
+}
+
+#sidebar {
+  height: 100%;
+  width: 40px;
+  float: left;
+  background-color: rgb(var(--color-foreground));
+}
+
+#viewport {
+
+}
