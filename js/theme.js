@@ -23,10 +23,9 @@ const themes = {
   }
 }
 
-document.addEventListener("DOMContentLoaded", e => {
-  chrome.storage.local.get({ theme: "light" }, value => {
-    setTheme(value.theme);
-  });
+chrome.storage.local.get({ theme: "light", accent_color: "color-blue" }, value => {
+  setTheme(value.theme);
+  document.documentElement.style.setProperty("--color-accent", "var(--" + value.accent_color + ")");
 });
 
 function setTheme(theme) {

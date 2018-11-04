@@ -10,5 +10,20 @@ document.addEventListener("DOMContentLoaded", e => {
       chrome.storage.local.remove(["access_token", "refresh_token", "user_info"], value => {});
       window.close();
     });
+
+    let accentButtons = document.getElementsByClassName("accent-button");
+    for (let element in accentButtons) {
+      if (accentButtons.hasOwnProperty(element)) {
+        element = accentButtons[element];
+        element.removeEventListener("click", changeColor);
+        element.addEventListener("click", e => changeColor(element));
+      }
+    }
   });
 });
+
+function changeColor(element) {
+  let newColorProp = element.id.replace("accent", "color");
+  chrome.storage.local.set({accent_color: newColorProp}, () =>{});
+  document.documentElement.style.setProperty("--color-accent", "var(--" + newColorProp + ")");
+}

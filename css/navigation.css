@@ -14,7 +14,7 @@ li {
   width: 40px;
   float: left;
   background-color: rgb(var(--color-foreground));
-  border-right: rgb(var(--color-blue)) medium inset;
+  border-right: rgb(var(--color-accent)) medium inset;
   color: rgb(var(--color-text));
 }
 

@@ -9,12 +9,20 @@
   --color-text: 92, 114, 138;
   --color-text-light: 122, 133, 143;
   --color-text-lighter: 146, 153, 161;
-
   /* No theming */
   --color-overlay: 31, 38, 49;
   --color-text-bright: 237, 241, 245;
-  --color-blue: 61,180, 242;
+  --color-blue: 61, 180, 242;
   --color-red: 232, 93, 117;
+  --color-blue-dim: 141, 178, 219;
+  --color-white: 255, 255, 255;
+  --color-black: 0, 0, 0;
+  --color-peach: 250, 122, 122;
+  --color-orange: 247, 154, 99;
+  --color-yellow: 247, 191, 99;
+  --color-green: 123, 213, 85;
+  /* Changeable option */
+  --color-accent: var(--color-blue);
 }
 
 html {
@@ -70,7 +78,7 @@ a {
 
 .button {
   align-items: center;
-  background: rgb(var(--color-blue));
+  background: rgb(var(--color-accent));
   border-radius: 4px;
   color: rgb(var(--color-text-bright));
   cursor: pointer;
@@ -95,5 +103,5 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(var(--color-blue));
+  background: rgb(var(--color-accent));
 }
