@@ -1,11 +1,17 @@
 const pages = {
   medialist: {
-    name: "Media",
     id: "medialist",
     icon: "format_list_bulleted"
   },
+  notifications: {
+    id: "notifications",
+    icon: "mail"
+  },
+  site_tweaks: {
+    id: "sitetweaks",
+    icon: "settings_ethernet"
+  },
   settings: {
-    name: "Settings",
     id: "settings",
     icon: "settings"
   }
@@ -18,17 +24,15 @@ document.addEventListener("DOMContentLoaded", e => {
     key = pages[key];
     let listElement = document.createElement("li");
     listElement.style.cursor = "hover";
-    listElement.insertAdjacentHTML("beforeend", "<span style='display:none'>" + key.name + "</span>");
     listElement.insertAdjacentHTML("beforeend", "<i class='material-icons'>" + key.icon + "</i>");
     listElement.addEventListener("click", e => {
       if (currentPage === key.id)
         return;
 
-      if (changePage(key.id)) {
-        chrome.storage.local.set({
-          last_page: key.id
-        }, () => {});
-      }
+      changePage(key.id);
+      chrome.storage.local.set({
+        last_page: key.id
+      }, () => {});
     });
 
     document.getElementById("navigation").insertAdjacentElement("beforeend", listElement);
@@ -40,15 +44,16 @@ document.addEventListener("DOMContentLoaded", e => {
   })
 
   changePage(null); // Load last page or login page
-})
 
-function changePage(page) {
-  chrome.storage.local.get({
-    last_page: "medialist",
-    access_token: ""
-  }, value => {
-    let showPage = value.access_token === "" ? currentPage = "login" : currentPage = (page ? page : value.last_page);
-    document.getElementById("viewport").src = "./html/" + showPage + ".html";
-    return showPage !== "login";
-  });
-}
+  function changePage(page) {
+    chrome.storage.local.get({
+      last_page: "medialist",
+      access_token: ""
+    }, value => {
+      let showPage = value.access_token === "" ? currentPage = "login" : currentPage = (page ? page : value.last_page);
+      document.getElementById("viewport").src = "./html/" + showPage + ".html";
+      return showPage !== "login";
+    });
+  }
+
+})
