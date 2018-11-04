@@ -12,7 +12,7 @@ const pages = {
 };
 
 document.addEventListener("DOMContentLoaded", e => {
-  let currentPage = "medialist";
+  let currentPage = "";
 
   Object.keys(pages).forEach(key => {
     key = pages[key];
@@ -23,19 +23,31 @@ document.addEventListener("DOMContentLoaded", e => {
       if (currentPage === key.id)
         return;
 
-      document.getElementById("viewport").src = "./html/" + key.id + ".html";
-      currentPage = key.id;
-      chrome.storage.local.set({
-        last_page: key.id
-      }, () => {});
-    })
-    document.getElementById("navigation").insertAdjacentElement("beforeend", listElement);
-  });
+      if (changePage(key.id)) {
+        chrome.storage.local.set({
+          last_page: key.id
+        }, () => {});
+      }
+    });
 
-  chrome.storage.local.get({
-    last_page: "medialist"
-  }, value => {
-    currentPage = value.last_page;
-    document.getElementById("viewport").src = "./html/" + value.last_page + ".html";
-  });
+    document.getElementById("navigation").insertAdjacentElement("beforeend", listElement);
+  })
+
+  chrome.storage.local.get({ user_info: { site_url: "https://anilist.co", avatar: "https://s3.anilist.co/user/avatar/medium/default.png" } }, value => {
+    let avatarElement = document.getElementById("avatar");
+    avatar.insertAdjacentHTML("beforeend", "<a href='" + value.user_info.site_url + "' target='_blank'><img src='" + value.user_info.avatar + "'></a>")
+  })
+
+  changePage(null); // Load last page or login page
 })
+
+function changePage(page) {
+  chrome.storage.local.get({
+    last_page: "medialist",
+    access_token: ""
+  }, value => {
+    let showPage = value.access_token === "" ? currentPage = "login" : currentPage = (page ? page : value.last_page);
+    document.getElementById("viewport").src = "./html/" + showPage + ".html";
+    return showPage !== "login";
+  });
+}

@@ -12,15 +12,21 @@ const anilistCall = (query, variables, token) =>
     }),
   });
 
-function beginMediaList(accessToken) {
-  if (document.getElementById("login"))
-    document.body.removeChild(document.getElementById("login"));
+document.addEventListener("DOMContentLoaded", e => {
+  chrome.storage.local.get({
+    access_token: ""
+  }, value => {
+    if (value.access_token !== "")
+      beginMediaList(value.access_token);
+  });
+});
 
-  anilistCall("{Viewer{id name siteUrl}}", {}, accessToken)
+function beginMediaList(accessToken) {
+  anilistCall("{Viewer{id name siteUrl avatar{large}}}", {}, accessToken)
     .then(viewerRes => viewerRes.json())
     .then(viewerRes => viewerRes.data.Viewer)
     .then(viewerRes => {
-      chrome.storage.local.set({ user_info: { name: viewerRes.name, id: viewerRes.id, site_url: viewerRes.siteUrl } });
+      chrome.storage.local.set({ user_info: { name: viewerRes.name, id: viewerRes.id, site_url: viewerRes.siteUrl, avatar: viewerRes.avatar.large } });
       handleList(viewerRes.id, accessToken);
     });
 }

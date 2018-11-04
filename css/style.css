@@ -79,6 +79,13 @@ a {
   padding: 10px 15px;
 }
 
+#avatar img {
+  width: 90%;
+  border-radius: 50%;
+  margin-left: 2px;
+  margin-top: 10px;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }
