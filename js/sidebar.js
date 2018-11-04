@@ -50,10 +50,11 @@ document.addEventListener("DOMContentLoaded", e => {
       last_page: "medialist",
       access_token: ""
     }, value => {
+      let lastView = document.getElementById("viewport-" + currentPage);
+      if (lastView)
+        lastView.style.display = "none";
       let showPage = value.access_token === "" ? currentPage = "login" : currentPage = (page ? page : value.last_page);
-      document.getElementById("viewport").src = "./html/" + showPage + ".html";
-      return showPage !== "login";
+      document.getElementById("viewport-" + showPage).style.display = "initial";
     });
   }
-
 })
