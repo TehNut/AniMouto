@@ -1,6 +1,6 @@
 {
   "name": "AniMouto",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "A little sister to enhance your AniList experience.",
   "permissions": [
     "storage",

@@ -9,11 +9,15 @@ const pages = {
   },
   site_tweaks: {
     id: "sitetweaks",
-    icon: "settings_ethernet"
+    icon: "extension"
   },
   settings: {
     id: "settings",
     icon: "settings"
+  },
+  about: {
+    id: "about",
+    icon: "face"
   }
 };
 
@@ -36,6 +40,7 @@ document.addEventListener("DOMContentLoaded", e => {
     });
 
     document.getElementById("navigation").insertAdjacentElement("beforeend", listElement);
+    document.getElementById("content").insertAdjacentHTML("beforeend", "<iframe id='viewport-" + key.id + "' src='./html/" + key.id + ".html' width='470' height='595' frameborder='0' style='display:none;'></iframe>")
   })
 
   chrome.storage.local.get({ user_info: { site_url: "https://anilist.co", avatar: "https://s3.anilist.co/user/avatar/medium/default.png" } }, value => {
