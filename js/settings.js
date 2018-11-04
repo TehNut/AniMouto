@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", e => {
     document.getElementById("theme-dark").addEventListener("click", () => setTheme("dark"));
 
     document.getElementById("logout-button").addEventListener("click", () => {
-      chrome.storage.local.remove(["access_token", "refresh_token", "user_info"], value => {});
+      chrome.storage.local.clear();
       window.close();
     });
 
