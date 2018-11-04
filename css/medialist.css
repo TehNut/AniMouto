@@ -24,13 +24,22 @@
 }
 
 .overlay-text {
-  color: rgba(var(--color-text-bright), .91);
+  color: rgba(var(--color-text-bright), .9);
   padding: 8px;
   display: inline-block;
   position: relative;
-  transition: .3s;
 }
 
 .is-behind {
   border-bottom: rgb(var(--color-red)) medium inset;
+}
+
+.icon {
+  color: rgb(var(--color-text));
+  transition: .3s;
+  cursor: pointer;
+}
+
+.icon:hover {
+  color: rgb(var(--color-accent));
 }

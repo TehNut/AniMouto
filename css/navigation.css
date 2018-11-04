@@ -8,6 +8,11 @@ li {
   padding: 2 13 2 13;
   margin-bottom: 4px;
   cursor: pointer;
+  transition: .3s;
+}
+
+li:hover {
+  color: rgb(var(--color-accent));
 }
 
 #sidebar {
