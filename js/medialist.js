@@ -1,17 +1,3 @@
-const anilistCall = (query, variables, token) =>
-  fetch('https://graphql.anilist.co', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      Authorization: "Bearer " + token
-    },
-    body: JSON.stringify({
-      query,
-      variables,
-    }),
-  });
-
 document.addEventListener("DOMContentLoaded", e => {
   chrome.storage.local.get({
     access_token: ""
