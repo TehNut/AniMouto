@@ -144,6 +144,7 @@ const notificationQuery = `
         user {
           ...user
         }
+        commentId
         context
         createdAt
       }
@@ -154,6 +155,7 @@ const notificationQuery = `
         user {
           ...user
         }
+        commentId
         context
         createdAt
       }
@@ -164,6 +166,7 @@ const notificationQuery = `
         user {
           ...user
         }
+        commentId
         context
         createdAt
       }
@@ -174,6 +177,7 @@ const notificationQuery = `
         user {
           ...user
         }
+        commentId
         context
         createdAt
       }
@@ -184,6 +188,7 @@ const notificationQuery = `
         user {
           ...user
         }
+        commentId
         context
         createdAt
       }

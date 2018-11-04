@@ -69,7 +69,7 @@ function getThreadEntry(notification) {
     .replace("#{user_link}", notification.user.url)
     .replace("#{unread}", unread ? "unread" : "")
     .replace("#{user_avatar}", notification.user.img.large)
-    .replace("#{activity_link}", notification.thread.url)
+    .replace("#{activity_link}", notification.thread.url + "/comment/" + notification.commentId)
     .replace("#{activity_message}", "<span class='name'>" + notification.user.name + "</span>" + notification.context + "<span class='name'>" + notification.thread.title + "</span>")
     .replace("#{activity_time}", parseTime(Math.abs(notification.createdAt - Date.now() / 1000)));
 
