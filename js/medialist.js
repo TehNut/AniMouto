@@ -19,6 +19,24 @@ document.addEventListener("DOMContentLoaded", e => {
     if (value.access_token !== "")
       beginMediaList(value.access_token);
   });
+
+  document.getElementById("refresh-list").addEventListener("click", e => {
+    clearSection(document.getElementById("airing-anime"));
+    clearSection(document.getElementById("anime"));
+    clearSection(document.getElementById("manga"));
+    chrome.storage.local.get({
+      access_token: ""
+    }, value => {
+      if (value.access_token !== "")
+        beginMediaList(value.access_token);
+    })
+    function clearSection(section) {
+      while (section.firstChild)
+        section.removeChild(section.firstChild);
+
+      section.insertAdjacentHTML("beforeend", "<h2 id='loading-" + section.id + "' class='section-title ellipsis' style='padding-left:10px'>Loading</h2>")
+    }
+  })
 });
 
 function beginMediaList(accessToken) {
