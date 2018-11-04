@@ -1,17 +1,18 @@
 body {
-  width: 515px;
+  width: 525px;
   height: 600px;
 }
 
 li {
   list-style-type: none;
-  padding: 8;
-  padding-bottom: 26px;
+  padding: 2 13 2 13;
+  margin-bottom: 4px;
+  cursor: pointer;
 }
 
 #sidebar {
   height: 100%;
-  width: 40px;
+  width: 50px;
   float: left;
   background-color: rgb(var(--color-foreground));
   border-right: rgb(var(--color-accent)) medium inset;
@@ -22,8 +23,10 @@ li {
   padding: 0;
 }
 
-.icon {
-  width: 20px;
-  float: left;
-  cursor: pointer;
+#avatar img {
+  width: 90%;
+  border-radius: 50%;
+  margin-left: 2px;
+  margin-bottom: 6px;
+  margin-top: 6px;
 }
