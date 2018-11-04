@@ -29,7 +29,7 @@ chrome.storage.local.get({ theme: "light", accent_color: "color-blue" }, value =
 });
 
 function setTheme(theme) {
-  chrome.storage.local.set({ theme: theme}, () => {});
+  chrome.storage.local.set({ theme: theme }, () => {});
   Object.keys(themes[theme]).forEach(key => {
     let value = themes[theme][key];
     document.documentElement.style.setProperty("--" + key.replace("_", "-"), value);

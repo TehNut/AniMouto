@@ -24,6 +24,6 @@ document.addEventListener("DOMContentLoaded", e => {
 
 function changeColor(element) {
   let newColorProp = element.id.replace("accent", "color");
-  chrome.storage.local.set({accent_color: newColorProp}, () =>{});
+  chrome.storage.local.set({ accent_color: newColorProp }, () => {});
   document.documentElement.style.setProperty("--color-accent", "var(--" + newColorProp + ")");
 }
