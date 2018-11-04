@@ -19,15 +19,11 @@ chrome.runtime.onInstalled.addListener(() => {
     }
   });
 
-  chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
-    chrome.declarativeContent.onPageChanged.addRules([{
-      conditions: [new chrome.declarativeContent.PageStateMatcher({
-        pageUrl: {
-          urlMatches: "(.*)"
-        },
-      })],
-      actions: [new chrome.declarativeContent.ShowPageAction()]
-    }]);
+  checkForNotifications();
+  chrome.alarms.create("notification_updater", { delayInMinutes: 1, periodInMinutes: 1 });
+  chrome.alarms.onAlarm.addListener(alarm => {
+    if (alarm.name === "notification_updater")
+      checkForNotifications();
   });
 });
 
@@ -51,5 +47,26 @@ function tradeForToken(oAuthCode) {
       refresh_token: res.refresh_token
     }, ret => {});
     window.close();
+  });
+}
+
+function checkForNotifications() {
+  chrome.storage.local.get({ access_token: "" }, value => {
+    if (value.access_token === "")
+      return;
+
+    fetch("https://graphql.anilist.co/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: "Bearer " + value.access_token
+      },
+      body: JSON.stringify({ query: "{Viewer{unreadNotificationCount}}" })
+    }).then(res => res.json()).then(res => {
+      let count = res.data.Viewer.unreadNotificationCount;
+      if (count > 0)
+        chrome.browserAction.setBadgeText({ text: text.toString() });
+    });
   });
 }

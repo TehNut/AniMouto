@@ -4,15 +4,14 @@
   "description": "A little sister to enhance your AniList experience.",
   "permissions": [
     "storage",
-    "declarativeContent",
-    "identity",
+    "alarms",
     "*://*.anilist.co/*"
   ],
   "background": {
     "scripts": ["js/background.js"],
     "persistent": false
   },
-  "page_action": {
+  "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {
       "16": "img/anilist_icon.png",
