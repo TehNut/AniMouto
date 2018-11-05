@@ -117,7 +117,7 @@ function incrementMediaProgress(clickEvent, entry, token) {
   anilistCall(listEntryMutation, {
     listId: entry.id,
     progress: entry.progress + 1
-  }, token).then(res => res.json()).then(res => data.SaveMediaListEntry).then(res => progressElement.innerHTML = res.progress + "+");
+  }, token).then(res => res.json()).then(res => res.data.SaveMediaListEntry).then(res => progressElement.innerHTML = res.progress + "+");
 }
 
 function parseTime(secs) {
