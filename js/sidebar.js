@@ -4,16 +4,21 @@ const pages = {
     icon: "format_list_bulleted",
     exists: false
   },
+  search: {
+    id: "search",
+    icon: "search",
+    exists: false
+  },
   notifications: {
     id: "notifications",
     icon: "mail",
     exists: false
   },
-  sitetweaks: {
-    id: "sitetweaks",
-    icon: "extension",
-    exists: false
-  },
+  // sitetweaks: {
+  //   id: "sitetweaks",
+  //   icon: "extension",
+  //   exists: false
+  // },
   settings: {
     id: "settings",
     icon: "settings",
