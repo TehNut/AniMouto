@@ -1,7 +1,7 @@
 chrome.runtime.onInstalled.addListener(() => {
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.command === "start_oauth") {
-      console.log("Beginning AniList authentication");
+      console.debug("Beginning AniList authentication");
       var client_id = "1299";
       var redirectUri = chrome.identity.getRedirectURL("oauth");
       var auth_url = "https://anilist.co/api/v2/oauth/authorize?client_id=" + client_id + "&redirect_uri=" + redirectUri + "&response_type=code";
@@ -10,9 +10,9 @@ chrome.runtime.onInstalled.addListener(() => {
         "interactive": true
       }, redirect_url => {
         if (chrome.runtime.lastError) {
-          console.log(chrome.runtime.lastError.message);
+          console.debug(chrome.runtime.lastError.message);
         } else {
-          console.log("Authentication code recieved, trading for token.")
+          console.debug("Authentication code recieved, trading for token.")
           tradeForToken(redirect_url.slice(redirect_url.indexOf("=") + 1, redirect_url.length));
         }
       });
@@ -46,6 +46,7 @@ function tradeForToken(oAuthCode) {
       access_token: res.access_token,
       refresh_token: res.refresh_token
     }, ret => {});
+    console.debug("Token obtained and stored.");
     window.close();
   });
 }
@@ -55,6 +56,7 @@ function checkForNotifications() {
     if (value.access_token === "")
       return;
 
+    console.debug("Checking for new notifications")
     fetch("https://graphql.anilist.co/", {
       method: "POST",
       headers: {
@@ -65,8 +67,9 @@ function checkForNotifications() {
       body: JSON.stringify({ query: "{Viewer{unreadNotificationCount}}" })
     }).then(res => res.json()).then(res => {
       let count = res.data.Viewer.unreadNotificationCount;
-      if (count > 0)
-        chrome.browserAction.setBadgeText({ text: text.toString() });
+      console.debug("Found " + count + " new notification(s)");
+      chrome.browserAction.setBadgeText({ text: count > 0 ? count.toString() : "" });
+      chrome.browserAction.setBadgeBackgroundColor({color: [61, 180, 242, Math.floor(255 * 0.8)]}, () => {});
     });
   });
 }
