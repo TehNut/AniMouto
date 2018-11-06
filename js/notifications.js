@@ -44,7 +44,7 @@ function getActivityEntry(notification) {
     .replace("#{unread}", unread ? "unread" : "")
     .replace("#{user_avatar}", notification.user.img.large)
     .replace("#{activity_link}", notification.activity ? notification.activity.url : notification.user.url)
-    .replace("#{activity_message}", "<span class='name'>" + notification.user.name + "</span>" + notification.context)
+    .replace("#{activity_message}", "<span class='highlight'>" + notification.user.name + "</span>" + notification.context)
     .replace("#{activity_time}", parseTime(Math.abs(notification.createdAt - Date.now() / 1000)));
 
   return newSection;
@@ -57,7 +57,7 @@ function getAiringEntry(notification) {
     .replace("#{unread}", unread ? "unread" : "")
     .replace("#{user_avatar}", notification.media.img.large)
     .replace("#{activity_link}", notification.media.url)
-    .replace("#{activity_message}", notification.contexts[0] + notification.episode + notification.contexts[1] + "<span class='name'>" + notification.media.title.userPreferred + "</span>" + notification.contexts[2])
+    .replace("#{activity_message}", notification.contexts[0] + notification.episode + notification.contexts[1] + "<span class='highlight'>" + notification.media.title.userPreferred + "</span>" + notification.contexts[2])
     .replace("#{activity_time}", parseTime(Math.abs(notification.createdAt - Date.now() / 1000)));
 
   return newSection;
@@ -70,7 +70,7 @@ function getThreadEntry(notification) {
     .replace("#{unread}", unread ? "unread" : "")
     .replace("#{user_avatar}", notification.user.img.large)
     .replace("#{activity_link}", notification.thread.url + "/comment/" + notification.commentId)
-    .replace("#{activity_message}", "<span class='name'>" + notification.user.name + "</span>" + notification.context + "<span class='name'>" + notification.thread.title + "</span>")
+    .replace("#{activity_message}", "<span class='highlight'>" + notification.user.name + "</span>" + notification.context + "<span class='highlight'>" + notification.thread.title + "</span>")
     .replace("#{activity_time}", parseTime(Math.abs(notification.createdAt - Date.now() / 1000)));
 
   return newSection;

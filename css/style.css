@@ -87,6 +87,10 @@ a {
   padding: 10px 15px;
 }
 
+.highlight {
+  color: rgb(var(--color-accent));
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }

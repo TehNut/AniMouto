@@ -31,10 +31,6 @@ a {
   position: absolute;
 }
 
-.name {
-  color: rgb(var(--color-accent));
-}
-
 .unread {
   border-right: rgb(var(--color-accent)) medium inset;
 }
