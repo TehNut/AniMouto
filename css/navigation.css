@@ -19,6 +19,7 @@ li:hover {
   height: 100%;
   width: 50px;
   float: left;
+  position: relative;
   background-color: rgb(var(--color-foreground));
   border-right: rgb(var(--color-accent)) medium inset;
   color: rgb(var(--color-text));
@@ -29,9 +30,16 @@ li:hover {
 }
 
 #avatar img {
+  position: inherit;
   width: 90%;
   border-radius: 50%;
   margin-left: 2px;
   margin-bottom: 6px;
   margin-top: 6px;
+}
+
+.anilist-icon {
+  width: 100%;
+  bottom: 0;
+  position: absolute;
 }
