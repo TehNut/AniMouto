@@ -47,6 +47,15 @@ function tradeForToken(oAuthCode) {
       refresh_token: res.refresh_token
     }, ret => {});
     console.debug("Token obtained and stored.");
+
+    console.debug("Requesting basic user information.");
+    anilistCall("{Viewer{id name siteUrl avatar{large}}}", {}, accessToken)
+      .then(viewerRes => viewerRes.json())
+      .then(viewerRes => viewerRes.data.Viewer)
+      .then(viewerRes => {
+        chrome.storage.local.set({ user_info: { name: viewerRes.name, id: viewerRes.id, site_url: viewerRes.siteUrl, avatar: viewerRes.avatar.large } });
+      });
+
     window.close();
   });
 }

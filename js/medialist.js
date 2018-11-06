@@ -27,13 +27,19 @@ document.addEventListener("DOMContentLoaded", e => {
 });
 
 function beginMediaList(accessToken) {
-  anilistCall("{Viewer{id name siteUrl avatar{large}}}", {}, accessToken)
-    .then(viewerRes => viewerRes.json())
-    .then(viewerRes => viewerRes.data.Viewer)
-    .then(viewerRes => {
-      chrome.storage.local.set({ user_info: { name: viewerRes.name, id: viewerRes.id, site_url: viewerRes.siteUrl, avatar: viewerRes.avatar.large } });
-      handleList(viewerRes.id, accessToken);
-    });
+  chrome.storage.local.get({ user_info: { id: -1 } }, value => {
+    if (value.user_info.id === -1) {
+      anilistCall("{Viewer{id name siteUrl avatar{large}}}", {}, accessToken)
+        .then(viewerRes => viewerRes.json())
+        .then(viewerRes => viewerRes.data.Viewer)
+        .then(viewerRes => {
+          chrome.storage.local.set({ user_info: { name: viewerRes.name, id: viewerRes.id, site_url: viewerRes.siteUrl, avatar: viewerRes.avatar.large } });
+          handleList(viewerRes.id, accessToken);
+        });
+    } else {
+      handleList(value.user_info.id, accessToken);
+    }
+  });
 }
 
 function handleList(userId, token) {
