@@ -12,6 +12,17 @@ const anilistCall = (query, variables, token) =>
     }),
   });
 
+const showHtml = `
+  <a id="#{id}" href="#{site_url}" target="_blank">
+  	<div class="cover" style="background-image: url('#{img}');">
+      #{airing_content}
+      <div class="cover-overlay progress #{is_behind}" id="#{id_progress}">
+        <span class="overlay-text">#{progress_content}</span>
+      </div>
+  	</div>
+  </a>
+`;
+
 const mediaListQuery = `
   query ($user: Int) {
     anime: MediaListCollection(userId: $user, status: CURRENT, type: ANIME) {
@@ -29,9 +40,6 @@ const mediaListQuery = `
         media {
           id
           siteUrl
-          title {
-            romaji
-          }
           coverImage {
             large
           }
@@ -232,13 +240,3 @@ fragment activity on ActivityUnion {
   }
 }
 `
-
-const showHtml = `
-  <a id="#{id}" href="#{site_url}" target="_blank">
-  	<div class="cover" style="background-image: url('#{img}');">
-  		<div class="cover-overlay #{is_behind}" style="display: #{is_airing};">
-  			#{content}
-  		</div>
-  	</div>
-  </a>
-`;

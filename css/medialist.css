@@ -1,5 +1,6 @@
+/* #container already adds bottom padding so this removes the large gap at the bottom */
 #manga {
-  margin-bottom: 0; /* #container already adds bottom padding so this removes the large gap at the bottom */
+  margin-bottom: 0;
 }
 
 .media-grid {
@@ -25,6 +26,11 @@
   text-align: center;
   position: absolute;
   bottom: 0;
+  transition: .1s;
+}
+
+.progress {
+  opacity: 0;
 }
 
 .overlay-text {
@@ -32,6 +38,14 @@
   padding: 8px;
   display: inline-block;
   position: relative;
+}
+
+.progress .overlay-text {
+  transition: .1s;
+}
+
+.progress .overlay-text:hover {
+  font-weight: bold;
 }
 
 .is-behind {

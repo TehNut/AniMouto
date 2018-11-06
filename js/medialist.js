@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", e => {
       if (value.access_token !== "")
         beginMediaList(value.access_token);
     })
+
     function clearSection(section) {
       while (section.firstChild)
         section.removeChild(section.firstChild);
@@ -70,46 +71,52 @@ function handleEntries(listType, list, sortFunction, token) {
 }
 
 function getHtml(media, progress, listType) {
-  let addedContent = "";
-  let ret = showHtml.replace("#{id}", listType + "-" + media.id).replace("#{img}", media.coverImage.large).replace("#{is_airing}", media.nextAiringEpisode ? "initial" : "none").replace("#{site_url}", media.siteUrl);
+  let ret = showHtml
+    .replace("#{id}", listType + "-" + media.id)
+    .replace("#{img}", media.coverImage.large)
+    .replace("#{site_url}", media.siteUrl);
 
-  addedContent += "<span style='display: none;'>" + media.title.romaji + "</span>";
   if (media.nextAiringEpisode) {
-    let date = new Date(1970, 0, 1);
-    date.setSeconds(media.nextAiringEpisode.timeUntilAiring);
+    let date = new Date(media.nextAiringEpisode.timeUntilAiring * 1000);
     let isBehind = media.nextAiringEpisode.episode - 1 > progress;
-    ret = ret.replace("#{is_behind}", isBehind ? "is-behind" : "")
-    addedContent += "<span id='" + listType + "-" + media.id + "-time-until" + "' class='overlay-text'>Ep " + media.nextAiringEpisode.episode + " - " + parseTime(media.nextAiringEpisode.timeUntilAiring) + "</span>";
-  } else {
-    ret = ret.replace("#{is_behind}", "")
-  }
-  addedContent += "<span id='" + listType + "-" + media.id + "-progress" + "' style='display:none;font-weight:bold;' class='overlay-text'>" + progress + " +</span>";
 
-  return ret.replace("#{content}", addedContent);
+    let airingDiv = "<div class='cover-overlay " + (isBehind ? "is-behind" : "") + "' id='airing-" + media.id + "'>";
+    airingDiv += "<span class='overlay-text'>Ep " + media.nextAiringEpisode.episode + " - " + parseTime(media.nextAiringEpisode.timeUntilAiring) + "</span>"
+    airingDiv += "</div>";
+
+    ret = ret.replace("#{airing_content}", airingDiv);
+    ret = ret.replace("#{is_behind}", isBehind ? "is-behind" : "");
+  } else {
+    ret = ret.replace("#{is_behind}", "").replace("#{airing_content}", "")
+  }
+
+  ret = ret.replace("#{id_progress}", listType + "-" + media.id + "-progress");
+  ret = ret.replace("#{progress_content}", progress + " +");
+
+  return ret;
 }
 
 function handleCardMouseOver(mouseOverEvent, listType, entry, media, token) {
-  let timeUntilElement = document.getElementById(listType + "-" + media.id + "-time-until");
-  let progressElement = document.getElementById(listType + "-" + media.id + "-progress");
+  if (listType === "airing-anime") {
+    let airingElement = document.getElementById("airing-" + media.id);
+    airingElement.style.opacity = 0.0;
+  }
 
-  if (timeUntilElement)
-    timeUntilElement.style.display = "none";
-  progressElement.style.display = "inline-block"
-  if (listType !== "airing-anime")
-    progressElement.parentElement.style.display = "initial"
+  let progressElement = document.getElementById(listType + "-" + media.id + "-progress");
+  progressElement.style.opacity = 1.0;
+
   progressElement.removeEventListener("click", incrementMediaProgress);
   progressElement.addEventListener("click", e => incrementMediaProgress(e, entry, token));
 }
 
 function handleCardMouseOff(listType, media) {
-  let timeUntilElement = document.getElementById(listType + "-" + media.id + "-time-until");
-  let progressElement = document.getElementById(listType + "-" + media.id + "-progress");
+  if (listType === "airing-anime") {
+    let airingElement = document.getElementById("airing-" + media.id);
+    airingElement.style.opacity = 1.0;
+  }
 
-  if (timeUntilElement)
-    timeUntilElement.style.display = "inline-block";
-  progressElement.style.display = "none"
-  if (listType !== "airing-anime")
-    progressElement.parentElement.style.display = "none"
+  let progressElement = document.getElementById(listType + "-" + media.id + "-progress");
+  progressElement.style.opacity = 0.0;
 }
 
 function incrementMediaProgress(clickEvent, entry, token) {
