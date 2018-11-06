@@ -1,0 +1,23 @@
+.theme-dark {
+  --color-background: 39, 44, 56;
+  --color-foreground: 31, 35, 45;
+  --color-foreground-grey: 25, 29, 38;
+  --color-foreground-grey-dark: 16, 20, 25;
+  --color-foreground-blue: 25, 29, 38;
+  --color-foreground-blue-dark: 19, 23, 29;
+  --color-text: 159, 173, 189;
+  --color-text-light: 129, 140, 153;
+  --color-text-lighter: 133, 150, 165;
+}
+
+.theme-light {
+  --color-background: 237, 241, 245;
+  --color-foreground: 250, 250, 250;
+  --color-foreground-grey: 245, 246, 246;
+  --color-foreground-grey-dark: 234, 236, 237;
+  --color-foreground-blue: 246, 248, 251;
+  --color-foreground-blue-dark: 241, 243, 247;
+  --color-text: 92, 114, 138;
+  --color-text-light: 122, 133, 143;
+  --color-text-lighter: 146, 153, 161;
+}
