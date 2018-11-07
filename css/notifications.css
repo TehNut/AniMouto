@@ -3,12 +3,6 @@ a {
   text-decoration: none;
 }
 
-.options {
-  margin-left: auto;
-  margin-right: auto;
-  display: table;
-}
-
 .notification {
   height: 50px;
   padding: 10px;
@@ -40,4 +34,22 @@ a {
   width: 45px;
   height: 45px;
   position: absolute;
+}
+
+.icon-area {
+  height: 20px;
+  padding: 5px 10px 8px 10px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.icon {
+  color: rgba(var(--color-text), 0.8);
+  transition: .3s;
+  padding: 0 5px;
+  cursor: pointer;
+}
+
+.icon:hover {
+  color: rgb(var(--color-accent));
 }

@@ -67,8 +67,11 @@ const listEntryMutation = `
 
 const notificationQuery = `
 {
+  Viewer {
+    unreadNotificationCount
+  }
   Page(perPage: 25) {
-    notifications {
+    notifications(resetNotificationCount: true) {
       __typename
       ... on ActivityLikeNotification {
         user {

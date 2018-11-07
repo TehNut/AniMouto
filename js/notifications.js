@@ -5,40 +5,50 @@ document.addEventListener("DOMContentLoaded", e => {
     if (value.access_token !== "") {
       beginNotifications(value.access_token);
       document.getElementById("refresh-button").addEventListener("click", () => beginNotifications(value.access_token));
-      document.getElementById("view-more-button").addEventListener("click", () => window.open("https://anilist.co/notifications"));
     }
+
+    document.getElementById("view-more-button").addEventListener("click", () => window.open("https://anilist.co/notifications"));
+    document.getElementById("mark-read-button").addEventListener("click", () => {
+      let unread = document.getElementsByClassName("unread");
+      for (let i = 0; i < unread.length; i++)
+        unread[i].classList.remove("unread");
+    });
   });
 });
 
 function beginNotifications(token) {
-  let container = document.getElementById("container");
+  let container = document.getElementById("notification-zone");
   while (container.firstChild)
     container.removeChild(container.firstChild);
 
   container.insertAdjacentHTML("beforeend", "<h2 id='loading' class='section-title ellipsis' style='padding-left:10px'>Loading</h2>");
   anilistCall(notificationQuery, {}, token)
     .then(res => res.json())
-    .then(res => res.data.Page.notifications)
+    .then(res => res.data)
     .then(res => {
       container.removeChild(container.firstChild);
-      for (notification in res) {
-        notification = res[notification];
+      for (index in res.Page.notifications) {
+        notification = res.Page.notifications[index];
 
+        let unread = index < res.Viewer.unreadNotificationCount;
         let newSection = "";
         if (notification.__typename.startsWith("Activity") || notification.__typename === "FollowingNotification")
-          newSection = getActivityEntry(notification);
+          newSection = getActivityEntry(notification, unread);
         else if (notification.__typename === "AiringNotification")
-          newSection = getAiringEntry(notification);
+          newSection = getAiringEntry(notification, unread);
         else if (notification.__typename.startsWith("ThreadCommentSubscribedNotification"))
-          newSection = getThreadEntry(notification);
+          newSection = getThreadEntry(notification, unread);
 
-        container.insertAdjacentHTML("beforeend", newSection);
+        container.insertAdjacentHTML("beforeend", newSection.replace("#{notification_id}", index));
+        if (unread)
+          document.getElementById("notification-" + index).addEventListener("click", e => e.target.classList.remove("unread"));
       }
+
+      chrome.browserAction.setBadgeText({ text: "" });
     });
 }
 
-function getActivityEntry(notification) {
-  let unread = false;
+function getActivityEntry(notification, unread) {
   let newSection = notificationSection
     .replace("#{user_link}", notification.user.url)
     .replace("#{unread}", unread ? "unread" : "")
@@ -50,8 +60,7 @@ function getActivityEntry(notification) {
   return newSection;
 }
 
-function getAiringEntry(notification) {
-  let unread = false;
+function getAiringEntry(notification, unread) {
   let newSection = notificationSection
     .replace("#{user_link}", notification.media.url)
     .replace("#{unread}", unread ? "unread" : "")
@@ -63,8 +72,7 @@ function getAiringEntry(notification) {
   return newSection;
 }
 
-function getThreadEntry(notification) {
-  let unread = false;
+function getThreadEntry(notification, unread) {
   let newSection = notificationSection
     .replace("#{user_link}", notification.user.url)
     .replace("#{unread}", unread ? "unread" : "")
@@ -102,7 +110,7 @@ function parseTime(secs) {
 }
 
 const notificationSection = `
-  <div class="section notification #{unread}">
+  <div class="section notification #{unread}" id="notification-#{notification_id}">
     <a href="#{user_link}" target="_blank"><img class="avatar" src="#{user_avatar}" /></a>
     <a class="notification-body" href="#{activity_link}" target="_blank">#{activity_message}</a>
     <span class="notification-time">#{activity_time}</span>
