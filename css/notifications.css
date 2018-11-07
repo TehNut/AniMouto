@@ -36,11 +36,18 @@ a {
   position: absolute;
 }
 
+.header {
+  position: absolute;
+  padding-top: 10px;
+}
+
 .icon-area {
   height: 20px;
   padding: 5px 10px 8px 10px;
   text-align: center;
+  width: fit-content;
   margin-bottom: 10px;
+  margin-left: auto;
 }
 
 .icon {
