@@ -46,6 +46,8 @@ document.addEventListener("DOMContentLoaded", e => {
           .then(res => res.data.Page.media)
           .then(res => {
             document.getElementById("loading").style.display = "none";
+            document.getElementById("blank-marker").style.display = res.length == 0 ? "inherit" : "none";
+
             for (media in res) {
               media = res[media];
               handleMedia(media, isAnime(media.format), resultArea);
@@ -57,8 +59,13 @@ document.addEventListener("DOMContentLoaded", e => {
 });
 
 function handleMedia(media, anime, resultArea) {
+  let entryLinkWrapper = document.createElement("a");
+  entryLinkWrapper.href = media.url;
+  entryLinkWrapper.target = "_blank";
+
   let entryElement = document.createElement("div");
   entryElement.className = "list-entry";
+  entryLinkWrapper.insertAdjacentElement("beforeend", entryElement);
 
   let imgElement = document.createElement("img");
   imgElement.className = "entry-image";
@@ -80,19 +87,23 @@ function handleMedia(media, anime, resultArea) {
   if (!media.mediaListEntry) {
     ptrElement.title = "Add to planning";
     ptrElement.className += " enabled";
-    ptrElement.addEventListener("click", e => handlePTRClick(media, ptrElement));
   }
+  ptrElement.addEventListener("click", e => {
+    e.preventDefault();
+    if (!media.mediaListEntry)
+      handlePTRClick(media, ptrElement)
+  });
   ptrElement.innerHTML = "book";
   iconArea.insertAdjacentElement("beforeend", ptrElement);
 
-  let openElement = document.createElement("i");
-  openElement.className = "material-icons entry-icon enabled";
-  openElement.title = "View on AniList";
-  openElement.innerHTML = "launch";
-  openElement.addEventListener("click", e => window.open(media.url));
-  iconArea.insertAdjacentElement("beforeend", openElement);
+  // let openElement = document.createElement("i");
+  // openElement.className = "material-icons entry-icon enabled";
+  // openElement.title = "View on AniList";
+  // openElement.innerHTML = "launch";
+  // openElement.addEventListener("click", e => window.open(media.url));
+  // iconArea.insertAdjacentElement("beforeend", openElement);
 
-  getResultArea(anime, resultArea).insertAdjacentElement("beforeend", entryElement);
+  getResultArea(anime, resultArea).insertAdjacentElement("beforeend", entryLinkWrapper);
 }
 
 function isAnime(format) {

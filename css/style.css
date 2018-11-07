@@ -91,6 +91,23 @@ a {
   color: rgb(var(--color-accent));
 }
 
+.spacer {
+  border-top: 2px solid rgb(var(--color-accent));
+  margin-left: auto;
+  margin-right: auto;
+  width: 35%;
+  height: 10px;
+}
+
+.no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }
