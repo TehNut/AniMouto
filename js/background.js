@@ -1,4 +1,4 @@
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onStartup.addListener(() => {
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.command === "start_oauth") {
       console.debug("Beginning AniList authentication");
