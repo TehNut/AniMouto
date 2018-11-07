@@ -56,7 +56,7 @@
   color: rgba(var(--color-text), 0.4);
   transition: .3s;
   cursor: pointer;
-  position: fixed;
+  position: absolute;
   right: 20;
 }
 
