@@ -1,6 +1,7 @@
 const themes = [
   "light",
-  "dark"
+  "dark",
+  "contrast"
 ]
 
 chrome.storage.local.get({ theme: "light", accent_color: "color-blue" }, value => {

@@ -4,6 +4,17 @@
   grid-template-rows: repeat(auto-fill, 25px);
 }
 
+.theme-preview {
+  display: inline-block;
+  cursor: pointer;
+  margin-right: 10px;
+  width: 30px;
+  height: 30px;
+  text-indent: 3px;
+  font-size: 1.2rem;
+  border: solid 3px rgba(var(--color-accent), .8);
+}
+
 .accent-button {
   border-radius: 5px;
   border: 2px solid rgb(var(--color-background));

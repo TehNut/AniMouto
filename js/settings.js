@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", e => {
 
     document.getElementById("theme-light").addEventListener("click", () => setTheme("light"));
     document.getElementById("theme-dark").addEventListener("click", () => setTheme("dark"));
+    document.getElementById("theme-contrast").addEventListener("click", () => setTheme("contrast"));
 
     document.getElementById("logout-button").addEventListener("click", () => {
       chrome.storage.local.clear();
