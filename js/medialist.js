@@ -87,7 +87,7 @@ function getHtml(media, progress, listType) {
     let isBehind = media.nextAiringEpisode.episode - 1 > progress;
 
     let airingDiv = "<div class='cover-overlay " + (isBehind ? "is-behind" : "") + "' id='airing-" + media.id + "'>";
-    airingDiv += "<span class='overlay-text'>Ep " + media.nextAiringEpisode.episode + " - " + parseTime(media.nextAiringEpisode.timeUntilAiring) + "</span>"
+    airingDiv += "<span class='overlay-text'>Ep " + media.nextAiringEpisode.episode + " <br /> " + parseTime(media.nextAiringEpisode.timeUntilAiring) + "</span>"
     airingDiv += "</div>";
 
     ret = ret.replace("#{airing_content}", airingDiv);

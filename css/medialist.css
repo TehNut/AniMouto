@@ -53,9 +53,11 @@
 }
 
 .icon {
-  color: rgb(var(--color-text));
+  color: rgba(var(--color-text), 0.4);
   transition: .3s;
   cursor: pointer;
+  position: fixed;
+  right: 20;
 }
 
 .icon:hover {
