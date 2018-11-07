@@ -1,4 +1,8 @@
-chrome.runtime.onStartup.addListener(() => {
+chrome.runtime.onInstalled.addListener(() => doStuff());
+chrome.runtime.onStartup.addListener(() => doStuff());
+
+function doStuff() {
+  console.log("Starting up :aquathumbsup:");
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.command === "start_oauth") {
       console.debug("Beginning AniList authentication");
@@ -25,7 +29,7 @@ chrome.runtime.onStartup.addListener(() => {
     if (alarm.name === "notification_updater")
       checkForNotifications();
   });
-});
+}
 
 function tradeForToken(oAuthCode) {
   fetch("https://anilist.co/api/v2/oauth/token", {
@@ -49,8 +53,16 @@ function tradeForToken(oAuthCode) {
     console.debug("Token obtained and stored.");
 
     console.debug("Requesting basic user information.");
-    anilistCall("{Viewer{id name siteUrl avatar{large}}}", {}, accessToken)
-      .then(viewerRes => viewerRes.json())
+
+    fetch("https://graphql.anilist.co/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: "Bearer " + res.accessToken
+        },
+        body: JSON.stringify({ query: "{Viewer{unreadNotificationCount}}" })
+      }).then(viewerRes => viewerRes.json())
       .then(viewerRes => viewerRes.data.Viewer)
       .then(viewerRes => {
         chrome.storage.local.set({ user_info: { name: viewerRes.name, id: viewerRes.id, site_url: viewerRes.siteUrl, avatar: viewerRes.avatar.large } });
@@ -78,7 +90,7 @@ function checkForNotifications() {
       let count = res.data.Viewer.unreadNotificationCount;
       console.debug("Found " + count + " new notification(s)");
       chrome.browserAction.setBadgeText({ text: count > 0 ? count.toString() : "" });
-      chrome.browserAction.setBadgeBackgroundColor({color: [61, 180, 242, Math.floor(255 * 0.8)]}, () => {});
+      chrome.browserAction.setBadgeBackgroundColor({ color: [61, 180, 242, Math.floor(255 * 0.8)] }, () => {});
     });
   });
 }

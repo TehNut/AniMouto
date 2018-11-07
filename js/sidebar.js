@@ -28,6 +28,10 @@ const pages = {
     id: "about",
     icon: "face",
     exists: false
+  },
+  login: {
+    id: "login",
+    exists: false
   }
 };
 
@@ -36,6 +40,9 @@ document.addEventListener("DOMContentLoaded", e => {
 
   Object.keys(pages).forEach(key => {
     key = pages[key];
+    if (key.id === "login")
+      return;
+
     let listElement = document.createElement("li");
     listElement.style.cursor = "hover";
     listElement.insertAdjacentHTML("beforeend", "<i class='material-icons'>" + key.icon + "</i>");
