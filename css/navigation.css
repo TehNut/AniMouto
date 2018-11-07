@@ -17,7 +17,7 @@ li:hover {
 
 #sidebar {
   height: 100%;
-  width: 50px;
+  width: 52px;
   float: left;
   position: relative;
   background-color: rgb(var(--color-foreground));

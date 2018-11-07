@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", e => {
 
       pageEntry = pages[showPage];
       if (pageEntry && !pageEntry.exists) {
-        document.getElementById("content").insertAdjacentHTML("beforeend", "<iframe id='viewport-" + pages[showPage].id + "' src='./html/" + pages[showPage].id + ".html' width='470' height='595' frameborder='0' style='display:none;'></iframe>")
+        document.getElementById("content").insertAdjacentHTML("beforeend", "<iframe id='viewport-" + pages[showPage].id + "' src='./html/" + pages[showPage].id + ".html' width='470' height='600' frameborder='0' style='display:none;'></iframe>")
         pageEntry.exists = true;
       }
       document.getElementById("viewport-" + showPage).style.display = "initial";
