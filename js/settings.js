@@ -3,9 +3,9 @@ document.addEventListener("DOMContentLoaded", e => {
     let loginText = "Logged in as <a href='" + value.user_info.site_url + "' style='color:rgb(var(--color-blue));font_weight:bold;' target='_blank'>" + value.user_info.name + "</a>";
     document.getElementById("login-name").insertAdjacentHTML("afterbegin", loginText);
 
-    document.getElementById("theme-light").addEventListener("click", () => setTheme("light"));
-    document.getElementById("theme-dark").addEventListener("click", () => setTheme("dark"));
-    document.getElementById("theme-contrast").addEventListener("click", () => setTheme("contrast"));
+    document.getElementById("theme-light").addEventListener("click", () => changeTheme("light"));
+    document.getElementById("theme-dark").addEventListener("click", () => changeTheme("dark"));
+    document.getElementById("theme-contrast").addEventListener("click", () => changeTheme("contrast"));
 
     document.getElementById("logout-button").addEventListener("click", () => {
       chrome.storage.local.clear();
@@ -25,6 +25,11 @@ document.addEventListener("DOMContentLoaded", e => {
 
 function changeColor(element) {
   let newColorProp = element.id.replace("accent", "color");
-  chrome.storage.local.set({ accent_color: newColorProp }, () => {});
-  document.documentElement.style.setProperty("--color-accent", "var(--" + newColorProp + ")");
+  chrome.storage.local.set({ accent_color: newColorProp });
+  chrome.runtime.sendMessage({ type: "change_accent", accent_color: newColorProp })
+}
+
+function changeTheme(theme) {
+  chrome.storage.local.set({ theme: theme })
+  chrome.runtime.sendMessage({ type: "change_theme", theme: theme });
 }
