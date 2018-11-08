@@ -58,13 +58,22 @@ function handleList(userId, token) {
 
 function handleEntries(listType, list, sortFunction, token) {
   list.sort(sortFunction);
+  let empty = true;
+
+  let sectionTitle = document.getElementById(listType + "-title");
+  let listElement = document.getElementById(listType);
+  if (listElement.style.display !== "grid") {
+    listElement.style.display = "grid";
+    sectionTitle.style.display = "inline-block";
+  }
+
+  let loadingElement = document.getElementById("loading-" + listType);
+  if (loadingElement)
+    listElement.removeChild(loadingElement);
+
   for (let media in list.slice(0, 20)) {
     let entry = list[media];
     media = entry.media;
-    let listElement = document.getElementById(listType);
-    let loadingElement = document.getElementById("loading-" + listType);
-    if (loadingElement)
-      listElement.removeChild(loadingElement);
     listElement.insertAdjacentHTML('beforeend', getHtml(media, entry.progress, listType));
 
     let card = document.getElementById(listType + "-" + media.id);
@@ -77,6 +86,12 @@ function handleEntries(listType, list, sortFunction, token) {
     let cardProgress = document.getElementById(listType + "-" + media.id + "-progress");
     cardProgress.removeEventListener("click", incrementMediaProgress);
     cardProgress.addEventListener("click", e => incrementMediaProgress(e, entry, token));
+    empty = false;
+  }
+
+  if (empty) {
+    listElement.style.display = "none";
+    sectionTitle.style.display = "none";
   }
 }
 
