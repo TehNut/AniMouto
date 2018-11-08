@@ -72,7 +72,11 @@ function handleEntries(listType, list, sortFunction, token) {
     card.addEventListener("mouseover", e => handleCardMouseOver(e, listType, entry, media, token));
 
     card.removeEventListener("mouseout", handleCardMouseOff);
-    card.addEventListener("mouseout", e => handleCardMouseOff(listType, media))
+    card.addEventListener("mouseout", e => handleCardMouseOff(listType, media));
+
+    let cardProgress = document.getElementById(listType + "-" + media.id + "-progress");
+    cardProgress.removeEventListener("click", incrementMediaProgress);
+    cardProgress.addEventListener("click", e => incrementMediaProgress(e, entry, token));
   }
 }
 
@@ -83,7 +87,6 @@ function getHtml(media, progress, listType) {
     .replace("#{site_url}", media.siteUrl);
 
   if (media.nextAiringEpisode) {
-    let date = new Date(media.nextAiringEpisode.timeUntilAiring * 1000);
     let isBehind = media.nextAiringEpisode.episode - 1 > progress;
 
     let airingDiv = "<div class='cover-overlay " + (isBehind ? "is-behind" : "") + "' id='airing-" + media.id + "'>";
@@ -110,9 +113,6 @@ function handleCardMouseOver(mouseOverEvent, listType, entry, media, token) {
 
   let progressElement = document.getElementById(listType + "-" + media.id + "-progress");
   progressElement.style.opacity = 1.0;
-
-  progressElement.removeEventListener("click", incrementMediaProgress);
-  progressElement.addEventListener("click", e => incrementMediaProgress(e, entry, token));
 }
 
 function handleCardMouseOff(listType, media) {
@@ -126,7 +126,8 @@ function handleCardMouseOff(listType, media) {
 }
 
 function incrementMediaProgress(clickEvent, entry, token) {
-  clickEvent.preventDefault();
+  if (clickEvent)
+    clickEvent.preventDefault();
   anilistCall(listEntryMutation, {
     listId: entry.id,
     progress: entry.progress + 1
