@@ -35,6 +35,11 @@ const pages = {
   }
 };
 
+chrome.runtime.onMessage.addListener((message, sender, response) => {
+  if (message.type === "change_avatar")
+    document.getElementById("user-avatar").src = message.avatar;
+});
+
 document.addEventListener("DOMContentLoaded", e => {
   let currentPage = "";
 
@@ -61,7 +66,7 @@ document.addEventListener("DOMContentLoaded", e => {
 
   chrome.storage.local.get({ user_info: { site_url: "https://anilist.co", avatar: "https://s3.anilist.co/user/avatar/medium/default.png" } }, value => {
     let avatarElement = document.getElementById("avatar");
-    avatar.insertAdjacentHTML("beforeend", "<a href='" + value.user_info.site_url + "' target='_blank'><img src='" + value.user_info.avatar + "'></a>")
+    avatar.insertAdjacentHTML("beforeend", "<a href='" + value.user_info.site_url + "' target='_blank'><img id='user-avatar' src='" + value.user_info.avatar + "'></a>")
   })
 
   changePage(null); // Load last page or login page

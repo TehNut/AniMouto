@@ -55,6 +55,7 @@ function tradeForToken(oAuthCode) {
       .then(viewerRes => viewerRes.data.Viewer)
       .then(viewerRes => {
         chrome.storage.local.set({ user_info: { name: viewerRes.name, id: viewerRes.id, site_url: viewerRes.siteUrl, avatar: viewerRes.avatar.large } });
+        chrome.runtime.sendMessage({ type: "change_avatar", avatar: viewerRes.avatar.large });
       });
   });
 }
