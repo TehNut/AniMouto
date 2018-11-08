@@ -9,7 +9,10 @@
     "*://*.anilist.co/*"
   ],
   "background": {
-    "scripts": ["js/background.js"],
+    "scripts": [
+      "bg/oauth_handler.js",
+      "bg/notification_watcher.js"
+    ],
     "persistent": false
   },
   "browser_action": {
