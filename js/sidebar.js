@@ -26,7 +26,7 @@ const pages = {
   },
   about: {
     id: "about",
-    icon: "face",
+    icon: "info",
     exists: false
   },
   login: {
@@ -44,6 +44,9 @@ chrome.runtime.onMessage.addListener((message, sender, response) => {
 
   if (message.type === "change_accent")
     changeTheme(null, message.accent_color);
+
+  if (message.type === "change_page")
+    changePage(message.page);
 });
 
 let currentPage = "";
@@ -76,20 +79,22 @@ document.addEventListener("DOMContentLoaded", e => {
   });
 
   changePage(null); // Load last page or login page
-  // chrome.storage.local.get({ theme: "light", accent_color: "color-blue" }, value => {
-  //   changeTheme(value.theme, value.accent_color);
-  // });
 });
 
 function changePage(page) {
-  chrome.storage.local.get({
-    last_page: "medialist",
-    access_token: ""
-  }, value => {
+  chrome.storage.local.get({ last_page: "medialist", access_token: "" }, value => {
     let lastView = document.getElementById("viewport-" + currentPage);
     if (lastView)
       lastView.style.display = "none";
     let showPage = value.access_token === "" ? currentPage = "login" : currentPage = (page ? page : value.last_page);
+
+    if (showPage === "login") {
+      let loginFrame = document.getElementById("viewport-login");
+      if (loginFrame) {
+        pages.login.exists = false;
+        loginFrame.parentNode.removeChild(loginFrame);
+      }
+    }
 
     pageEntry = pages[showPage];
     if (pageEntry && !pageEntry.exists) {

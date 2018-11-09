@@ -85,6 +85,12 @@ a {
   display: inline-flex;
   margin: 10px;
   padding: 10px 15px;
+  transition: .3s;
+}
+
+.disabled {
+  background: rgba(var(--color-accent), 0.5);
+  cursor: not-allowed;
 }
 
 .highlight {

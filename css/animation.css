@@ -17,6 +17,25 @@
   color: rgb(var(--color-text));
 }
 
+.loader {
+  border: 8px solid rgb(var(--color-foreground-grey));
+  border-radius: 50%;
+  border-top: 8px solid rgb(var(--color-accent));
+  width: 30px;
+  height: 30px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 @keyframes spin {
   from {
     transform: rotate(0deg);
