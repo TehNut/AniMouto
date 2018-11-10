@@ -9,6 +9,10 @@
 
 #### Added
 
+* A changelog to the about page
+
+#### Changed
+
 * Login page now provides visual feedback upon being clicked
 * Login page now transfers you to the media list page after a successful login
 
@@ -33,7 +37,7 @@
 
 #### Added
 
-* Added missing `identity` permission
+* The missing `identity` permission
 
 ## 1.0.0
 
