@@ -6,6 +6,7 @@
 
 * About page refers to AniList as it's "parent" instead of it's "onii-chan"
 * Logout button does not send you back to the login page
+* Removed the ability to select text that shouldn't be selectable
 
 #### Added
 

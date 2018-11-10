@@ -82,7 +82,7 @@ function handleMedia(media, anime, resultArea) {
   entryElement.insertAdjacentElement("beforeend", iconArea);
 
   let ptrElement = document.createElement("i");
-  ptrElement.className = "material-icons entry-icon";
+  ptrElement.className = "material-icons entry-icon no-select";
   ptrElement.title = "Already listed";
   if (!media.mediaListEntry) {
     ptrElement.title = "Add to planning";
