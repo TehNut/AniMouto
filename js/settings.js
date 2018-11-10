@@ -9,8 +9,8 @@ document.addEventListener("DOMContentLoaded", e => {
 
     document.getElementById("logout-button").addEventListener("click", () => {
       chrome.storage.local.clear();
-      chrome.runtime.sendMessage({ message: "change_page", page: "login" });
-      chrome.runtime.sendMessage({ message: "change_avatar", avatar: "https://s3.anilist.co/user/avatar/medium/default.png" });
+      chrome.runtime.sendMessage({ type: "change_page", page: "login" });
+      chrome.runtime.sendMessage({ type: "change_avatar", avatar: "https://s3.anilist.co/user/avatar/medium/default.png" });
     });
 
     let accentButtons = document.getElementsByClassName("accent-button");
