@@ -43,3 +43,18 @@ li:hover {
   bottom: 0;
   position: absolute;
 }
+
+.notification-text {
+  position: absolute;
+  right: 2px;
+  margin-top: 8px;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgb(var(--color-foreground));
+  border-radius: 50%;
+  background-color: rgb(var(--color-red));
+  font-size: 10px;
+  line-height: 20px;
+  text-align: center;
+  color: rgb(var(--color-text-bright));
+}

@@ -11,14 +11,9 @@ const pages = {
   },
   notifications: {
     id: "notifications",
-    icon: "mail",
+    icon: "notifications",
     exists: false
   },
-  // sitetweaks: {
-  //   id: "sitetweaks",
-  //   icon: "extension",
-  //   exists: false
-  // },
   settings: {
     id: "settings",
     icon: "settings",
@@ -39,6 +34,9 @@ chrome.runtime.onMessage.addListener((message, sender, response) => {
   if (message.type === "change_avatar")
     document.getElementById("user-avatar").src = message.avatar;
 
+  if (message.type === "update_notifications")
+    updateNotifications(message.notification_count);
+
   if (message.type === "change_theme")
     changeTheme(message.theme, null);
 
@@ -58,6 +56,7 @@ document.addEventListener("DOMContentLoaded", e => {
       return;
 
     let listElement = document.createElement("li");
+    listElement.id = key.id;
     listElement.style.cursor = "hover";
     listElement.insertAdjacentHTML("beforeend", "<i class='material-icons'>" + key.icon + "</i>");
     listElement.addEventListener("click", e => {
@@ -125,4 +124,22 @@ function changeTheme(theme, accent) {
     let frame = document.getElementById("viewport-" + key.id);
     frame.contentWindow.setTheme(theme, accent);
   });
+}
+
+function updateNotifications(amount) {
+  let tooBig = amount > 99;
+
+  let notificationEntry = document.getElementById("notifications");
+  let icon = notificationEntry.childNodes[0];
+  icon.innerText = amount > 0 ? "notifications_active" : "notifications";
+
+  let countDiv = notificationEntry.childNodes[1];
+  if (!countDiv) {
+    countDiv = document.createElement("div");
+    countDiv.className = "notification-text";
+    notificationEntry.insertAdjacentElement("beforeend", countDiv);
+  }
+
+  countDiv.style.display = amount > 0 ? "inline-block" : "none";
+  countDiv.innerText = tooBig ? "99+" : amount.toString();
 }

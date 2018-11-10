@@ -45,6 +45,7 @@ function beginNotifications(token) {
       }
 
       chrome.browserAction.setBadgeText({ text: "" });
+      chrome.runtime.sendMessage({ type: "update_notifications", notification_count: 0 });
     });
 }
 

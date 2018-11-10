@@ -21,6 +21,7 @@ function checkForNotifications() {
     }).then(res => res.json()).then(res => {
       let count = res.data.Viewer.unreadNotificationCount;
       console.debug("Found " + count + " new notification(s)");
+      chrome.runtime.sendMessage({ type: "update_notifications", notification_count: count });
       chrome.browserAction.setBadgeText({ text: count > 0 ? count.toString() : "" });
       chrome.browserAction.setBadgeBackgroundColor({ color: [61, 180, 242, Math.floor(255 * 0.8)] }, () => {});
     });
