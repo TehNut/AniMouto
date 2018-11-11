@@ -4,14 +4,17 @@
     "fix": [
       "About page refers to AniList as it's \"parent\" instead of it's \"onii-chan\"",
       "Logout button does not send you back to the login page",
-      "Removed the ability to select text that shouldn't be selectable"
+      "Removed the ability to select text that shouldn't be selectable",
+      "Removed margin around the logout button to bring it in line with other section contents"
     ],
     "add": [
-      "Changelog to the about page. Shows changes for the latest version."
+      "Changelog to the about page. Shows changes for the latest version",
+      "Notification icon now diplays the notification count"
     ],
     "change": [
       "Login page now provides visual feedback upon being clicked",
-      "Login page now transfers you to the media list page after a successful login"
+      "Login page now transfers you to the media list page after a successful login",
+      "The red line at the bottom of media cards of shows you're behind on have been changed to not be shit"
     ]
   },
   "1.0.2": {
