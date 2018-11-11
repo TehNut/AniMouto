@@ -6,17 +6,14 @@ const pages = {
   },
   search: {
     id: "search",
-    icon: "search",
     exists: false
   },
   notifications: {
     id: "notifications",
-    icon: "notifications",
     exists: false
   },
   settings: {
     id: "settings",
-    icon: "settings",
     exists: false
   },
   about: {
@@ -58,7 +55,7 @@ document.addEventListener("DOMContentLoaded", e => {
     let listElement = document.createElement("li");
     listElement.id = key.id;
     listElement.style.cursor = "hover";
-    listElement.insertAdjacentHTML("beforeend", "<i class='material-icons'>" + key.icon + "</i>");
+    listElement.insertAdjacentHTML("beforeend", "<i class='material-icons'>" + (key.icon ? key.icon : key.id) + "</i>");
     listElement.addEventListener("click", e => {
       if (currentPage === key.id)
         return;

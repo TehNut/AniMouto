@@ -36,7 +36,7 @@ function beginNotifications(token) {
           newSection = getActivityEntry(notification, unread);
         else if (notification.__typename === "AiringNotification")
           newSection = getAiringEntry(notification, unread);
-        else if (notification.__typename.startsWith("ThreadCommentSubscribedNotification"))
+        else if (notification.__typename.startsWith("ThreadComment"))
           newSection = getThreadEntry(notification, unread);
 
         container.insertAdjacentHTML("beforeend", newSection.replace("#{notification_id}", index));

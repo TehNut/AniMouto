@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.4
+
+#### Fixed
+
+* Notification page ignores most thread related notifications
+
 ## 1.0.3
 
 #### Fixed

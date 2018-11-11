@@ -1,5 +1,10 @@
 
 {
+  "1.0.4": {
+    "fix": [
+      "Notification page ignores most thread related notifications"
+    ]
+  },
   "1.0.3": {
     "fix": [
       "About page refers to AniList as it's \"parent\" instead of it's \"onii-chan\"",
