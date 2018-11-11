@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", e => {
   let manifest = chrome.runtime.getManifest();
-  document.getElementById("animouto-title").innerHTML = manifest.name + " v" + manifest.version;
-  document.getElementById("animouto-description").innerHTML = manifest.description;
+  document.getElementById("animouto-title").innerText = manifest.name + " v" + manifest.version;
+  document.getElementById("animouto-description").innerText = manifest.description;
+  document.getElementById("changelog-version").innerText = " v" + manifest.version;
 
   handleChangelog(manifest);
 });
