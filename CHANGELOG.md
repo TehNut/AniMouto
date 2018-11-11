@@ -6,6 +6,10 @@
 
 * Notification page ignores most thread related notifications
 
+#### Added
+
+* Included version in the changelog title
+
 ## 1.0.3
 
 #### Fixed
