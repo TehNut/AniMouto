@@ -103,18 +103,19 @@ function getHtml(media, progress, listType) {
     .replace("#{site_url}", media.siteUrl);
 
   if (media.nextAiringEpisode) {
-    let isBehind = media.nextAiringEpisode.episode - 1 > progress;
-
-    let airingDiv = "<div class='cover-overlay " + (isBehind ? "is-behind" : "") + "' id='airing-" + media.id + "'>";
+    let airingDiv = "<div class='cover-overlay' id='airing-" + media.id + "'>";
     airingDiv += "<span class='overlay-text'>Ep " + media.nextAiringEpisode.episode + " <br /> " + parseTime(media.nextAiringEpisode.timeUntilAiring) + "</span>"
     airingDiv += "</div>";
 
     ret = ret.replace("#{airing_content}", airingDiv);
-    ret = ret.replace("#{is_behind}", isBehind ? "is-behind" : "");
+
+    if ( media.nextAiringEpisode.episode - 1 > progress)
+      ret = ret.replace("#{behind}", `<div class="is-behind"></div>`);
   } else {
-    ret = ret.replace("#{is_behind}", "").replace("#{airing_content}", "")
+    ret = ret.replace("#{airing_content}", "");
   }
 
+  ret = ret.replace("#{behind}", "");
   ret = ret.replace("#{id_progress}", listType + "-" + media.id + "-progress");
   ret = ret.replace("#{progress_content}", progress + " +");
 

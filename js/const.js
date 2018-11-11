@@ -16,9 +16,10 @@ const showHtml = `
   <a id="#{id}" href="#{site_url}" target="_blank">
   	<div class="cover" style="background-image: url('#{img}');">
       #{airing_content}
-      <div class="cover-overlay progress #{is_behind}" id="#{id_progress}">
+      <div class="cover-overlay progress" id="#{id_progress}">
         <span class="overlay-text">#{progress_content}</span>
       </div>
+      #{behind}
   	</div>
   </a>
 `;
