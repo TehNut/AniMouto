@@ -29,14 +29,18 @@ document.addEventListener("DOMContentLoaded", e => {
 function beginMediaList(accessToken) {
   chrome.storage.local.get({ user_info: { id: -1 } }, value => {
     if (value.user_info.id === -1) {
-      anilistCall("{Viewer{id name siteUrl avatar{large}}}", {}, accessToken)
-        .then(viewerRes => viewerRes.json())
-        .then(viewerRes => viewerRes.data.Viewer)
-        .then(viewerRes => {
-          chrome.storage.local.set({ user_info: { name: viewerRes.name, id: viewerRes.id, site_url: viewerRes.siteUrl, avatar: viewerRes.avatar.large } });
-          chrome.runtime.sendMessage({ type: "change_avatar", avatar: viewerRes.avatar.large });
-          handleList(viewerRes.id, accessToken);
+      fetch("../graphql/viewer.graphql").then(res => res.text()).then(res => {
+        chrome.runtime.getBackgroundPage(page => {
+          page.queryAL(res, {}, accessToken)
+            .then(viewerRes => viewerRes.json())
+            .then(viewerRes => viewerRes.data.Viewer)
+            .then(viewerRes => {
+              chrome.storage.local.set({ user_info: { name: viewerRes.name, id: viewerRes.id, site_url: viewerRes.siteUrl, avatar: viewerRes.avatar.large } });
+              chrome.runtime.sendMessage({ type: "change_avatar", avatar: viewerRes.avatar.large });
+              handleList(viewerRes.id, accessToken);
+            });
         });
+      })
     } else {
       handleList(value.user_info.id, accessToken);
     }
@@ -44,17 +48,21 @@ function beginMediaList(accessToken) {
 }
 
 function handleList(userId, token) {
-  anilistCall(mediaListQuery, {
-      user: userId
-    }, token)
-    .then(res => res.json())
-    .then(res => res.data)
-    .then(res => {
-      let animeEntries = res.anime.lists[0].entries;
-      handleEntries("airing-anime", animeEntries.filter(entry => entry.media.nextAiringEpisode), (o1, o2) => o1.media.nextAiringEpisode.timeUntilAiring - o2.media.nextAiringEpisode.timeUntilAiring, token);
-      handleEntries("anime", animeEntries.filter(entry => !entry.media.nextAiringEpisode), (o1, o2) => o2.updatedAt - o1.updatedAt, token);
-      handleEntries("manga", res.manga.lists[0].entries, (o1, o2) => o2.updatedAt - o1.updatedAt, token);
+  fetch("../graphql/user_media_list.graphql").then(res => res.text()).then(res => {
+    chrome.runtime.getBackgroundPage(page => {
+      page.queryAL(res, {
+          user: userId
+        }, token)
+        .then(res => res.json())
+        .then(res => res.data)
+        .then(res => {
+          let animeEntries = res.anime.lists[0].entries;
+          handleEntries("airing-anime", animeEntries.filter(entry => entry.media.nextAiringEpisode), (o1, o2) => o1.media.nextAiringEpisode.timeUntilAiring - o2.media.nextAiringEpisode.timeUntilAiring, token);
+          handleEntries("anime", animeEntries.filter(entry => !entry.media.nextAiringEpisode), (o1, o2) => o2.updatedAt - o1.updatedAt, token);
+          handleEntries("manga", res.manga.lists[0].entries, (o1, o2) => o2.updatedAt - o1.updatedAt, token);
+        });
     });
+  });
 }
 
 function handleEntries(listType, list, sortFunction, token) {
@@ -109,7 +117,7 @@ function getHtml(media, progress, listType) {
 
     ret = ret.replace("#{airing_content}", airingDiv);
 
-    if ( media.nextAiringEpisode.episode - 1 > progress)
+    if (media.nextAiringEpisode.episode - 1 > progress)
       ret = ret.replace("#{behind}", `<div class="is-behind"></div>`);
   } else {
     ret = ret.replace("#{airing_content}", "");
@@ -145,10 +153,15 @@ function handleCardMouseOff(listType, media) {
 function incrementMediaProgress(clickEvent, entry, token) {
   if (clickEvent)
     clickEvent.preventDefault();
-  anilistCall(listEntryMutation, {
-    listId: entry.id,
-    progress: entry.progress + 1
-  }, token).then(res => res.json()).then(res => res.data.SaveMediaListEntry).then(res => clickEvent.target.innerHTML = res.progress + " +");
+
+  fetch("../graphql/update_progress.graphql").then(res => res.text()).then(res => {
+    chrome.runtime.getBackgroundPage(page => {
+      page.queryAL(res, {
+        listId: entry.id,
+        progress: entry.progress + 1
+      }, token).then(res => res.json()).then(res => res.data.SaveMediaListEntry).then(res => clickEvent.target.innerHTML = res.progress + " +");
+    })
+  });
 }
 
 function parseTime(secs) {
@@ -171,3 +184,15 @@ function parseTime(secs) {
 
   return ret;
 }
+
+const showHtml = `
+  <a id="#{id}" href="#{site_url}" target="_blank">
+  	<div class="cover" style="background-image: url('#{img}');">
+      #{airing_content}
+      <div class="cover-overlay progress" id="#{id_progress}">
+        <span class="overlay-text">#{progress_content}</span>
+      </div>
+      #{behind}
+  	</div>
+  </a>
+`;

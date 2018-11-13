@@ -1,0 +1,5 @@
+mutation PTR($mediaId:Int) {
+  SaveMediaListEntry(mediaId: $mediaId, status: PLANNING){
+    id
+  }
+}

@@ -1,24 +1,3 @@
-const mediaQuery = `
-  query ($search: String) {
-    Page(perPage: 50) {
-      media(search: $search) {
-        id
-        img: coverImage {
-          large
-        }
-        title {
-          userPreferred
-        }
-        format
-        url: siteUrl
-        mediaListEntry {
-          id
-        }
-      }
-    }
-  }
-`
-
 document.addEventListener("DOMContentLoaded", e => {
   const inputField = document.getElementById("search-bar");
   const resultArea = document.getElementById("results");
@@ -41,18 +20,22 @@ document.addEventListener("DOMContentLoaded", e => {
         if (value.access_token === "")
           return;
 
-        anilistCall(mediaQuery, { search: trimmed }, value.access_token)
-          .then(res => res.json())
-          .then(res => res.data.Page.media)
-          .then(res => {
-            document.getElementById("loading").style.display = "none";
-            document.getElementById("blank-marker").style.display = res.length == 0 ? "inherit" : "none";
+        fetch("../graphql/media_search.graphql").then(res => res.text()).then(res => {
+          chrome.runtime.getBackgroundPage(page => {
+            page.queryAL(res, { search: trimmed }, value.access_token)
+              .then(res => res.json())
+              .then(res => res.data.Page.media)
+              .then(res => {
+                document.getElementById("loading").style.display = "none";
+                document.getElementById("blank-marker").style.display = res.length == 0 ? "inherit" : "none";
 
-            for (media in res) {
-              media = res[media];
-              handleMedia(media, isAnime(media.format), resultArea);
-            }
-          });
+                for (media in res) {
+                  media = res[media];
+                  handleMedia(media, isAnime(media.format), resultArea);
+                }
+              });
+          })
+        });
       })
     }, 700);
   })
@@ -96,13 +79,6 @@ function handleMedia(media, anime, resultArea) {
   ptrElement.innerHTML = "book";
   iconArea.insertAdjacentElement("beforeend", ptrElement);
 
-  // let openElement = document.createElement("i");
-  // openElement.className = "material-icons entry-icon enabled";
-  // openElement.title = "View on AniList";
-  // openElement.innerHTML = "launch";
-  // openElement.addEventListener("click", e => window.open(media.url));
-  // iconArea.insertAdjacentElement("beforeend", openElement);
-
   getResultArea(anime, resultArea).insertAdjacentElement("beforeend", entryLinkWrapper);
 }
 
@@ -115,12 +91,16 @@ function handlePTRClick(media, element) {
     if (value.access_token === "")
       return;
 
-    anilistCall("mutation PTR($mediaId:Int){SaveMediaListEntry(mediaId:$mediaId,status:PLANNING){id}}", { mediaId: media.id }, value.access_token)
-      .then(res => {
-        element.title = "Already listed";
-        element.classList.remove("enabled");
-        element.removeEventListener("click", handlePTRClick);
-      });
+    fetch("../graphql/mark_planning.graphql").then(res => res.text()).then(res => {
+      chrome.runtime.getBackgroundPage(page => {
+        page.queryAL(res, { mediaId: media.id }, value.access_token)
+          .then(res => {
+            element.title = "Already listed";
+            element.classList.remove("enabled");
+            element.removeEventListener("click", handlePTRClick);
+          });
+      })
+    });
   });
 }
 

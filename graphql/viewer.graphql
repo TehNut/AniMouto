@@ -1,0 +1,10 @@
+query {
+  Viewer {
+    id
+    name
+    siteUrl
+    avatar {
+      large
+    }
+  }
+}

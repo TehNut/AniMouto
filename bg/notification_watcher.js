@@ -10,15 +10,8 @@ function checkForNotifications() {
       return;
 
     console.debug("Checking for new notifications")
-    fetch("https://graphql.anilist.co/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: "Bearer " + value.access_token
-      },
-      body: JSON.stringify({ query: "{Viewer{unreadNotificationCount}}" })
-    }).then(res => res.json()).then(res => {
+    queryAL("{Viewer{unreadNotificationCount}}", {}, value.access_token)
+    .then(res => res.json()).then(res => {
       let count = res.data.Viewer.unreadNotificationCount;
       console.debug("Found " + count + " new notification(s)");
       chrome.runtime.sendMessage({ type: "update_notifications", notification_count: count });

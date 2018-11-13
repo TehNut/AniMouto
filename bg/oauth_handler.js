@@ -37,20 +37,14 @@ function tradeForToken(oAuthCode) {
     console.log("Token obtained and stored.");
 
     console.log("Requesting basic user information.");
-    fetch("https://graphql.anilist.co/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: "Bearer " + res.access_token
-        },
-        body: JSON.stringify({ query: "{Viewer{name id siteUrl avatar{large}}}" })
-      }).then(viewerRes => viewerRes.json())
+    fetch("../graphql/viewer.graphql").then(query => query.text()).then(query => {
+      queryAL(query, {}, res.access_token).then(viewerRes => viewerRes.json())
       .then(viewerRes => viewerRes.data.Viewer)
       .then(viewerRes => {
         chrome.storage.local.set({ user_info: { name: viewerRes.name, id: viewerRes.id, site_url: viewerRes.siteUrl, avatar: viewerRes.avatar.large } });
         chrome.runtime.sendMessage({ type: "change_avatar", avatar: viewerRes.avatar.large });
         chrome.runtime.sendMessage({ type: "change_page", page: "medialist" });
       });
+    });
   });
 }

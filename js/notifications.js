@@ -22,31 +22,35 @@ function beginNotifications(token) {
     container.removeChild(container.firstChild);
 
   container.insertAdjacentHTML("beforeend", "<h2 id='loading' class='section-title ellipsis' style='padding-left:10px'>Loading</h2>");
-  anilistCall(notificationQuery, {}, token)
-    .then(res => res.json())
-    .then(res => res.data)
-    .then(res => {
-      container.removeChild(container.firstChild);
-      for (index in res.Page.notifications) {
-        notification = res.Page.notifications[index];
+  fetch("../graphql/notifications.graphql").then(res => res.text()).then(res => {
+    chrome.runtime.getBackgroundPage(page => {
+      page.queryAL(res, {}, token)
+        .then(res => res.json())
+        .then(res => res.data)
+        .then(res => {
+          container.removeChild(container.firstChild);
+          for (index in res.Page.notifications) {
+            notification = res.Page.notifications[index];
 
-        let unread = index < res.Viewer.unreadNotificationCount;
-        let newSection = "";
-        if (notification.__typename.startsWith("Activity") || notification.__typename === "FollowingNotification")
-          newSection = getActivityEntry(notification, unread);
-        else if (notification.__typename === "AiringNotification")
-          newSection = getAiringEntry(notification, unread);
-        else if (notification.__typename.startsWith("ThreadComment"))
-          newSection = getThreadEntry(notification, unread);
+            let unread = index < res.Viewer.unreadNotificationCount;
+            let newSection = "";
+            if (notification.__typename.startsWith("Activity") || notification.__typename === "FollowingNotification")
+              newSection = getActivityEntry(notification, unread);
+            else if (notification.__typename === "AiringNotification")
+              newSection = getAiringEntry(notification, unread);
+            else if (notification.__typename.startsWith("ThreadComment"))
+              newSection = getThreadEntry(notification, unread);
 
-        container.insertAdjacentHTML("beforeend", newSection.replace("#{notification_id}", index));
-        if (unread)
-          document.getElementById("notification-" + index).addEventListener("click", e => e.target.classList.remove("unread"));
-      }
+            container.insertAdjacentHTML("beforeend", newSection.replace("#{notification_id}", index));
+            if (unread)
+              document.getElementById("notification-" + index).addEventListener("click", e => e.target.classList.remove("unread"));
+          }
 
-      chrome.browserAction.setBadgeText({ text: "" });
-      chrome.runtime.sendMessage({ type: "update_notifications", notification_count: 0 });
+          chrome.browserAction.setBadgeText({ text: "" });
+          chrome.runtime.sendMessage({ type: "update_notifications", notification_count: 0 });
+        });
     });
+  });
 }
 
 function getActivityEntry(notification, unread) {

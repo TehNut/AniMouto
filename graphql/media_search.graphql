@@ -1,0 +1,18 @@
+query ($search: String) {
+  Page(perPage: 50) {
+    media(search: $search) {
+      id
+      img: coverImage {
+        large
+      }
+      title {
+        userPreferred
+      }
+      format
+      url: siteUrl
+      mediaListEntry {
+        id
+      }
+    }
+  }
+}

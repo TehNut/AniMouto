@@ -1,72 +1,3 @@
-const anilistCall = (query, variables, token) =>
-  fetch('https://graphql.anilist.co', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      Authorization: "Bearer " + token
-    },
-    body: JSON.stringify({
-      query,
-      variables,
-    }),
-  });
-
-const showHtml = `
-  <a id="#{id}" href="#{site_url}" target="_blank">
-  	<div class="cover" style="background-image: url('#{img}');">
-      #{airing_content}
-      <div class="cover-overlay progress" id="#{id_progress}">
-        <span class="overlay-text">#{progress_content}</span>
-      </div>
-      #{behind}
-  	</div>
-  </a>
-`;
-
-const mediaListQuery = `
-  query ($user: Int) {
-    anime: MediaListCollection(userId: $user, status: CURRENT, type: ANIME) {
-      ...active
-    }
-    manga: MediaListCollection(userId: $user, status: CURRENT, type: MANGA) {
-      ...active
-    }
-  }
-
-  fragment active on MediaListCollection {
-    lists {
-      entries {
-        id
-        media {
-          id
-          siteUrl
-          coverImage {
-            large
-          }
-          nextAiringEpisode {
-            episode
-            airingAt
-            timeUntilAiring
-          }
-        }
-        progress
-        updatedAt
-      }
-    }
-  }
-`
-
-const listEntryMutation = `
-  mutation UpdateMedia($listId: Int, $progress: Int) {
-    SaveMediaListEntry(id: $listId, progress: $progress) {
-      id
-      progress
-    }
-  }
-`
-
-const notificationQuery = `
 {
   Viewer {
     unreadNotificationCount
@@ -243,4 +174,3 @@ fragment activity on ActivityUnion {
     url: siteUrl
   }
 }
-`
