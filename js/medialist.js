@@ -155,9 +155,15 @@ function incrementMediaProgress(clickEvent, listType, entry, token) {
 
   fetch("../graphql/update_progress.graphql").then(res => res.text()).then(res => {
     chrome.runtime.getBackgroundPage(page => {
+      let completionDate = null;
+      if (entry.progress + 1 >= entry.media.episodes) {
+        let currentDate = new Date(Date.now());
+        completionDate = { year: currentDate.getFullYear(), month: currentDate.getMonth() + 1, day: currentDate.getDate() };
+      }
       page.queryAL(res, {
         listId: entry.id,
-        progress: entry.progress + 1
+        progress: entry.progress + 1,
+        completionDate: completionDate
       }, token).then(res => res.json()).then(res => res.data.SaveMediaListEntry).then(res => {
         if ((entry.media.episodes && res.progress >= entry.media.episodes) || (entry.media.chapters && res.progress >= entry.media.chapters)) {
           let card = document.getElementById(listType + "-" + entry.media.id);

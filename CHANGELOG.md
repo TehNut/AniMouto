@@ -7,6 +7,10 @@
 * Incrementing a media entry only updates progress the first time
 * Incrementing a media entry that is marked as behind to a status that makes it not behind does not remove the marker
 
+#### Added
+
+* Completion of a media will now set the completion date
+
 ## 1.0.4
 
 #### Fixed

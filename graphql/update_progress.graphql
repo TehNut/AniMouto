@@ -1,5 +1,5 @@
-mutation UpdateMedia($listId: Int, $progress: Int) {
-  SaveMediaListEntry(id: $listId, progress: $progress) {
+mutation UpdateMedia($listId: Int, $progress: Int, $completionDate: FuzzyDateInput) {
+  SaveMediaListEntry(id: $listId, progress: $progress, completedAt: $completionDate) {
     id
     progress
   }
