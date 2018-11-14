@@ -13,6 +13,8 @@ fragment active on MediaListCollection {
       id
       media {
         id
+        episodes
+        chapters
         siteUrl
         coverImage {
           large

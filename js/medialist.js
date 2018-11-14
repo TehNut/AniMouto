@@ -94,7 +94,7 @@ function handleEntries(listType, list, sortFunction, token) {
 
     let cardProgress = document.getElementById(listType + "-" + media.id + "-progress");
     cardProgress.removeEventListener("click", incrementMediaProgress);
-    cardProgress.addEventListener("click", e => incrementMediaProgress(e, entry, token));
+    cardProgress.addEventListener("click", e => incrementMediaProgress(e, listType, entry, token));
     empty = false;
   }
 
@@ -118,7 +118,7 @@ function getHtml(media, progress, listType) {
     ret = ret.replace("#{airing_content}", airingDiv);
 
     if (media.nextAiringEpisode.episode - 1 > progress)
-      ret = ret.replace("#{behind}", `<div class="is-behind"></div>`);
+      ret = ret.replace("#{behind}", `<div class="is-behind" id="${media.id}-behind"></div>`);
   } else {
     ret = ret.replace("#{airing_content}", "");
   }
@@ -150,16 +150,33 @@ function handleCardMouseOff(listType, media) {
   progressElement.style.opacity = 0.0;
 }
 
-function incrementMediaProgress(clickEvent, entry, token) {
-  if (clickEvent)
-    clickEvent.preventDefault();
+function incrementMediaProgress(clickEvent, listType, entry, token) {
+  clickEvent.preventDefault();
 
   fetch("../graphql/update_progress.graphql").then(res => res.text()).then(res => {
     chrome.runtime.getBackgroundPage(page => {
       page.queryAL(res, {
         listId: entry.id,
         progress: entry.progress + 1
-      }, token).then(res => res.json()).then(res => res.data.SaveMediaListEntry).then(res => clickEvent.target.innerHTML = res.progress + " +");
+      }, token).then(res => res.json()).then(res => res.data.SaveMediaListEntry).then(res => {
+        if ((entry.media.episodes && res.progress >= entry.media.episodes) || (entry.media.chapters && res.progress >= entry.media.chapters)) {
+          let card = document.getElementById(listType + "-" + entry.media.id);
+          card.parentNode.removeChild(card);
+        }
+
+        entry.progress++;
+
+        let span = clickEvent.target; // Assume clicked on the text itself
+        if (clickEvent.target.nodeName === "DIV") // If not, they clicked on the wrapper div
+          span = clickEvent.target.childNodes[1]; // Get text itself from div
+        span.innerText = `${res.progress} +`;
+
+        if (entry.media.nextAiringEpisode && res.progress >= entry.media.nextAiringEpisode.episode - 1) {
+          let behind = document.getElementById(entry.media.id + "-behind");
+          if (behind)
+            behind.parentNode.removeChild(behind);
+        }
+      });
     })
   });
 }

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.5
+
+#### Fixed
+
+* Incrementing a media entry only updates progress the first time
+* Incrementing a media entry that is marked as behind to a status that makes it not behind does not remove the marker
+
 ## 1.0.4
 
 #### Fixed
