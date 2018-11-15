@@ -6,6 +6,7 @@
 
 * Incrementing a media entry only updates progress the first time
 * Incrementing a media entry that is marked as behind to a status that makes it not behind does not remove the marker
+* Sidebar notification icon does not display current notification count until the task has run again
 
 #### Added
 
@@ -33,7 +34,7 @@
 #### Added
 
 * A changelog to the about page
-* Notification icon now diplays the notification count
+* Notification icon now displays the notification count
 
 #### Changed
 

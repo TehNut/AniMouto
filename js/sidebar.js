@@ -10,7 +10,13 @@ const pages = {
   },
   notifications: {
     id: "notifications",
-    exists: false
+    exists: false,
+    postHandle: function() {
+      chrome.browserAction.getBadgeText({}, text => {
+        if (text !== "" && parseInt(text) > 0)
+          updateNotifications(parseInt(text));
+      });
+    }
   },
   settings: {
     id: "settings",
@@ -67,7 +73,9 @@ document.addEventListener("DOMContentLoaded", e => {
     });
 
     document.getElementById("navigation").insertAdjacentElement("beforeend", listElement);
-  })
+    if (key.postHandle)
+      key.postHandle();
+  });
 
   chrome.storage.local.get({ user_info: { site_url: "https://anilist.co", avatar: "https://s3.anilist.co/user/avatar/medium/default.png" } }, value => {
     let avatarElement = document.getElementById("avatar");
