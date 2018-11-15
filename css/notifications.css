@@ -34,6 +34,7 @@ a {
   width: 45px;
   height: 45px;
   position: absolute;
+  object-fit: cover;
 }
 
 .header {

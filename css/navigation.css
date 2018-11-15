@@ -36,6 +36,7 @@ li:hover {
   margin-left: 2px;
   margin-bottom: 6px;
   margin-top: 6px;
+  object-fit: cover;
 }
 
 .anilist-icon {
