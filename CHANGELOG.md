@@ -11,6 +11,8 @@
 #### Added
 
 * Completion of a media will now set the completion date
+* Forum page
+  * Displays the 10 most recently active forum posts
 
 ## 1.0.4
 

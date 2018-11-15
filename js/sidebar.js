@@ -8,6 +8,10 @@ const pages = {
     id: "search",
     exists: false
   },
+  forum: {
+    id: "forum",
+    exists: false
+  },
   notifications: {
     id: "notifications",
     exists: false,

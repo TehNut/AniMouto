@@ -7,7 +7,8 @@
       "Sidebar notification icon does not display current notification count until the task has run again"
     ],
     "add": [
-      "Completion of a media will now set the completion date"
+      "Completion of a media will now set the completion date",
+      "Forum page which shows the 10 most recently active threads"
     ]
   },
   "1.0.4": {
