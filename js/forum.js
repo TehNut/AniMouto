@@ -18,7 +18,7 @@ function handleThreads() {
           const threadTemplate = `
             <div class="section" id="${thread.id}" style="position:relative;margin-bottom:10px;padding:10px;">
               <div class="thread-title">
-                <a href="${thread.siteUrl}" class="thread-text">${thread.title}</a>
+                <a href="${thread.siteUrl}" class="thread-text" target="_blank">${thread.title}</a>
               </div>
               <br />
               <a href="${thread.replyUser.siteUrl}" class="thread-commenter" target="_blank">
