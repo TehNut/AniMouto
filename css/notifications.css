@@ -29,7 +29,7 @@ a {
   border-right: rgb(var(--color-accent)) medium inset;
 }
 
-.avatar {
+.notification-icon {
   border-radius: 50%;
   width: 45px;
   height: 45px;

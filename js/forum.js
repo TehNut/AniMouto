@@ -18,14 +18,14 @@ function handleThreads() {
           const threadTemplate = `
             <div class="section" id="${thread.id}" style="position:relative;margin-bottom:10px;padding:10px;">
               <div class="thread-title">
-                <a href="${thread.siteUrl}" class="thread-text" target="_blank">${thread.title}</a>
+                <a href="${thread.siteUrl}" class="highlight-hover" target="_blank">${thread.title}</a>
               </div>
               <br />
               <a href="${thread.replyUser.siteUrl}" class="thread-commenter" target="_blank">
-                <img src="${thread.replyUser.avatar.medium}" class="avatar" />
+                <img src="${thread.replyUser.avatar.medium}" class="avatar forum-avatar" />
                 <span class="highlight">${thread.replyUser.name}</span>
               </a>
-              <a href="${thread.siteUrl}/comment/${thread.latest}" class="thread-text" target="_blank">replied ${parseTime(Math.abs(thread.repliedAt - Date.now() / 1000))} ago</a>
+              <a href="${thread.siteUrl}/comment/${thread.latest}" class="highlight-hover" target="_blank">replied ${parseTime(Math.abs(thread.repliedAt - Date.now() / 1000))} ago</a>
               <span class="thread-info">
                 <span><i class="material-icons" style="padding-right:2px;font-size:10px;vertical-align:bottom;">visibility</i>${thread.viewCount}</span>
                 <span><i class="material-icons" style="padding-right:2px;font-size:10px;vertical-align:bottom;">message</i>${thread.replyCount}</span>

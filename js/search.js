@@ -51,7 +51,7 @@ function handleMedia(media, anime, resultArea) {
   entryLinkWrapper.insertAdjacentElement("beforeend", entryElement);
 
   let imgElement = document.createElement("img");
-  imgElement.className = "entry-image";
+  imgElement.className = "entry-image no-select";
   imgElement.src = media.img.large;
   entryElement.insertAdjacentElement("beforeend", imgElement);
 

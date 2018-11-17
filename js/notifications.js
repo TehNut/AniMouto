@@ -116,7 +116,7 @@ function parseTime(secs) {
 
 const notificationSection = `
   <div class="section notification #{unread}" id="notification-#{notification_id}">
-    <a href="#{user_link}" target="_blank"><img class="avatar" src="#{user_avatar}" /></a>
+    <a href="#{user_link}" target="_blank"><img class="avatar notification-icon no-select" src="#{user_avatar}" /></a>
     <a class="notification-body" href="#{activity_link}" target="_blank">#{activity_message}</a>
     <span class="notification-time">#{activity_time}</span>
   </div>

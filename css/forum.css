@@ -1,12 +1,3 @@
-.thread-text {
-  color: rgb(var(--color-text));
-  transition: .3s;
-}
-
-.thread-text:hover {
-  color: rgb(var(--color-accent));
-}
-
 .thread-title {
   max-width: 380px;
   font-size: 14px;
@@ -24,12 +15,9 @@
   right: 5px;
 }
 
-.avatar {
-  border-radius: 50%;
+.forum-avatar {
   width: 25px;
   height: 25px;
-  vertical-align: middle;
-  object-fit: cover;
 }
 
 .header {

@@ -42,7 +42,6 @@
   width: 70%;
   height: 35px;
   border-radius: 4px;
-  /* border: 2px solid rgb(var(--color-accent)); */
 }
 
 .result-container {
@@ -96,6 +95,6 @@
 }
 
 .enabled:hover {
-  color: rgb(var(--color-accent));
+  color: rgb(var(--color-green));
   font-size: 16px;
 }

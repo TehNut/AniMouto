@@ -16,6 +16,7 @@
   max-height: 115px;
   width: 85px;
   background-size: cover;
+  background-position: center;
   border-radius: 3px;
   position: relative;
 }
@@ -58,14 +59,7 @@
   bottom: 0;
 }
 
-.icon {
-  color: rgba(var(--color-text), 0.4);
-  transition: .3s;
-  cursor: pointer;
+.refresh-icon {
   position: absolute;
   right: 20;
-}
-
-.icon:hover {
-  color: rgb(var(--color-accent));
 }

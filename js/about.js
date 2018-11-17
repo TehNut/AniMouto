@@ -15,7 +15,6 @@ function handleChangelog(manifest) {
       return;
     }
 
-    document.getElementById("view-full-changelog").addEventListener("click", e => window.open("https://github.com/TehNut/AniMouto/blob/master/CHANGELOG.md"))
     let changelogArea = document.getElementById("changes-stage");
 
     addChangelogSection(changelogArea, "Fixes", latestChanges.fix);
@@ -25,7 +24,7 @@ function handleChangelog(manifest) {
 }
 
 function addChangelogSection(stage, title, section) {
-  stage.insertAdjacentHTML("beforeend", "<h2 class='highlight'>" + title + "</h2>");
+  stage.insertAdjacentHTML("beforeend", "<h2 class='highlight section-title'>" + title + "</h2>");
   if (section && section.length > 0) {
     let changeList = "";
     for (let line in section)
