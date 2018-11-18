@@ -1,8 +1,4 @@
-// dev
-const clientId = 1336, clientSecret = "MgQlEhAPKIijPCw25FIxldtuiIG2ilijbXuMvdJ1";
-// live
-// const clientId = 1299, clientSecret = "e7qcv8eDlB8tSo7ShzTMcKKKj988MsczIKeQLi7d";
-
+const clientId = 1299, clientSecret = "e7qcv8eDlB8tSo7ShzTMcKKKj988MsczIKeQLi7d";
 const redirectUri = chrome.identity.getRedirectURL("oauth");
 const authUrl = "https://anilist.co/api/v2/oauth/authorize?client_id=" + clientId + "&redirect_uri=" + redirectUri + "&response_type=code";
 
