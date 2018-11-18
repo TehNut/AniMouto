@@ -111,7 +111,7 @@ function parseTime(secs) {
   if (minutes > 0)
     return (ret.length == 0 ? "" : " ") + minutes + "m"
 
-  return ret;
+  return ret === "" ? "<1m" : ret;
 }
 
 const notificationSection = `
