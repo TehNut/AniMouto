@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.0.6
+
+#### Fixed
+
+* Some images appear squashed
+* Changelog link tries to open in iframe
+* Forum links try to open in iframe
+
+#### Changed
+
+* Cleaned up styling
+* Notifications should display "<1m" instead of nothing
+
 ## 1.0.5
 
 #### Fixed
