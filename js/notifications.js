@@ -56,7 +56,7 @@ function beginNotifications(token) {
 function getActivityEntry(notification, unread) {
   let newSection = notificationSection
     .replace("#{user_link}", notification.user.url)
-    .replace("#{unread}", unread || true ? "unread" : "")
+    .replace("#{unread}", unread ? "unread" : "")
     .replace("#{user_avatar}", notification.user.img.large)
     .replace("#{activity_link}", notification.activity ? notification.activity.url : notification.user.url)
     .replace("#{activity_message}", "<span class='highlight'>" + notification.user.name + "</span>" + notification.context)
