@@ -10,8 +10,8 @@ document.addEventListener("DOMContentLoaded", e => {
     document.getElementById("view-more-button").addEventListener("click", () => window.open("https://anilist.co/notifications"));
     document.getElementById("mark-read-button").addEventListener("click", () => {
       let unread = document.getElementsByClassName("unread");
-      for (let i = 0; i < unread.length; i++)
-        unread[i].classList.remove("unread");
+      while (unread[0])
+        unread[0].classList.remove("unread");
     });
   });
 });
@@ -56,7 +56,7 @@ function beginNotifications(token) {
 function getActivityEntry(notification, unread) {
   let newSection = notificationSection
     .replace("#{user_link}", notification.user.url)
-    .replace("#{unread}", unread ? "unread" : "")
+    .replace("#{unread}", unread || true ? "unread" : "")
     .replace("#{user_avatar}", notification.user.img.large)
     .replace("#{activity_link}", notification.activity ? notification.activity.url : notification.user.url)
     .replace("#{activity_message}", "<span class='highlight'>" + notification.user.name + "</span>" + notification.context)
