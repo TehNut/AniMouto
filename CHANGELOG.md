@@ -2,6 +2,12 @@
 
 ## 1.0.6
 
+#### Changed
+
+Authorization tokens are now obtained via an implicit grant rather than an authorization code grant
+
+## 1.0.6
+
 #### Fixed
 
 * Some images appear squashed
