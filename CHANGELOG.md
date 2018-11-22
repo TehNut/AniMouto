@@ -1,10 +1,17 @@
 # Changelog
 
+## 1.0.8
+
+#### Changed
+
+* Created properly sized AL icons for various situations
+  * Created directly from the AL logo SVG
+
 ## 1.0.7
 
 #### Changed
 
-Authorization tokens are now obtained via an implicit grant rather than an authorization code grant
+* Authorization tokens are now obtained via an implicit grant rather than an authorization code grant
 
 ## 1.0.6
 

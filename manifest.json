@@ -19,17 +19,17 @@
   "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "img/anilist_icon.png",
-      "32": "img/anilist_icon.png",
-      "48": "img/anilist_icon.png",
-      "128": "img/anilist_icon.png"
+      "16": "img/anilist_icon_16x.png",
+      "32": "img/anilist_icon_32x.png",
+      "48": "img/anilist_icon_48x.png",
+      "128": "img/anilist_icon_128x.png"
     }
   },
   "icons": {
-    "16": "img/anilist_icon.png",
-    "32": "img/anilist_icon.png",
-    "48": "img/anilist_icon.png",
-    "128": "img/anilist_icon.png"
+    "16": "img/anilist_icon_16x.png",
+    "32": "img/anilist_icon_32x.png",
+    "48": "img/anilist_icon_48x.png",
+    "128": "img/anilist_icon_128x.png"
   },
   "web_accessible_resources": [
     "/oauth2/*"

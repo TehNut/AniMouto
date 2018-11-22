@@ -1,5 +1,10 @@
 
 {
+  "1.0.8": {
+    "change": [
+      "Created properly sized AL icons for various situations"
+    ]
+  },
   "1.0.7": {
     "change": [
       "Authorization tokens are now obtained via an implicit grant rather than an authorization code grant"
