@@ -1,4 +1,6 @@
-chrome.alarms.create("notification_updater", { delayInMinutes: 1, periodInMinutes: 1 });
+chrome.storage.local.get({ notification_interval: 1 }, value => {
+  modifyAlarmTime("notification_updater", value.notification_interval);
+})
 chrome.alarms.onAlarm.addListener(alarm => {
   if (alarm.name === "notification_updater")
     checkForNotifications();
@@ -19,4 +21,10 @@ function checkForNotifications() {
       chrome.browserAction.setBadgeBackgroundColor({ color: [61, 180, 242, Math.floor(255 * 0.8)] }, () => {});
     });
   });
+}
+
+function modifyAlarmTime(name, time) {
+  console.log("Set alarm " + name + " to an interval of " + time + " minutes")
+  chrome.alarms.clear(name);
+  chrome.alarms.create(name, { delayInMinutes: time, periodInMinutes: time });
 }

@@ -3,15 +3,15 @@ document.addEventListener("DOMContentLoaded", e => {
     let loginText = "Logged in as <a href='" + value.user_info.site_url + "' style='color:rgb(var(--color-accent));font_weight:bold;' target='_blank'>" + value.user_info.name + "</a>";
     document.getElementById("login-name").insertAdjacentHTML("afterbegin", loginText);
 
-    document.getElementById("theme-light").addEventListener("click", () => changeTheme("light"));
-    document.getElementById("theme-dark").addEventListener("click", () => changeTheme("dark"));
-    document.getElementById("theme-contrast").addEventListener("click", () => changeTheme("contrast"));
-
     document.getElementById("logout-button").addEventListener("click", () => {
       chrome.storage.local.clear();
       chrome.runtime.sendMessage({ type: "change_page", page: "login" });
       chrome.runtime.sendMessage({ type: "change_avatar", avatar: "https://s3.anilist.co/user/avatar/medium/default.png" });
     });
+
+    document.getElementById("theme-light").addEventListener("click", () => changeTheme("light"));
+    document.getElementById("theme-dark").addEventListener("click", () => changeTheme("dark"));
+    document.getElementById("theme-contrast").addEventListener("click", () => changeTheme("contrast"));
 
     let accentButtons = document.getElementsByClassName("accent-button");
     for (let element in accentButtons) {
@@ -21,6 +21,18 @@ document.addEventListener("DOMContentLoaded", e => {
         element.addEventListener("click", e => changeColor(element));
       }
     }
+  });
+
+  chrome.storage.local.get({ notification_interval: 1 }, value => {
+    document.getElementById("notification-time").value = value.notification_interval;
+  })
+
+  document.getElementById("notification-save").addEventListener("click", () => {
+    let notificationInterval = parseInt(document.getElementById("notification-time").value);
+    chrome.storage.local.set({ notification_interval: notificationInterval });
+    chrome.runtime.getBackgroundPage(page => {
+      page.modifyAlarmTime("notification_updater", notificationInterval);
+    });
   });
 });
 

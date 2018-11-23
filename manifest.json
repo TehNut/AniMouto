@@ -15,7 +15,7 @@
   "background": {
     "scripts": [
       "bg/oauth_handler.js",
-      "bg/notification_watcher.js",
+      "bg/alarms.js",
       "bg/anilist_util.js"
     ],
     "persistent": false

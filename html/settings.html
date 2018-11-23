@@ -12,20 +12,22 @@
 <body>
   <br>
   <div id="container">
-    <h1 class="section-title">AniMouto Settings</h1>
+    <h1 class="section-title">Login/Data</h1>
     <div class="section">
       <h2 id="login-name" class="section-title" style="padding-left:auto;padding-right:auto;"></h2>
       <div id="logout-button" class="button no-select" style="margin:0;">Logout</div>
     </div>
 
+    <h1 class="section-title">AniMouto Theme</h1>
     <div class="section">
-      <h2 class="section-title">AniMouto Theme</h2>
+      <h2 class="section-title">Primary Scheme</h2>
       <div class="theme-preview no-select" style="background-color:rgb(237, 241, 245);color:rgb(92, 114, 138)" id="theme-light">A</div>
       <div class="theme-preview no-select" style="background-color:rgb(39, 44, 56);color:rgb(159, 173, 189)" id="theme-dark">A</div>
       <div class="theme-preview no-select" style="background-color:rgb(214, 224, 239);color:rgb(0, 0, 0)" id="theme-contrast">A</div>
-    </div>
 
-    <div class="section">
+      <br />
+      <br />
+
       <h2 class="section-title">Accent Color</h2>
       <div id="accent-colors">
         <div class="accent-button" id="accent-blue" style="background-color:rgb(var(--color-blue))"></div>
@@ -38,6 +40,16 @@
         <div class="accent-button" id="accent-yellow" style="background-color:rgb(var(--color-yellow))"></div>
         <div class="accent-button" id="accent-green" style="background-color:rgb(var(--color-green))"></div>
       </div>
+    </div>
+
+    <h1 class="section-title">Notifications</h2>
+    <div class="section">
+      <h2 class="section-title">Notification check interval in minutes</h2>
+      <div class="text-input-container" style="margin-left:0px;">
+        <input type="number" class="text-input" id="notification-time" placeholder="Minutes" autocomplete="off" style="background-color:rgb(var(--color-background));width:50px;margin-left:0;" />
+      </div>
+      <br />
+      <div class="button" id="notification-save">Save</div>
     </div>
   </div>
 </body>
