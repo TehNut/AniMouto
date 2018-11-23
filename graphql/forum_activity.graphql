@@ -1,5 +1,5 @@
 {
-  Page(perPage: 10) {
+  Page(perPage: 25) {
     threads(sort: REPLIED_AT_DESC) {
       id
       siteUrl
