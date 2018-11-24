@@ -62,6 +62,10 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   margin: 0;
 }
 
+input[type=checkbox] {
+  visibility: hidden;
+}
+
 /* Main page div */
 #container {
   padding: 10px;
@@ -86,6 +90,15 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   font-weight: 500;
 }
 
+.title {
+  color: rgb(var(--color-text));
+  margin: 0;
+  padding: 0;
+  padding-bottom: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
 .spacer {
   border-top: 2px solid rgb(var(--color-accent));
   margin-left: auto;
@@ -105,6 +118,44 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   margin: 10px;
   padding: 10px 15px;
   transition: .3s;
+}
+
+.checkbox {
+  position: relative;
+}
+
+.checkbox label {
+  cursor: pointer;
+  position: absolute;
+  width: 17px;
+  height: 17px;
+  top: 0;
+  left: 0;
+  background-color: rgb(var(--color-accent));
+  border-radius: 3px;
+}
+
+.checkbox label:after {
+  opacity: 0.1;
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 4px;
+  background: transparent;
+  top: 4px;
+  left: 3px;
+  border: 3px solid rgb(var(--color-text-bright));
+  border-top: none;
+  border-right: none;
+  transform: rotate(-55deg);
+}
+
+.checkbox label:hover::after {
+  opacity: 0.5;
+}
+
+.checkbox input[type=checkbox]:checked+label:after {
+  opacity: 1;
 }
 
 .disabled {
@@ -138,6 +189,12 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   border-radius: 50%;
   vertical-align: middle;
   object-fit: cover;
+}
+
+.subtext {
+  margin-top: -5px;
+  padding-left: 15px;
+  color: rgb(var(--color-text));
 }
 
 .icon {

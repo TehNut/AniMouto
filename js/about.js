@@ -24,7 +24,7 @@ function handleChangelog(manifest) {
 }
 
 function addChangelogSection(stage, title, section) {
-  stage.insertAdjacentHTML("beforeend", "<h2 class='highlight section-title'>" + title + "</h2>");
+  stage.insertAdjacentHTML("beforeend", "<h2 class='highlight title'>" + title + "</h2>");
   if (section && section.length > 0) {
     let changeList = "";
     for (let line in section)

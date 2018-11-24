@@ -23,13 +23,17 @@ document.addEventListener("DOMContentLoaded", e => {
     }
   });
 
-  chrome.storage.local.get({ notification_interval: 1 }, value => {
-    document.getElementById("notification-time").value = value.notification_interval;
+  chrome.storage.local.get({ notifications: { interval: 1, enabled: true } }, value => {
+    document.getElementById("notification-enabled").checked = value.notifications.enabled;
+    document.getElementById("notification-time").value = value.notifications.interval;
   })
 
   document.getElementById("notification-save").addEventListener("click", () => {
     let notificationInterval = parseInt(document.getElementById("notification-time").value);
-    chrome.storage.local.set({ notification_interval: notificationInterval });
+    let checkerEnabled = document.getElementById("notification-enabled").checked;
+
+    chrome.storage.local.set({ notifications: { interval: notificationInterval, enabled: checkerEnabled } });
+
     chrome.runtime.getBackgroundPage(page => {
       page.modifyAlarmTime("notification_updater", notificationInterval);
     });
