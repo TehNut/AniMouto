@@ -2,10 +2,20 @@
 
 ## 1.0.8
 
+#### Added
+
+* Added a config for how often (if at all) to check for new notifications in the background
+* Added titles to the theme selection boxes
+* Display the AniMouto logo in the about page
+
 #### Changed
 
 * Created properly sized AL icons for various situations
   * Created directly from the AL logo SVG
+* Increased number of threads queried to match the notification query
+* Removed ability to select black/white accent colors
+* Switched from using the AniList logo to the AniMouto logo
+* Switched AniList logo at the bottom of the navigation bar to use an SVG instead of a PNG
 
 ## 1.0.7
 
