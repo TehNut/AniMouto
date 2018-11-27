@@ -1,9 +1,9 @@
-{
+query($amount: Int, $reset: Boolean) {
   Viewer {
     unreadNotificationCount
   }
-  Page(perPage: 25) {
-    notifications(resetNotificationCount: true) {
+  Page(perPage: $amount) {
+    notifications(resetNotificationCount: $reset) {
       __typename
       ... on ActivityLikeNotification {
         user {

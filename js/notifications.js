@@ -24,7 +24,7 @@ function beginNotifications(token) {
   container.insertAdjacentHTML("beforeend", "<h2 id='loading' class='section-title ellipsis' style='padding-left:10px'>Loading</h2>");
   fetch("../graphql/notifications.graphql").then(res => res.text()).then(res => {
     chrome.runtime.getBackgroundPage(page => {
-      page.queryAL(res, {}, token)
+      page.queryAL(res, { amount: 25, reset: true }, token)
         .then(res => res.json())
         .then(res => res.data)
         .then(res => {

@@ -23,16 +23,25 @@ document.addEventListener("DOMContentLoaded", e => {
     }
   });
 
-  chrome.storage.local.get({ notifications: { interval: 1, enabled: true } }, value => {
+  chrome.storage.local.get({ notifications: { interval: 1, enabled: true, desktop: false } }, value => {
     document.getElementById("notification-enabled").checked = value.notifications.enabled;
     document.getElementById("notification-time").value = value.notifications.interval;
+    document.getElementById("desktop-enabled").checked = value.notifications.desktop;
   })
 
   document.getElementById("notification-save").addEventListener("click", () => {
     let notificationInterval = parseInt(document.getElementById("notification-time").value);
     let checkerEnabled = document.getElementById("notification-enabled").checked;
+    let desktopEnabled = document.getElementById("desktop-enabled").checked;
 
     chrome.storage.local.set({ notifications: { interval: notificationInterval, enabled: checkerEnabled } });
+
+    chrome.permissions.request({
+      permissions: ["notifications"]
+    }, granted => {
+      chrome.storage.local.set({ notifications: { desktop: desktopEnabled && granted } });
+    });
+
 
     chrome.runtime.getBackgroundPage(page => {
       page.modifyAlarmTime("notification_updater", notificationInterval);

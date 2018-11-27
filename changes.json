@@ -2,6 +2,11 @@
 {
   "1.0.8": {
     "add": [
+      "Desktop notifications *crab rave*"
+    ]
+  },
+  "1.0.8": {
+    "add": [
       "Added a config for how often (if at all) to check for new notifications in the background",
       "Added titles to the theme selection boxes",
       "Display the AniMouto logo in the about page"

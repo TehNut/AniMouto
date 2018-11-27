@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.9
+
+#### Added
+
+* Desktop notifications *crab rave*
+
 ## 1.0.8
 
 #### Added
