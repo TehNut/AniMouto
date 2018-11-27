@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", e => {
       chrome.storage.local.clear();
       chrome.runtime.sendMessage({ type: "change_page", page: "login" });
       chrome.runtime.sendMessage({ type: "change_avatar", avatar: "https://s3.anilist.co/user/avatar/medium/default.png" });
+      chrome.runtime.sendMessage({ type: "display_toast", toast: { type: "butter", text: "Logout successful" } });
     });
 
     document.getElementById("theme-light").addEventListener("click", () => changeTheme("light"));
@@ -46,6 +47,8 @@ document.addEventListener("DOMContentLoaded", e => {
     chrome.runtime.getBackgroundPage(page => {
       page.modifyAlarmTime("notification_updater", notificationInterval);
     });
+
+    chrome.runtime.sendMessage({ type: "display_toast", toast: { type: "butter", text: "Settings saved" } });
   });
 });
 

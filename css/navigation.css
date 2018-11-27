@@ -29,6 +29,17 @@ li:hover {
   padding: 0;
 }
 
+#toast {
+  pointer-events: none;
+  position: absolute;
+  padding-top: 20px;
+  overflow: hidden;
+  right: 0;
+  top: 0;
+  width: 470;
+  height: 600;
+}
+
 #avatar img {
   position: inherit;
   width: 90%;
@@ -37,6 +48,27 @@ li:hover {
   margin-bottom: 6px;
   margin-top: 6px;
   object-fit: cover;
+}
+
+.toast {
+  min-width: 100px;
+  width: 100px;
+  min-height: 30px;
+  line-height: 30px;
+  font-size: 14px;
+  text-align: center;
+  color: rgba(var(--color-text-bright), .8);
+  border-radius: 5px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.burnt {
+  background-color: rgba(var(--color-red), .8);
+}
+
+.butter {
+  background-color: rgba(var(--color-accent), .8);
 }
 
 .anilist-icon {

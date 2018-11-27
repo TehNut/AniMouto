@@ -52,6 +52,9 @@ chrome.runtime.onMessage.addListener((message, sender, response) => {
 
   if (message.type === "change_page")
     changePage(message.page);
+
+  if (message.type === "display_toast")
+    displayToast(message.toast);
 });
 
 let currentPage = "";
@@ -151,4 +154,12 @@ function updateNotifications(amount) {
 
   countDiv.style.display = amount > 0 ? "inline-block" : "none";
   countDiv.innerText = tooBig ? "99+" : amount.toString();
+}
+
+function displayToast(toast) {
+  let newToast = document.createElement("div");
+  newToast.className = "toast " + toast.type;
+  newToast.innerText = toast.text;
+  document.getElementById("toast").insertAdjacentElement("beforeend", newToast);
+  setTimeout(() => newToast.parentNode.removeChild(newToast), 5000);
 }
