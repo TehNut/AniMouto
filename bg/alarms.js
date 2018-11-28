@@ -1,11 +1,5 @@
-chrome.runtime.onStartup.addListener(() => {
-  console.log("startup")
-  startup()
-});
-chrome.runtime.onInstalled.addListener(() => {
-  console.log("installed")
-  startup()
-});
+chrome.runtime.onStartup.addListener(startup);
+chrome.runtime.onInstalled.addListener(startup);
 
 chrome.alarms.onAlarm.addListener(alarm => {
   if (alarm.name === "notification_updater") {
@@ -36,13 +30,10 @@ function checkForNotifications() {
         chrome.browserAction.setBadgeText({ text: count > 0 ? count.toString() : "" });
         chrome.browserAction.setBadgeBackgroundColor({ color: [61, 180, 242, Math.floor(255 * 0.8)] }, () => {});
 
-        console.log(`${count} | ${lastCheck} | ${count - lastCheck}`)
-
         if (count > 0 && count - lastCheck > 0)
           handleDesktopNotifications(count - lastCheck, value.access_token);
 
         chrome.storage.local.set({ notifications: { lastCheck: count } })
-        console.log(`new lastCheck ${lastCheck}`)
       });
   });
 }
@@ -56,7 +47,7 @@ function startup() {
 }
 
 function modifyAlarmTime(name, time) {
-  console.log("Set alarm " + name + " to an interval of " + time + " minutes")
+  console.debug("Set alarm " + name + " to an interval of " + time + " minutes")
   chrome.alarms.clear(name);
   chrome.alarms.create(name, { delayInMinutes: time, periodInMinutes: time });
 }
