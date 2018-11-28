@@ -1,7 +1,10 @@
-chrome.storage.local.get({ notifications: { interval: 1, enabled: true } }, value => {
-  modifyAlarmTime("notification_updater", value.notifications.interval);
-  if (value.notifications.enabled)
-    checkForNotifications(); // Initial check to account for 1m delay
+chrome.runtime.onStartup.addListener(() => {
+  console.log("startup")
+  startup()
+});
+chrome.runtime.onInstalled.addListener(() => {
+  console.log("installed")
+  startup()
 });
 
 chrome.alarms.onAlarm.addListener(alarm => {
@@ -18,26 +21,37 @@ chrome.notifications.onClicked.addListener(notification => {
     window.open(notification);
 })
 
-let lastCheck = 0;
 function checkForNotifications() {
-  chrome.storage.local.get({ access_token: "" }, value => {
+  chrome.storage.local.get({ access_token: "", notifications: { lastCheck: 0 } }, value => {
     if (value.access_token === "")
       return;
 
     console.debug("Checking for new notifications")
     queryAL("{Viewer{unreadNotificationCount}}", {}, value.access_token)
       .then(res => res.json()).then(res => {
+        let lastCheck = value.notifications.lastCheck;
         let count = res.data.Viewer.unreadNotificationCount;
-        console.debug("Found " + count + " new notification(s)");
+        console.debug("Found " + count + " unread notification(s)");
         chrome.runtime.sendMessage({ type: "update_notifications", notification_count: count });
         chrome.browserAction.setBadgeText({ text: count > 0 ? count.toString() : "" });
         chrome.browserAction.setBadgeBackgroundColor({ color: [61, 180, 242, Math.floor(255 * 0.8)] }, () => {});
 
+        console.log(`${count} | ${lastCheck} | ${count - lastCheck}`)
+
         if (count > 0 && count - lastCheck > 0)
           handleDesktopNotifications(count - lastCheck, value.access_token);
 
-        lastCheck = count;
+        chrome.storage.local.set({ notifications: { lastCheck: count } })
+        console.log(`new lastCheck ${lastCheck}`)
       });
+  });
+}
+
+function startup() {
+  chrome.storage.local.get({ notifications: { interval: 1, enabled: true } }, value => {
+    modifyAlarmTime("notification_updater", value.notifications.interval);
+    if (value.notifications.enabled)
+      checkForNotifications(); // Initial check to account for 1m delay
   });
 }
 
