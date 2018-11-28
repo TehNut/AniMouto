@@ -3,6 +3,7 @@ chrome.storage.local.get({ notifications: { interval: 1, enabled: true } }, valu
   if (value.notifications.enabled)
     checkForNotifications(); // Initial check to account for 1m delay
 });
+
 chrome.alarms.onAlarm.addListener(alarm => {
   if (alarm.name === "notification_updater") {
     chrome.storage.local.get({ notifications: { enabled: true } }, value => {
@@ -11,6 +12,11 @@ chrome.alarms.onAlarm.addListener(alarm => {
     })
   }
 });
+
+chrome.notifications.onClicked.addListener(notification => {
+  if (notification.startsWith("https://anilist.co/"))
+    window.open(notification);
+})
 
 let lastCheck = 0;
 function checkForNotifications() {
