@@ -5,6 +5,12 @@
 #### Added
 
 * Desktop notifications *crab rave*
+* Simple toast system for visual feedback
+
+#### Changed
+
+* Standardized the layout of the about page
+* If notification checks are enabled, one will be run after the browser is opened rather than waiting for the alarm to fire
 
 ## 1.0.8
 
