@@ -41,6 +41,10 @@ document.addEventListener("DOMContentLoaded", e => {
       permissions: ["notifications"]
     }, granted => {
       chrome.storage.local.set({ notifications: { desktop: desktopEnabled && granted } });
+      if (desktopEnabled && !granted) {
+        chrome.runtime.sendMessage({ type: "display_toast", toast: { type: "burnt", text: "No permission to display desktop notifications" } });
+        document.getElementById("desktop-enabled").checked = false;
+      }
     });
 
 
