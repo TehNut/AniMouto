@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.0.10
+
+#### Added
+
+* Added a way to directly add media to your current list from search
+
+#### Fixed
+
+* Fixed issue where desktop notifications were constantly being repeated
+
+#### Changed
+
+* Desktop notifications are now clickable
+
 ## 1.0.9
 
 #### Added
