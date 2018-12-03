@@ -156,7 +156,7 @@ function incrementMediaProgress(clickEvent, listType, entry, token) {
   fetch("../graphql/update_progress.graphql").then(res => res.text()).then(res => {
     chrome.runtime.getBackgroundPage(page => {
       let completionDate = null;
-      if (entry.progress + 1 >= entry.media.episodes) {
+      if (entry.progress + 1 >= entry.media.episodes && entry.progress + 1 >= entry.media.chapters) {
         let currentDate = new Date(Date.now());
         completionDate = { year: currentDate.getFullYear(), month: currentDate.getMonth() + 1, day: currentDate.getDate() };
       }
