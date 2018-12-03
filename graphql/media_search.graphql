@@ -2,6 +2,7 @@ query ($search: String) {
   Page(perPage: 50) {
     media(search: $search) {
       id
+      status
       img: coverImage {
         large
       }
@@ -12,6 +13,7 @@ query ($search: String) {
       url: siteUrl
       mediaListEntry {
         id
+        status
       }
     }
   }

@@ -64,7 +64,25 @@ function handleMedia(media, anime, resultArea) {
   iconArea.className = "entry-icons";
   entryElement.insertAdjacentElement("beforeend", iconArea);
 
+  let currentElement = document.createElement("i");
   let ptrElement = document.createElement("i");
+
+  if (media.status !== "NOT_YET_RELEASED") {
+    currentElement.className = "material-icons entry-icon no-select";
+    currentElement.title = "Already listed";
+    if (!media.mediaListEntry || media.mediaListEntry.status === "PLANNING") {
+      currentElement.title = "Add to current";
+      currentElement.className += " enabled";
+    }
+    currentElement.addEventListener("click", e => {
+      e.preventDefault();
+      if (!media.mediaListEntry)
+        handleEntryClick(media, ptrElement, currentElement, "CURRENT")
+    });
+    currentElement.innerText = "library_add";
+    iconArea.insertAdjacentElement("beforeend", currentElement);
+  }
+
   ptrElement.className = "material-icons entry-icon no-select";
   ptrElement.title = "Already listed";
   if (!media.mediaListEntry) {
@@ -74,9 +92,9 @@ function handleMedia(media, anime, resultArea) {
   ptrElement.addEventListener("click", e => {
     e.preventDefault();
     if (!media.mediaListEntry)
-      handlePTRClick(media, ptrElement)
+      handleEntryClick(media, ptrElement, currentElement, "PLANNING")
   });
-  ptrElement.innerHTML = "book";
+  ptrElement.innerText = "library_books";
   iconArea.insertAdjacentElement("beforeend", ptrElement);
 
   getResultArea(anime, resultArea).insertAdjacentElement("beforeend", entryLinkWrapper);
@@ -86,18 +104,27 @@ function isAnime(format) {
   return format !== "MANGA" && format !== "NOVEL" && format !== "ONE_SHOT";
 }
 
-function handlePTRClick(media, element) {
+function handleEntryClick(media, ptrElement, currentElement, status) {
   chrome.storage.local.get({ access_token: "" }, value => {
     if (value.access_token === "")
       return;
 
-    fetch("../graphql/mark_planning.graphql").then(res => res.text()).then(res => {
+    fetch("../graphql/update_viewing_status.graphql").then(res => res.text()).then(res => {
       chrome.runtime.getBackgroundPage(page => {
-        page.queryAL(res, { mediaId: media.id }, value.access_token)
+        page.queryAL(res, { mediaId: media.id, status: status }, value.access_token)
           .then(res => {
-            element.title = "Already listed";
-            element.classList.remove("enabled");
-            element.removeEventListener("click", handlePTRClick);
+            function setListed(element) {
+              element.title = "Already listed";
+              element.classList.remove("enabled");
+              element.removeEventListener("click", handleEntryClick);
+            }
+
+            if (status === "CURRENT") {
+              setListed(currentElement);
+              setListed(ptrElement);
+            } else {
+              setListed(ptrElement);
+            }
           });
       })
     });
