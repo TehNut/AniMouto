@@ -1,5 +1,13 @@
 
 {
+  "1.0.11": {
+    "add": [
+      "Added support for new ACTIVITY_REPLY_SUBSCRIBED notification type"
+    ],
+    "fix": [
+      "Completion date always being set upon manga progress incrementation"
+    ]
+  },
   "1.0.10": {
     "add": [
       "Added a way to directly add media to your current list from search"

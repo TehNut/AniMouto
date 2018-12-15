@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.11
+
+#### Added
+
+* Added support for new ACTIVITY_REPLY_SUBSCRIBED notification type
+
+#### Fixed
+
+* Completion date always being set upon manga progress incrementation
+
 ## 1.0.10
 
 #### Added
