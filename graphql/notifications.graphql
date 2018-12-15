@@ -65,6 +65,16 @@ query($amount: Int, $reset: Boolean) {
         context
         createdAt
       }
+      ... on ActivityReplySubscribedNotification {
+        user {
+          ...user
+        }
+        activity {
+          ...activity
+        }
+        context
+        createdAt
+      }
       ... on AiringNotification {
         media {
           ...media
