@@ -55,6 +55,9 @@ chrome.runtime.onMessage.addListener((message, sender, response) => {
 
   if (message.type === "display_toast")
     displayToast(message.toast);
+
+  if (message.type === "login_failure")
+    resetFirefox();
 });
 
 let currentPage = "";
