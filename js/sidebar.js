@@ -61,8 +61,15 @@ chrome.runtime.onMessage.addListener((message, sender, response) => {
 });
 
 let currentPage = "";
+let frameWidth = 470;
 
 document.addEventListener("DOMContentLoaded", e => {
+  // Fix spacing if Firefox
+  if (typeof InstallTrigger !== 'undefined') {
+    document.getElementsByTagName("body")[0].style.width = "532px";
+    frameWidth = 477;
+  }
+
   Object.keys(pages).forEach(key => {
     key = pages[key];
     if (key.id === "login")
@@ -117,7 +124,7 @@ function changePage(page) {
     pageEntry = pages[showPage];
     if (pageEntry && !pageEntry.exists) {
       let frame = document.createElement("iframe");
-      frame.width = 470;
+      frame.width = frameWidth;
       frame.height = 600;
       frame.frameBorder = "0";
       frame.style.display = "none";
