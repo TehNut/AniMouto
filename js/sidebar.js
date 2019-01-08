@@ -119,7 +119,7 @@ function changePage(page) {
       let frame = document.createElement("iframe");
       frame.width = 470;
       frame.height = 600;
-      frame.frameBorder = "none";
+      frame.frameBorder = "0";
       frame.style.display = "none";
       frame.id = "viewport-" + pageEntry.id;
       frame.src = "./html/" + pageEntry.id + ".html";
