@@ -97,9 +97,13 @@ document.addEventListener("DOMContentLoaded", e => {
 
 function changePage(page) {
   chrome.storage.local.get({ last_page: "medialist", access_token: "" }, value => {
+    if (value.access_token === "" && currentPage === "login")
+      return;
+
     let lastView = document.getElementById("viewport-" + currentPage);
     if (lastView)
       lastView.style.display = "none";
+
     let showPage = value.access_token === "" ? currentPage = "login" : currentPage = (page ? page : value.last_page);
 
     if (showPage === "login") {
