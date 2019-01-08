@@ -52,7 +52,7 @@ li:hover {
 
 .toast {
   min-width: 100px;
-  width: 100px;
+  max-width: 75%;
   min-height: 30px;
   line-height: 30px;
   font-size: 14px;
