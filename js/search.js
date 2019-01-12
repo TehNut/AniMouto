@@ -76,7 +76,7 @@ function handleMedia(media, anime, resultArea) {
     }
     currentElement.addEventListener("click", e => {
       e.preventDefault();
-      if (!media.mediaListEntry)
+      if (!media.mediaListEntry || media.mediaListEntry.status === "PLANNING")
         handleEntryClick(media, ptrElement, currentElement, "CURRENT")
     });
     currentElement.innerText = "library_add";
