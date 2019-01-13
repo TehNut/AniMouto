@@ -1,3 +1,5 @@
+const isChrome = typeof InstallTrigger === 'undefined';
+
 document.addEventListener("DOMContentLoaded", e => {
   chrome.storage.local.get({ user_info: { name: "", id: 0, site_url: "" } }, value => {
     let loginText = "Logged in as <a href='" + value.user_info.site_url + "' style='color:rgb(var(--color-accent));font-weight:bold;' target='_blank'>" + value.user_info.name + "</a>";
@@ -24,6 +26,9 @@ document.addEventListener("DOMContentLoaded", e => {
     }
   });
 
+  if (!isChrome)
+    document.getElementById("desktop-notifications").style.display = "none";
+
   chrome.storage.local.get({ notifications: { interval: 1, enabled: true, desktop: false } }, value => {
     document.getElementById("notification-enabled").checked = value.notifications.enabled;
     document.getElementById("notification-time").value = value.notifications.interval;
@@ -37,16 +42,17 @@ document.addEventListener("DOMContentLoaded", e => {
 
     chrome.storage.local.set({ notifications: { interval: notificationInterval, enabled: checkerEnabled } });
 
-    chrome.permissions.request({
-      permissions: ["notifications"]
-    }, granted => {
-      chrome.storage.local.set({ notifications: { desktop: desktopEnabled && granted } });
-      if (desktopEnabled && !granted) {
-        chrome.runtime.sendMessage({ type: "display_toast", toast: { type: "burnt", text: "No permission to display desktop notifications" } });
-        document.getElementById("desktop-enabled").checked = false;
-      }
-    });
-
+    if (isChrome) {
+      chrome.permissions.request({
+        permissions: ["notifications"]
+      }, granted => {
+        chrome.storage.local.set({ notifications: { desktop: desktopEnabled && granted } });
+        if (desktopEnabled && !granted) {
+          chrome.runtime.sendMessage({ type: "display_toast", toast: { type: "burnt", text: "No permission to display desktop notifications" } });
+          document.getElementById("desktop-enabled").checked = false;
+        }
+      });
+    }
 
     chrome.runtime.getBackgroundPage(page => {
       page.modifyAlarmTime("notification_updater", notificationInterval);
