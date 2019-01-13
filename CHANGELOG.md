@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.12
+
+#### Added
+
+* Added alternative login flow to prepare for Firefox support
+
+#### Fixed
+
+* Toasts are squished
+* An attempt is made to change the page while not logged in
+* Unable to add media marked as planning to current from search
+
 ## 1.0.11
 
 #### Added

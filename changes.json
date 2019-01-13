@@ -1,5 +1,15 @@
 
 {
+  "1.0.12": {
+    "add": [
+      "Added alternative login flow to prepare for Firefox support"
+    ],
+    "fix": [
+      "Toasts are squished",
+      "An attempt is made to change the page while not logged in",
+      "Unable to add media marked as planning to current from search"
+    ]
+  },
   "1.0.11": {
     "add": [
       "Added support for new ACTIVITY_REPLY_SUBSCRIBED notification type"
