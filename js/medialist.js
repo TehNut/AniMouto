@@ -21,7 +21,13 @@ document.addEventListener("DOMContentLoaded", e => {
       while (section.firstChild)
         section.removeChild(section.firstChild);
 
-      section.insertAdjacentHTML("beforeend", "<h2 id='loading-" + section.id + "' class='section-title ellipsis' style='padding-left:10px'>Loading</h2>")
+      let loadingElement = document.createElement("h2");
+      loadingElement.id = `loading-${section.id}`;
+      loadingElement.classList.add("section-title");
+      loadingElement.classList.add("ellipsis");
+      loadingElement.style.paddingLeft = "10px";
+      loadingElement.innerText = "Loading";
+      section.insertAdjacentElement("beforeend", loadingElement);
     }
   })
 });
@@ -83,7 +89,7 @@ function handleEntries(listType, list, sortFunction, token) {
   for (let media in list.slice(0, 20)) {
     let entry = list[media];
     media = entry.media;
-    listElement.insertAdjacentHTML('beforeend', getHtml(media, entry.progress, listType));
+    listElement.insertAdjacentElement('beforeend', getHtml(media, entry.progress, listType));
 
     let card = document.getElementById(listType + "-" + media.id);
     card.removeEventListener("mouseover", handleCardMouseOver);
@@ -105,29 +111,49 @@ function handleEntries(listType, list, sortFunction, token) {
 }
 
 function getHtml(media, progress, listType) {
-  let ret = showHtml
-    .replace("#{id}", listType + "-" + media.id)
-    .replace("#{img}", media.coverImage.large)
-    .replace("#{site_url}", media.siteUrl);
+  let linkWrap = document.createElement("a");
+  linkWrap.id = `${listType}-${media.id}`;
+  linkWrap.href = media.siteUrl;
+  linkWrap.target = "_blank";
 
+  let coverDiv = document.createElement("div");
+  coverDiv.classList.add("cover");
+  coverDiv.style.backgroundImage = `url(${media.coverImage.large})`;
+  linkWrap.appendChild(coverDiv);
+
+  let behindDiv = null;
   if (media.nextAiringEpisode) {
-    let airingDiv = "<div class='cover-overlay' id='airing-" + media.id + "'>";
-    airingDiv += "<span class='overlay-text'>Ep " + media.nextAiringEpisode.episode + " <br /> " + parseTime(media.nextAiringEpisode.timeUntilAiring) + "</span>"
-    airingDiv += "</div>";
+    let airingDiv = document.createElement("div");
+    airingDiv.classList.add("cover-overlay");
+    airingDiv.id = `airing-${media.id}`;
 
-    ret = ret.replace("#{airing_content}", airingDiv);
+    let overlayText = document.createElement("span");
+    overlayText.classList.add("overlay-text");
+    overlayText.innerText = `Ep ${media.nextAiringEpisode.episode}\n${parseTime(media.nextAiringEpisode.timeUntilAiring)}`;
+    airingDiv.appendChild(overlayText);
+    coverDiv.appendChild(airingDiv);
 
-    if (media.nextAiringEpisode.episode - 1 > progress)
-      ret = ret.replace("#{behind}", `<div class="is-behind" id="${media.id}-behind"></div>`);
-  } else {
-    ret = ret.replace("#{airing_content}", "");
+    if (media.nextAiringEpisode.episode - 1 > progress) {
+      behindDiv = document.createElement("div");
+      behindDiv.classList.add("is-behind");
+      behindDiv.id = `${media.id}-behind`;
+    }
   }
 
-  ret = ret.replace("#{behind}", "");
-  ret = ret.replace("#{id_progress}", listType + "-" + media.id + "-progress");
-  ret = ret.replace("#{progress_content}", progress + " +");
+  let progressDiv = document.createElement("div");
+  progressDiv.classList.add("cover-overlay");
+  progressDiv.classList.add("progress");
+  progressDiv.id = `${listType}-${media.id}-progress`;
+  let progressOverlay = document.createElement("span");
+  progressOverlay.classList.add("overlay-text");
+  progressOverlay.innerText = `${progress} +`;
+  progressDiv.appendChild(progressOverlay);
+  coverDiv.appendChild(progressDiv);
 
-  return ret;
+  if (behindDiv)
+    coverDiv.appendChild(behindDiv);
+
+  return linkWrap;
 }
 
 function handleCardMouseOver(mouseOverEvent, listType, entry, media, token) {
@@ -207,15 +233,3 @@ function parseTime(secs) {
 
   return ret;
 }
-
-const showHtml = `
-  <a id="#{id}" href="#{site_url}" target="_blank">
-  	<div class="cover" style="background-image: url('#{img}');">
-      #{airing_content}
-      <div class="cover-overlay progress" id="#{id_progress}">
-        <span class="overlay-text">#{progress_content}</span>
-      </div>
-      #{behind}
-  	</div>
-  </a>
-`;

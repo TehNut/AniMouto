@@ -21,7 +21,14 @@ function beginNotifications(token) {
   while (container.firstChild)
     container.removeChild(container.firstChild);
 
-  container.insertAdjacentHTML("beforeend", "<h2 id='loading' class='section-title ellipsis' style='padding-left:10px'>Loading</h2>");
+  let loadingElement = document.createElement("h2");
+  loadingElement.id = "loading";
+  loadingElement.classList.add("section-title");
+  loadingElement.classList.add("ellipsis");
+  loadingElement.style.paddingLeft = "10px";
+  loadingElement.innerText = "Loading";
+  container.insertAdjacentElement("beforeend", loadingElement);
+
   fetch("../graphql/notifications.graphql").then(res => res.text()).then(res => {
     chrome.runtime.getBackgroundPage(page => {
       page.queryAL(res, { amount: 25, reset: true }, token)
@@ -30,10 +37,10 @@ function beginNotifications(token) {
         .then(res => {
           container.removeChild(container.firstChild);
           for (index in res.Page.notifications) {
-            notification = res.Page.notifications[index];
-
+            let notification = res.Page.notifications[index];
             let unread = index < res.Viewer.unreadNotificationCount;
-            let newSection = "";
+            let newSection;
+
             if (notification.__typename.startsWith("Activity") || notification.__typename === "FollowingNotification")
               newSection = getActivityEntry(notification, unread);
             else if (notification.__typename === "AiringNotification")
@@ -41,9 +48,13 @@ function beginNotifications(token) {
             else if (notification.__typename.startsWith("ThreadComment"))
               newSection = getThreadEntry(notification, unread);
 
-            container.insertAdjacentHTML("beforeend", newSection.replace("#{notification_id}", index));
-            if (unread)
-              document.getElementById("notification-" + index).addEventListener("click", e => e.target.classList.remove("unread"));
+            if (newSection) {
+              newSection.id = `notification-${index}`;
+              container.insertAdjacentElement("beforeend", newSection);
+
+              if (unread)
+                document.getElementById("notification-" + index).addEventListener("click", e => e.target.classList.remove("unread"));
+            }
           }
 
           chrome.browserAction.setBadgeText({ text: "" });
@@ -54,39 +65,104 @@ function beginNotifications(token) {
 }
 
 function getActivityEntry(notification, unread) {
-  let newSection = notificationSection
-    .replace("#{user_link}", notification.user.url)
-    .replace("#{unread}", unread ? "unread" : "")
-    .replace("#{user_avatar}", notification.user.img.large)
-    .replace("#{activity_link}", notification.activity ? notification.activity.url : notification.user.url)
-    .replace("#{activity_message}", "<span class='highlight'>" + notification.user.name + "</span>" + notification.context)
-    .replace("#{activity_time}", parseTime(Math.abs(notification.createdAt - Date.now() / 1000)));
+  let contextElement = document.createElement("span");
+  let nameHighlight = document.createElement("span");
+  nameHighlight.classList.add("highlight");
+  nameHighlight.innerText = notification.user.name;
+  contextElement.appendChild(nameHighlight);
+  let firstContext = document.createElement("span");
+  firstContext.innerText = notification.context;
+  contextElement.appendChild(firstContext);
 
-  return newSection;
+  return getNotificationElement(
+    unread,
+    notification.user.url,
+    notification.user.img.large,
+    notification.activity ? notification.activity.url : notification.user.url,
+    contextElement,
+    notification.createdAt
+  );
 }
 
 function getAiringEntry(notification, unread) {
-  let newSection = notificationSection
-    .replace("#{user_link}", notification.media.url)
-    .replace("#{unread}", unread ? "unread" : "")
-    .replace("#{user_avatar}", notification.media.img.large)
-    .replace("#{activity_link}", notification.media.url)
-    .replace("#{activity_message}", notification.contexts[0] + notification.episode + notification.contexts[1] + "<span class='highlight'>" + notification.media.title.userPreferred + "</span>" + notification.contexts[2])
-    .replace("#{activity_time}", parseTime(Math.abs(notification.createdAt - Date.now() / 1000)));
+  let contextElement = document.createElement("span");
+  let firstContext = document.createElement("span");
+  firstContext.innerText = `${notification.contexts[0]}${notification.episode}${notification.contexts[1]}`;
+  contextElement.appendChild(firstContext);
+  let nameHighlight = document.createElement("span");
+  nameHighlight.classList.add("highlight");
+  nameHighlight.innerText = notification.media.title.userPreferred;
+  contextElement.appendChild(nameHighlight);
+  let secondContext = document.createElement("span");
+  secondContext.innerText += notification.contexts[2];
+  contextElement.appendChild(secondContext);
 
-  return newSection;
+  return getNotificationElement(
+    unread,
+    notification.media.url,
+    notification.media.img.large,
+    notification.media.url,
+    contextElement,
+    notification.createdAt
+  );
 }
 
 function getThreadEntry(notification, unread) {
-  let newSection = notificationSection
-    .replace("#{user_link}", notification.user.url)
-    .replace("#{unread}", unread ? "unread" : "")
-    .replace("#{user_avatar}", notification.user.img.large)
-    .replace("#{activity_link}", notification.thread.url + "/comment/" + notification.commentId)
-    .replace("#{activity_message}", "<span class='highlight'>" + notification.user.name + "</span>" + notification.context + "<span class='highlight'>" + notification.thread.title + "</span>")
-    .replace("#{activity_time}", parseTime(Math.abs(notification.createdAt - Date.now() / 1000)));
+  let contextElement = document.createElement("span");
+  let nameHighlight = document.createElement("span");
+  nameHighlight.classList.add("highlight");
+  nameHighlight.innerText = notification.user.name;
+  contextElement.appendChild(nameHighlight);
 
-  return newSection;
+  let firstContext = document.createElement("span");
+  firstContext.innerText = notification.context;
+  contextElement.appendChild(firstContext);
+
+  let titleHighlight = document.createElement("span");
+  titleHighlight.classList.add("highlight");
+  titleHighlight.innerText = notification.thread.title;
+  contextElement.appendChild(titleHighlight);
+
+  return getNotificationElement(
+    unread,
+    notification.user.url,
+    notification.user.img.large,
+    `${notification.thread.url}/comment/${notification.commentId}`,
+    contextElement,
+    notification.createdAt
+  );
+}
+
+function getNotificationElement(unread, badgeLink, userAvatar, activityLink, activityElement, createdAt) {
+  let notificationDiv = document.createElement("div");
+  notificationDiv.classList.add("section");
+  notificationDiv.classList.add("notification");
+  if (unread)
+    notificationDiv.classList.add("unread");
+
+  let userLink = document.createElement("a");
+  userLink.href = badgeLink;
+  userLink.target = "_blank";
+  userImage = document.createElement("img");
+  userImage.classList.add("avatar");
+  userImage.classList.add("notification-icon");
+  userImage.classList.add("no-select");
+  userImage.src = userAvatar;
+  userLink.appendChild(userImage);
+  notificationDiv.appendChild(userLink);
+
+  let notificationLink = document.createElement("a");
+  notificationLink.classList.add("notification-body");
+  notificationLink.href = activityLink;
+  notificationLink.appendChild(activityElement);
+  notificationDiv.appendChild(notificationLink);
+
+  let timeElement = document.createElement("span");
+  timeElement.classList.add("notification-time");
+  timeElement.innerText = parseTime(Math.abs(createdAt - Date.now() / 1000));
+  notificationDiv.appendChild(timeElement);
+
+  return notificationDiv;
 }
 
 function parseTime(secs) {
@@ -113,11 +189,3 @@ function parseTime(secs) {
 
   return ret === "" ? "<1m" : ret;
 }
-
-const notificationSection = `
-  <div class="section notification #{unread}" id="notification-#{notification_id}">
-    <a href="#{user_link}" target="_blank"><img class="avatar notification-icon no-select" src="#{user_avatar}" /></a>
-    <a class="notification-body" href="#{activity_link}" target="_blank">#{activity_message}</a>
-    <span class="notification-time">#{activity_time}</span>
-  </div>
-`

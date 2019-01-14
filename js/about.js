@@ -24,13 +24,28 @@ function handleChangelog(manifest) {
 }
 
 function addChangelogSection(stage, title, section) {
-  stage.insertAdjacentHTML("beforeend", "<h2 class='title'>" + title + "</h2>");
+  let titleElement = document.createElement("h2");
+  titleElement.classList.add("title");
+  titleElement.innerText = title;
+  stage.insertAdjacentElement("beforeend", titleElement);
   if (section && section.length > 0) {
-    let changeList = "";
-    for (let line in section)
-      changeList += "<p class='subtext'><span class='no-select'>&bull; </span>" + section[line] + "</p>";
+    let changeList = [];
+    for (let line in section) {
+      let lineText = document.createElement("p");
+      lineText.classList.add("subtext");
+      let bulletPoint = document.createElement("span");
+      bulletPoint.classList.add("no-select");
+      lineText.appendChild(bulletPoint);
+      lineText.innerText += section[line];
 
-    stage.insertAdjacentHTML("beforeend", changeList);
-  } else
-    stage.insertAdjacentHTML("beforeend", "<p class='subtext'>No " + title.toLowerCase() + "</p>");
+      changeList.push(lineText);
+    }
+
+    changeList.forEach(e => stage.insertAdjacentElement("beforeend", e));
+  } else {
+    let lineText = document.createElement("p");
+    lineText.classList.add("subtext");
+    lineText.innerText = `No ${title.toLowerCase()}`;
+    stage.insertAdjacentElement("beforeend", lineText);
+  }
 }
