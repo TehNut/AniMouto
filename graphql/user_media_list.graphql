@@ -1,8 +1,8 @@
 query ($user: Int) {
-  anime: MediaListCollection(userId: $user, status: CURRENT, type: ANIME) {
+  anime: MediaListCollection(userId: $user, status_in: [CURRENT, REPEATING], type: ANIME) {
     ...active
   }
-  manga: MediaListCollection(userId: $user, status: CURRENT, type: MANGA) {
+  manga: MediaListCollection(userId: $user, status_in: [CURRENT, REPEATING], type: MANGA) {
     ...active
   }
 }

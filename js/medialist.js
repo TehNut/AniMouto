@@ -63,9 +63,15 @@ function handleList(userId, token) {
         .then(res => res.data)
         .then(res => {
           let animeEntries = res.anime.lists[0].entries;
+          if (res.anime.lists.length > 1)
+            animeEntries = animeEntries.concat(res.anime.lists[1].entries);
           handleEntries("airing-anime", animeEntries.filter(entry => entry.media.nextAiringEpisode), (o1, o2) => o1.media.nextAiringEpisode.timeUntilAiring - o2.media.nextAiringEpisode.timeUntilAiring, token);
           handleEntries("anime", animeEntries.filter(entry => !entry.media.nextAiringEpisode), (o1, o2) => o2.updatedAt - o1.updatedAt, token);
-          handleEntries("manga", res.manga.lists[0].entries, (o1, o2) => o2.updatedAt - o1.updatedAt, token);
+
+          let mangaEntries = res.manga.lists[0].entries;
+          if (res.manga.lists.length > 1)
+            mangaEntries = animeEntries.concat(res.manga.lists[1].entries);
+          handleEntries("manga", mangaEntries, (o1, o2) => o2.updatedAt - o1.updatedAt, token);
         });
     });
   });
