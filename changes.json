@@ -1,5 +1,14 @@
 
 {
+  "1.0.13": {
+    "fix": [
+      "Repeating media are ignored in the media list"
+    ],
+    "change": [
+      "Hid Desktop Notifications option when using Firefox",
+      "Removed number of \"unsafe\" `insertAdjacentHTML` calls and moved them to element builders"
+    ]
+  },
   "1.0.12": {
     "add": [
       "Added alternative login flow to prepare for Firefox support"

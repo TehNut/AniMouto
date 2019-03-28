@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.13
+
+#### Fixed
+
+* Repeating media are ignored in the media list
+
+#### Changed
+
+* Hid Desktop Notifications option when using Firefox
+* Removed number of "unsafe" `insertAdjacentHTML` calls and moved them to element builders
+
 ## 1.0.12
 
 #### Added
