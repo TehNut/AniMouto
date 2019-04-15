@@ -41,6 +41,10 @@ const config = {
           name: '[path][name].[ext]',
         },
       },
+      {
+        test: /\.(graphql)$/,
+        loader: 'raw-loader'
+      }
     ],
   },
   plugins: [

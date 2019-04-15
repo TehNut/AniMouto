@@ -20,7 +20,8 @@ export default {
   created() {
     chrome.storage.local.get({ theme: "light", accent_color: "color-blue", last_page: "login" }, value => {
       document.documentElement.style.setProperty("--color-accent", `var(--${value.accent_color})`);
-      document.getElementsByTagName("body")[0].className = `theme-${value.theme}`;
+      // document.getElementsByTagName("body")[0].className = `theme-${value.theme}`;
+      document.getElementsByTagName("body")[0].className = `theme-dark`;
 
       console.log(value.last_page)
       this.$router.push(value.last_page);
@@ -104,8 +105,11 @@ export default {
   }
 
   .content {
+    position: absolute;
+    overflow-y: auto;
     padding: 20px 10px 10px;
-    width: 450px;
-    float: right;
+    width: 440px;
+    height: 570px;
+    left: 65px;
   }
 </style>

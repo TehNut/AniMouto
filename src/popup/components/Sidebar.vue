@@ -7,7 +7,7 @@
     </div>
     <div class="navigation no-select">
       <div v-for="page in pages" style="cursor:hover;" :id="page.id">
-        <i class="material-icons page-icon" @click="changePage(page.id)">{{ page.icon ? page.icon : page.id }}</i>
+        <i class="material-icons page-icon" @click="changePage(page)">{{ page.icon ? page.icon : page.id }}</i>
       </div>
     </div>
     <a href="https://anilist.co/" target="_blank"><img class="anilist-icon" src="../../assets/img/anilist.svg" /></a>
@@ -24,20 +24,16 @@
         pages: {
           medialist: {
             id: "medialist",
-            icon: "format_list_bulleted",
-            exists: false
+            icon: "format_list_bulleted"
           },
           search: {
-            id: "search",
-            exists: false
+            id: "search"
           },
           forum: {
-            id: "forum",
-            exists: false
+            id: "forum"
           },
           notifications: {
             id: "notifications",
-            exists: false,
             postHandle: function() {
               chrome.browserAction.getBadgeText({}, text => {
                 if (text !== "" && parseInt(text) > 0)
@@ -46,29 +42,27 @@
             }
           },
           settings: {
-            id: "settings",
-            exists: false
+            id: "settings"
           },
           about: {
             id: "about",
-            icon: "info",
-            exists: false
+            icon: "info"
           },
           login: {
-            id: "login",
-            exists: false
+            id: "login"
           }
         }
       }
     },
     created() {
       updateUser();
-
     },
     methods: {
       changePage(page) {
-        this.$router.push(page);
-        chrome.storage.local.set({ last_page: page });
+        this.$router.push(page.id);
+        chrome.storage.local.set({ last_page: page.id });
+        if (page.postHandle)
+          page.postHandle();
       },
     }
   }
@@ -79,7 +73,7 @@
     height: 100%;
     width: 52px;
     float: left;
-    position: relative;
+    position: fixed;
     background-color: rgb(var(--color-foreground));
     border-right: rgb(var(--color-accent)) medium inset;
     color: rgb(var(--color-text));
