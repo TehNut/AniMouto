@@ -1,0 +1,25 @@
+{
+  "schema": {
+    "request": {
+      "url": "https://graphql.anilist.co",
+      "method": "POST",
+      "postIntrospectionQuery": true,
+      "options": {
+        "headers": {
+          "user-agent": "JS GraphQL"
+        }
+      }
+    }
+  },
+  "endpoints": [
+    {
+      "name": "AniList",
+      "url": "https://graphql.anilist.co",
+      "options": {
+        "headers": {
+          "user-agent": "JS GraphQL"
+        }
+      }
+    }
+  ]
+}
