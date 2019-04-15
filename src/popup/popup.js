@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import App from "./App";
 import Login from "./components/login/Login"
+import MediaList from "./components/medialist/MediaList";
 import Settings from "./components/Settings";
 import Search from "./components/search/Search";
 
@@ -19,7 +20,7 @@ const router = new VueRouter({
     },
     {
       path: "/medialist",
-      component: Settings
+      component: MediaList
     },
     {
       path: "/search",
