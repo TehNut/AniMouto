@@ -18,6 +18,7 @@ fragment active on MediaListCollection {
         siteUrl
         coverImage {
           large
+          color
         }
         nextAiringEpisode {
           episode

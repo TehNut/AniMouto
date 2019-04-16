@@ -1,23 +1,26 @@
 <template>
   <div>
+    <transition name="fade">
+      <Spinner v-if="media.airing.length === 0 && media.watching.length === 0 && media.reading.length === 0"/>
+    </transition>
     <span v-if="media.airing.length > 0">
       <h1 class="section-title">
         <a href="https://anilist.co/airing" target="_blank">Airing</a>
       </h1>
       <div class="section media-grid">
-        <MediaCard v-for="anime in media.airing" :entry="anime"/>
+        <MediaCard v-for="anime in media.airing" v-if="!isComplete(anime)" :entry="anime"/>
       </div>
     </span>
     <span v-if="media.watching.length > 0">
       <h1 class="section-title">Anime in Progress</h1>
       <div class="section media-grid">
-        <MediaCard v-for="anime in media.watching" :entry="anime"/>
+        <MediaCard v-for="anime in media.watching" v-if="!isComplete(anime)" :entry="anime"/>
       </div>
     </span>
     <span v-if="media.reading.length > 0">
       <h1 class="section-title">Manga in Progress</h1>
       <div class="section media-grid">
-        <MediaCard v-for="anime in media.reading" :entry="anime"/>
+        <MediaCard v-for="manga in media.reading" v-if="!isComplete(manga)" :entry="manga"/>
       </div>
     </span>
   </div>
@@ -27,10 +30,11 @@
   import {queryAL} from "../../../assets/js/utils";
   import mediaList from "../../../assets/graphql/user_media_list.graphql";
   import MediaCard from "./MediaCard";
+  import Spinner from "../base/Spinner";
 
   export default {
     name: "MediaList",
-    components: {MediaCard},
+    components: {Spinner, MediaCard},
     data() {
       return {
         media: {
@@ -38,6 +42,11 @@
           watching: [],
           reading: []
         }
+      }
+    },
+    methods: {
+      isComplete(entry) {
+        return (entry.media.episodes && entry.progress >= entry.media.episodes) || (entry.media.chapters && entry.progress >= entry.media.chapters);
       }
     },
     created() {
