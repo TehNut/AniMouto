@@ -6,8 +6,11 @@
       </a>
     </div>
     <div class="navigation no-select">
-      <div v-for="page in pages" style="cursor:hover;" :id="page.id">
-        <i class="material-icons page-icon" @click="changePage(page)">{{ page.icon ? page.icon : page.id }}</i>
+      <div v-for="page in pages" style="cursor:pointer;" :id="page.id">
+        <i class="material-icons page-icon" @click="changePage(page)">{{ getIcon(page) }}</i>
+        <div v-if="page.id === 'notifications' && unreadNotifications > 0" class="notification-text">
+          {{ unreadNotifications > 99 ? "99+" : unreadNotifications }}
+        </div>
       </div>
     </div>
     <a href="https://anilist.co/" target="_blank"><img class="anilist-icon" src="../../assets/img/anilist.svg" /></a>
@@ -19,6 +22,9 @@
 
   export default {
     name: "Sidebar",
+    props: [
+      "unreadNotifications"
+    ],
     data() {
       return {
         pages: {
@@ -29,9 +35,6 @@
           search: {
             id: "search"
           },
-          forum: {
-            id: "forum"
-          },
           notifications: {
             id: "notifications",
             postHandle: function() {
@@ -40,6 +43,9 @@
                   updateNotifications(parseInt(text));
               });
             }
+          },
+          forum: {
+            id: "forum"
           },
           settings: {
             id: "settings"
@@ -64,6 +70,12 @@
         if (page.postHandle)
           page.postHandle();
       },
+      getIcon(page) {
+        if (page.id === "notifications" && this.unreadNotifications > 0)
+          return "notifications_active";
+
+        return page.icon ? page.icon : page.id;
+      }
     }
   }
 </script>
@@ -104,5 +116,20 @@
     width: 100%;
     bottom: 0;
     position: absolute;
+  }
+
+  .notification-text {
+    position: absolute;
+    right: 2px;
+    margin-top: 8px;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgb(var(--color-foreground));
+    border-radius: 50%;
+    background-color: rgb(var(--color-red));
+    font-size: 10px;
+    line-height: 20px;
+    text-align: center;
+    color: rgb(var(--color-text-bright));
   }
 </style>

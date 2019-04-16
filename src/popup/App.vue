@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <Messages/>
-    <Sidebar/>
-    <div class="content">
+    <Sidebar :unreadNotifications="unreadNotifications"/>
+    <div class="content" @update-notifications="updateNotifications">
       <router-view></router-view>
     </div>
   </div>
@@ -15,7 +15,14 @@ import Messages from "./Messages";
 export default {
   components: {Messages, Sidebar},
   data () {
-    return {}
+    return {
+      unreadNotifications: 0
+    }
+  },
+  methods: {
+    updateNotifications(unread) {
+      this.unreadNotifications = unread;
+    }
   },
   created() {
     chrome.storage.local.get({ theme: "light", accent_color: "color-blue", last_page: "login" }, value => {
@@ -105,7 +112,7 @@ export default {
 
   .content {
     position: absolute;
-    overflow-y: auto;
+    overflow-y: scroll;
     padding: 20px 10px 10px;
     width: 440px;
     height: 570px;

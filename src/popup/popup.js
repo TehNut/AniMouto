@@ -5,6 +5,7 @@ import Login from "./components/login/Login"
 import MediaList from "./components/medialist/MediaList";
 import Settings from "./components/Settings";
 import Search from "./components/search/Search";
+import Notifications from "./components/notifications/Notifications";
 
 Vue.use(VueRouter);
 
@@ -28,7 +29,7 @@ const router = new VueRouter({
     },
     {
       path: "/notifications",
-      component: Settings
+      component: Notifications
     },
     {
       path: "/forum",

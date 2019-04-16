@@ -31,24 +31,16 @@
         chrome.runtime.getBackgroundPage(page => page.beginAuthorizationFlow());
       }
     },
-    created() {
+    mounted() {
+      const _self = this;
       chrome.storage.local.get({ access_token: "" }, value => {
         if (value.access_token === "")
           return;
 
-        this.$refs.loginButton.title = "Already logged in.";
-        this.$refs.loginButton.classList.add("disabled");
+        // fixme
+        // _self.$refs.loginButton.title = "Already logged in.";
+        // _self.$refs.loginButton.classList.add("disabled");
       });
     }
   }
 </script>
-
-<style>
-  .fade-enter-active, .fade-leave-active {
-    transition: opacity .2s;
-  }
-
-  .fade-enter, .fade-leave-to {
-    opacity: 0;
-  }
-</style>

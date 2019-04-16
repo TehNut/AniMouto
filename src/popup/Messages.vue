@@ -12,8 +12,8 @@
         if (message.type === "update_user")
           updateUser();
 
-        // if (message.type === "update_notifications")
-        //   updateNotifications(message.notification_count);
+        if (message.type === "update_notifications")
+          _self.$emit("update-notifications", message.notification_count);
 
         if (message.type === "change_page")
           _self.$router.push(message.page);

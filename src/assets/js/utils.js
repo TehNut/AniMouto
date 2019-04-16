@@ -22,9 +22,11 @@ export function queryAL(query, variables, token) {
   }).then(res => res.json());
 }
 
-export function parseTime(secs, appendseconds) {
+export function parseTime(secs) {
   let seconds = parseInt(secs, 10);
 
+  let weeks = Math.floor(seconds / (3600 * 24 * 7));
+  seconds -= weeks * 3600 * 24 * 7;
   let days = Math.floor(seconds / (3600 * 24));
   seconds -= days * 3600 * 24;
   let hours = Math.floor(seconds / 3600);
@@ -32,16 +34,40 @@ export function parseTime(secs, appendseconds) {
   let minutes = Math.floor(seconds / 60);
   seconds -= minutes * 60;
 
-  let ret = "";
-  if (days > 0)
-    ret += days + "d";
-  if (hours > 0)
-    ret += (ret.length === 0 ? "" : " ") + hours + "h";
-  if (minutes > 0)
-    ret += (ret.length === 0 ? "" : " ") + minutes + "m";
+  return { weeks, days, hours, minutes, seconds };
+}
 
-  if (appendseconds && seconds > 0)
-    ret += (ret.length === 0 ? "" : " ") + seconds + "s";
+export function formatTime(secs, appendSeconds) {
+  const time = parseTime(secs);
+
+  let ret = "";
+  if (time.weeks > 0)
+    ret += time.weeks + "w";
+  if (time.days > 0)
+    ret += (ret.length === 0 ? "" : " ") + time.days + "d";
+  if (time.hours > 0)
+    ret += (ret.length === 0 ? "" : " ") + time.hours + "h";
+  if (time.minutes > 0)
+    ret += (ret.length === 0 ? "" : " ") + time.minutes + "m";
+
+  if (appendSeconds && time.seconds > 0)
+    ret += (ret.length === 0 ? "" : " ") + time.seconds + "s";
 
   return ret;
+}
+
+export function formatTimeShort(secs) {
+  const time = parseTime(secs);
+
+  let ret = "";
+  if (time.weeks > 0)
+    return time.weeks + "w";
+  if (time.days > 0)
+    return (ret.length === 0 ? "" : " ") + time.days + "d";
+  if (time.hours > 0)
+    return (ret.length === 0 ? "" : " ") + time.hours + "h";
+  if (time.minutes > 0)
+    return (ret.length === 0 ? "" : " ") + time.minutes + "m";
+
+  return ret === "" ? "<1m" : ret;
 }

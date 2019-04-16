@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import {parseTime, queryAL} from "../../../assets/js/utils";
+  import {formatTime, queryAL} from "../../../assets/js/utils";
   import updateProgressQuery from "../../../assets/graphql/update_progress.graphql"
 
   export default {
@@ -40,7 +40,7 @@
     },
     methods: {
       timeUntilAiring() {
-        return parseTime(this.entry.media.nextAiringEpisode.timeUntilAiring)
+        return formatTime(this.entry.media.nextAiringEpisode.timeUntilAiring)
       },
       handleProgressClick() {
         const _self = this;
