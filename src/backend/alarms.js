@@ -35,7 +35,7 @@ function checkForNotifications() {
         if (count > 0 && count - lastCheck > 0)
           handleDesktopNotifications(count - lastCheck, value.access_token);
 
-        chrome.storage.local.set({ notifications: { lastCheck: count } })
+        chrome.storage.local.set({ notifications: { lastCheck: count } });
       });
   });
 }

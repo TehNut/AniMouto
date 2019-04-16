@@ -63,6 +63,9 @@
     },
     created() {
       this.loadNotifications();
+    },
+    mounted() {
+      this.$emit("update-notifications", 0);
     }
   }
 </script>

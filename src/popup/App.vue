@@ -2,8 +2,8 @@
   <div class="container">
     <Messages/>
     <Sidebar :unreadNotifications="unreadNotifications"/>
-    <div class="content" @update-notifications="updateNotifications">
-      <router-view></router-view>
+    <div class="content">
+      <router-view @update-notifications="updateNotifications"></router-view>
     </div>
   </div>
 </template>
@@ -22,16 +22,21 @@ export default {
   methods: {
     updateNotifications(unread) {
       this.unreadNotifications = unread;
+      chrome.browserAction.setBadgeText({ text: unread > 0 ? unread.toString() : "" });
+      chrome.storage.local.set({ notifications: { lastCheck: unread }}, () => {});
     }
   },
   created() {
-    chrome.storage.local.get({ theme: "light", accent_color: "color-blue", last_page: "login" }, value => {
+    const _self = this;
+    chrome.storage.local.get({ theme: "light", accent_color: "color-blue", last_page: "login", notifications: { lastCheck: 0 } }, value => {
       document.documentElement.style.setProperty("--color-accent", `var(--${value.accent_color})`);
       // document.getElementsByTagName("body")[0].className = `theme-${value.theme}`;
       document.getElementsByTagName("body")[0].className = `theme-dark`;
 
-      this.$router.push(value.last_page);
+      _self.$router.push(value.last_page);
       // this.$router.push("login");
+
+      _self.updateNotifications(value.notifications.lastCheck);
     });
   }
 }

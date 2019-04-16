@@ -36,13 +36,7 @@
             id: "search"
           },
           notifications: {
-            id: "notifications",
-            postHandle: function() {
-              chrome.browserAction.getBadgeText({}, text => {
-                if (text !== "" && parseInt(text) > 0)
-                  updateNotifications(parseInt(text));
-              });
-            }
+            id: "notifications"
           },
           forum: {
             id: "forum"
@@ -65,10 +59,8 @@
     },
     methods: {
       changePage(page) {
-        this.$router.push(page.id);
         chrome.storage.local.set({ last_page: page.id });
-        if (page.postHandle)
-          page.postHandle();
+        this.$router.push(page.id);
       },
       getIcon(page) {
         if (page.id === "notifications" && this.unreadNotifications > 0)
@@ -121,7 +113,7 @@
   .notification-text {
     position: absolute;
     right: 2px;
-    margin-top: 8px;
+    margin-top: -22px;
     width: 20px;
     height: 20px;
     border: 2px solid rgb(var(--color-foreground));
