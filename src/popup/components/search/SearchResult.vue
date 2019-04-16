@@ -47,12 +47,12 @@
         });
       },
       handleCurrent(media) {
-        if (!this.$refs.planning.classList.contains("enabled"))
+        if (!this.$refs.current.classList.contains("enabled"))
           return;
 
         const _self = this;
         chrome.storage.local.get({ access_token: ""}, value => {
-          if (access_token === "")
+          if (value.access_token === "")
             return;
           queryAL(updateViewingStatus, { mediaId: media.id, status: "CURRENT" }, value.access_token).then(res => {
             setListed(_self.$refs.current);
