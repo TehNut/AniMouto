@@ -23,7 +23,6 @@ export default {
       // document.getElementsByTagName("body")[0].className = `theme-${value.theme}`;
       document.getElementsByTagName("body")[0].className = `theme-dark`;
 
-      console.log(value.last_page)
       this.$router.push(value.last_page);
       // this.$router.push("login");
     });

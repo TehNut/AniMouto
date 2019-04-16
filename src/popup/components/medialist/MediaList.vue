@@ -1,8 +1,11 @@
 <template>
   <div>
     <transition name="fade">
-      <Spinner v-if="media.airing.length === 0 && media.watching.length === 0 && media.reading.length === 0"/>
+      <Spinner v-if="loading"/>
     </transition>
+    <div class="buttons" v-if="!loading">
+      <i class="material-icons icon" @click="loadList">refresh</i>
+    </div>
     <span v-if="media.airing.length > 0">
       <h1 class="section-title">
         <a href="https://anilist.co/airing" target="_blank">Airing</a>
@@ -47,38 +50,50 @@
     methods: {
       isComplete(entry) {
         return (entry.media.episodes && entry.progress >= entry.media.episodes) || (entry.media.chapters && entry.progress >= entry.media.chapters);
+      },
+      loadList() {
+        this.media.airing = [];
+        this.media.watching = [];
+        this.media.reading = [];
+
+        const _self = this;
+        chrome.storage.local.get({ access_token: "", user_info: { id: -1 } }, value => {
+          if (value.access_token === "" || value.user_info.id === -1)
+            return;
+
+          queryAL(mediaList, { user: value.user_info.id }, value.access_token).then(res => res.data).then(res => {
+            let animeEntries = res.anime.lists[0].entries;
+            if (res.anime.lists.length > 1)
+              animeEntries = animeEntries.concat(res.anime.lists[1].entries);
+
+            animeEntries.forEach(e => {
+              if (e.media.nextAiringEpisode)
+                _self.media.airing.push(e);
+              else
+                _self.media.watching.push(e);
+            });
+
+            _self.media.airing.sort((o1, o2) => o1.media.nextAiringEpisode.timeUntilAiring - o2.media.nextAiringEpisode.timeUntilAiring);
+            _self.media.watching.sort((o1, o2) => o2.updatedAt - o1.updatedAt);
+
+            let mangaEntries = res.manga.lists[0].entries;
+            if (res.manga.lists.length > 1)
+              mangaEntries = mangaEntries.concat(res.manga.lists[1].entries);
+
+            mangaEntries.forEach(e => _self.media.reading.push(e));
+
+            _self.media.reading.sort((o1, o2) => o2.updatedAt - o1.updatedAt);
+          });
+        });
+      }
+    },
+    computed: {
+      loading() {
+        return this.media.airing.length === 0 && this.media.watching.length === 0 && this.media.reading.length === 0;
       }
     },
     created() {
-      const _self = this;
-      chrome.storage.local.get({ access_token: "", user_info: { id: -1 } }, value => {
-        if (value.access_token === "" || value.user_info.id === -1)
-          return;
-
-        queryAL(mediaList, { user: value.user_info.id }, value.access_token).then(res => res.data).then(res => {
-          let animeEntries = res.anime.lists[0].entries;
-          if (res.anime.lists.length > 1)
-            animeEntries = animeEntries.concat(res.anime.lists[1].entries);
-
-          animeEntries.forEach(e => {
-            if (e.media.nextAiringEpisode)
-              _self.media.airing.push(e);
-            else
-              _self.media.watching.push(e);
-          });
-
-          _self.media.airing.sort((o1, o2) => o1.media.nextAiringEpisode.timeUntilAiring - o2.media.nextAiringEpisode.timeUntilAiring);
-          _self.media.watching.sort((o1, o2) => o2.updatedAt - o1.updatedAt);
-
-          let mangaEntries = res.manga.lists[0].entries;
-          if (res.manga.lists.length > 1)
-            mangaEntries = mangaEntries.concat(res.manga.lists[1].entries);
-
-          mangaEntries.forEach(e => _self.media.reading.push(e));
-
-          _self.media.reading.sort((o1, o2) => o2.updatedAt - o1.updatedAt);
-        });
-      });
+      this.loadList();
     }
   }
 </script>
@@ -90,5 +105,10 @@
     grid-template-columns: repeat(auto-fill, 85px);
     grid-template-rows: repeat(auto-fill, 115px);
     margin-bottom: 25px;
+  }
+
+  .buttons {
+    position: absolute;
+    right: 20px;
   }
 </style>
