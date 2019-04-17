@@ -3,7 +3,9 @@
     <Messages/>
     <Sidebar :unreadNotifications="unreadNotifications"/>
     <div class="content">
-      <router-view @update-notifications="updateNotifications"></router-view>
+      <keep-alive>
+        <router-view @update-notifications="updateNotifications"/>
+      </keep-alive>
     </div>
   </div>
 </template>
