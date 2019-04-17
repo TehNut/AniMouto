@@ -6,38 +6,22 @@
     <div class="buttons" v-if="!loading">
       <i class="material-icons icon" @click="loadList">refresh</i>
     </div>
-    <span v-if="media.airing.length > 0">
-      <h1 class="section-title">
-        <a href="https://anilist.co/airing" target="_blank">Airing</a>
-      </h1>
-      <div class="section media-grid">
-        <MediaCard v-for="anime in media.airing" v-if="!isComplete(anime)" :entry="anime"/>
-      </div>
-    </span>
-    <span v-if="media.watching.length > 0">
-      <h1 class="section-title">Anime in Progress</h1>
-      <div class="section media-grid">
-        <MediaCard v-for="anime in media.watching" v-if="!isComplete(anime)" :entry="anime"/>
-      </div>
-    </span>
-    <span v-if="media.reading.length > 0">
-      <h1 class="section-title">Manga in Progress</h1>
-      <div class="section media-grid">
-        <MediaCard v-for="manga in media.reading" v-if="!isComplete(manga)" :entry="manga"/>
-      </div>
-    </span>
+
+    <MediaGrid :list="media.airing" :title="{ url: 'https://anilist.co/airing', text: 'Airing' }"/>
+    <MediaGrid :list="media.watching" :title="'Anime in Progress'"/>
+    <MediaGrid :list="media.reading" :title="'Manga in Progress'"/>
   </div>
 </template>
 
 <script>
   import {queryAL} from "../../../assets/js/utils";
   import mediaList from "../../../assets/graphql/user_media_list.graphql";
-  import MediaCard from "./MediaCard";
   import Spinner from "../base/Spinner";
+  import MediaGrid from "./MediaGrid";
 
   export default {
     name: "MediaList",
-    components: {Spinner, MediaCard},
+    components: {MediaGrid, Spinner},
     data() {
       return {
         media: {
@@ -99,14 +83,6 @@
 </script>
 
 <style scoped>
-  .media-grid {
-    display: grid;
-    grid-gap: 16px;
-    grid-template-columns: repeat(auto-fill, 85px);
-    grid-template-rows: repeat(auto-fill, 115px);
-    margin-bottom: 25px;
-  }
-
   .buttons {
     position: absolute;
     right: 20px;
