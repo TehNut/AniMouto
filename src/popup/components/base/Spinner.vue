@@ -1,6 +1,6 @@
 <template>
   <div class="loading-container">
-    <div class="spinner">{{ emoji }}</div>
+    <div class="spinner">{{ getRandomEmoji() }}</div>
   </div>
 </template>
 
@@ -29,15 +29,11 @@
 
   export default {
     name: "Spinner",
-    data() {
-      return {
-        emoji: getRandomEmoji()
+    methods: {
+      getRandomEmoji() {
+        return emoji[Math.floor(Math.random() * emoji.length)];
       }
     }
-  }
-
-  function getRandomEmoji() {
-    return emoji[Math.floor(Math.random() * emoji.length)];
   }
 </script>
 
