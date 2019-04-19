@@ -5,7 +5,7 @@
     </div>
     <div class="spacer" style="margin-top:10px;margin-bottom:10px;"></div>
     <transition name="fade">
-      <div id="blank-marker" v-if="results.anime.length === 0 && results.manga.length === 0 && !searching">
+      <div class="blank-marker" v-if="results.anime.length === 0 && results.manga.length === 0 && !searching">
         <i class="material-icons no-select" style="font-size:200px;position:relative;">search</i>
       </div>
     </transition>
@@ -14,17 +14,8 @@
       <Spinner v-if="searching"/>
     </transition>
 
-    <div class="results">
-      <h1 class="section-title" v-if="results.anime.length > 0">Anime</h1>
-      <div class="section pad-me-daddy" v-if="results.anime.length > 0">
-        <SearchResult v-for="result in results.anime" :result="result" />
-      </div>
-
-      <h1 class="section-title" v-if="results.manga.length > 0">Manga</h1>
-      <div class="section pad-me-daddy" v-if="results.manga.length > 0">
-        <SearchResult v-for="result in results.manga" :result="result" />
-      </div>
-    </div>
+    <SearchSection :title="'Anime'" :results="results.anime"/>
+    <SearchSection :title="'Manga'" :results="results.manga"/>
   </div>
 </template>
 
@@ -33,13 +24,15 @@
   import {queryAL, getQuery} from "../../../assets/js/utils";
   import SearchResult from "./SearchResult";
   import mediaSearchQuery from "../../../assets/graphql/media_search.graphql";
+  import SearchSection from "./SearchSection";
 
   export default {
     name: "Search",
-    components: {SearchResult, Spinner},
+    components: {SearchSection, SearchResult, Spinner},
     data() {
       return {
         searching: false,
+        displayMulti: 1,
         results: {
           anime: [],
           manga: []
@@ -92,7 +85,7 @@
     border-radius: 4px;
   }
 
-  #blank-marker {
+  .blank-marker {
     color: rgba(var(--color-text-lighter), 0.8);
     left: 0;
     right: 0;
@@ -101,14 +94,6 @@
     margin-top: 100px;
     text-align: center;
     position: absolute;
-
-  }
-
-  .pad-me-daddy {
-    margin-bottom: 20px;
-  }
-
-  .results {
 
   }
 </style>
