@@ -12,6 +12,9 @@ fragment active on MediaListCollection {
     entries {
       id
       media {
+        title {
+          userPreferred
+        }
         id
         episodes
         chapters

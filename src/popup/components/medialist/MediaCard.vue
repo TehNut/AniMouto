@@ -1,21 +1,27 @@
 <template>
-  <a :href="entry.media.siteUrl" target="_blank">
-    <div class="cover" ref="cover" @mouseenter="displayProgress = true" @mouseleave="displayProgress = false">
+  <a :href="media.siteUrl" target="_blank">
+    <div class="cover" ref="cover" @mouseenter="displayExtras = true" @mouseleave="displayExtras = false">
       <transition name="fade">
-        <div v-if="!displayProgress && entry.media.nextAiringEpisode" class="cover-overlay">
+        <div v-if="!displayExtras && media.nextAiringEpisode" class="cover-overlay">
           <span class="overlay-text">
-            Ep {{ entry.media.nextAiringEpisode.episode }}
+            Ep {{ media.nextAiringEpisode.episode }}
             <br/>
             {{ timeUntilAiring() }}
           </span>
         </div>
       </transition>
+
       <transition name="fade">
-        <div v-if="displayProgress" class="cover-overlay">
+        <div v-if="entry && displayExtras" class="cover-overlay">
           <span class="overlay-text progress-text" @click.prevent="handleProgressClick">{{ entry.progress }} +</span>
         </div>
       </transition>
-      <div v-if="entry.media.nextAiringEpisode && entry.media.nextAiringEpisode.episode - 1 > entry.progress" class="is-behind"></div>
+
+      <transition name="fade">
+        <MediaCardPopout v-if="displayExtras" :left="left" :media="media" :entry="entry"/>
+      </transition>
+
+      <div v-if="entry && media.nextAiringEpisode && media.nextAiringEpisode.episode - 1 > entry.progress" class="is-behind"></div>
     </div>
   </a>
 </template>
@@ -23,17 +29,25 @@
 <script>
   import {formatTime, queryAL} from "../../../assets/js/utils";
   import updateProgressQuery from "../../../assets/graphql/update_progress.graphql"
+  import MediaCardPopout from "./MediaCardPopout";
 
   export default {
     name: "MediaCard",
+    components: {MediaCardPopout},
     data() {
       return {
-        displayProgress: false
+        displayExtras: false
       }
     },
     props: [
-      "entry"
+      "entry",
+      "media",
+      "left"
     ],
+    created() {
+      if (!this.media && this.entry)
+        this.media = this.entry.media;
+    },
     mounted() {
       this.$refs.cover.style.backgroundImage = `url(${this.entry.media.coverImage.large})`;
       this.$refs.cover.style.backgroundColor = this.entry.media.coverImage.color;

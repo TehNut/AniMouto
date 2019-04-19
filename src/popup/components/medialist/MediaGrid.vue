@@ -5,7 +5,7 @@
         <span v-else>{{ title.text || title }}</span>
       </h1>
       <div class="section media-grid">
-        <MediaCard v-for="entry in list" v-if="!isComplete(entry)" :entry="entry"/>
+        <MediaCard v-for="(entry, index) in list" v-if="!isComplete(entry)" :entry="entry" :left="index % 4 >= 2"/>
       </div>
     </div>
 </template>
