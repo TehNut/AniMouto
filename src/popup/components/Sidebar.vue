@@ -6,8 +6,8 @@
       </a>
     </div>
     <div class="navigation no-select">
-      <div v-for="page in pages" style="cursor:pointer;" :id="page.id">
-        <i class="material-icons page-icon" @click="changePage(page)">{{ getIcon(page) }}</i>
+      <div v-for="page in pages" :id="page.id" @click="changePage(page)">
+        <i class="material-icons page-icon">{{ getIcon(page) }}</i>
         <div v-if="page.id === 'notifications' && unreadNotifications > 0" class="notification-text">
           {{ unreadNotifications > 99 ? "99+" : unreadNotifications }}
         </div>
@@ -123,5 +123,6 @@
     line-height: 20px;
     text-align: center;
     color: rgb(var(--color-text-bright));
+    pointer-events: none;
   }
 </style>
