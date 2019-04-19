@@ -6,6 +6,7 @@ import MediaList from "./components/medialist/MediaList";
 import Settings from "./components/Settings";
 import Search from "./components/search/Search";
 import Notifications from "./components/notifications/Notifications";
+import Spinner from "./components/base/Spinner";
 
 Vue.use(VueRouter);
 
@@ -33,7 +34,7 @@ const router = new VueRouter({
     },
     {
       path: "/forum",
-      component: Settings
+      component: Spinner
     },
     {
       path: "/settings",
@@ -41,7 +42,7 @@ const router = new VueRouter({
     },
     {
       path: "/about",
-      component: Settings
+      component: Spinner
     },
   ]
 });
