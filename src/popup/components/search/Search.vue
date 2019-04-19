@@ -44,6 +44,8 @@
       let lastSearch = null;
 
       const _self = this;
+
+      this.$refs.searchBar.focus();
       this.$refs.searchBar.addEventListener("keyup", e => {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
@@ -70,6 +72,9 @@
           });
         }, 700)
       });
+    },
+    activated() {
+      this.$refs.searchBar.focus();
     }
   }
 </script>
