@@ -1,10 +1,10 @@
 <template>
-  <a :href="media.siteUrl" target="_blank">
+  <a :href="mediaInternal.siteUrl" target="_blank">
     <div class="cover" ref="cover" @mouseenter="displayExtras = true" @mouseleave="displayExtras = false">
       <transition name="fade">
-        <div v-if="!displayExtras && media.nextAiringEpisode" class="cover-overlay">
+        <div v-if="!displayExtras && mediaInternal.nextAiringEpisode" class="cover-overlay">
           <span class="overlay-text">
-            Ep {{ media.nextAiringEpisode.episode }}
+            Ep {{ mediaInternal.nextAiringEpisode.episode }}
             <br/>
             {{ timeUntilAiring() }}
           </span>
@@ -18,10 +18,10 @@
       </transition>
 
       <transition name="fade">
-        <MediaCardPopout v-if="displayExtras" :left="left" :media="media" :entry="entry"/>
+        <MediaCardPopout v-if="displayExtras" :left="left" :media="mediaInternal" :entry="entry"/>
       </transition>
 
-      <div v-if="entry && media.nextAiringEpisode && media.nextAiringEpisode.episode - 1 > entry.progress" class="is-behind"></div>
+      <div v-if="entry && mediaInternal.nextAiringEpisode && mediaInternal.nextAiringEpisode.episode - 1 > entry.progress" class="is-behind"></div>
     </div>
   </a>
 </template>
@@ -36,7 +36,8 @@
     components: {MediaCardPopout},
     data() {
       return {
-        displayExtras: false
+        displayExtras: false,
+        mediaInternal: null
       }
     },
     props: [
@@ -45,8 +46,7 @@
       "left"
     ],
     created() {
-      if (!this.media && this.entry)
-        this.media = this.entry.media;
+      this.mediaInternal = this.media || this.entry.media;
     },
     mounted() {
       this.$refs.cover.style.backgroundImage = `url(${this.entry.media.coverImage.large})`;
