@@ -49,18 +49,21 @@
       this.mediaInternal = this.media || this.entry.media;
     },
     mounted() {
-      this.$refs.cover.style.backgroundImage = `url(${this.entry.media.coverImage.large})`;
-      this.$refs.cover.style.backgroundColor = this.entry.media.coverImage.color;
+      this.$refs.cover.style.backgroundImage = `url(${this.mediaInternal.coverImage.large})`;
+      this.$refs.cover.style.backgroundColor = this.mediaInternal.coverImage.color;
     },
     methods: {
       timeUntilAiring() {
-        return formatTime(this.entry.media.nextAiringEpisode.timeUntilAiring)
+        return formatTime(this.mediaInternal.nextAiringEpisode.timeUntilAiring)
+      },
+      isComplete(entry) {
+        return (!entry.media.nextAiringEpisode && entry.media.episodes && entry.progress >= entry.media.episodes) || (entry.media.chapters && entry.progress >= entry.media.chapters);
       },
       handleProgressClick() {
         const _self = this;
 
         let completionDate = null;
-        if (this.entry.progress + 1 >= this.entry.media.episodes && this.entry.progress + 1 >= this.entry.media.chapters) {
+        if (this.isComplete(this.entry)) {
           let currentDate = new Date(Date.now());
           completionDate = { year: currentDate.getFullYear(), month: currentDate.getMonth() + 1, day: currentDate.getDate() };
         }

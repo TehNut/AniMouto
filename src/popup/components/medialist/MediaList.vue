@@ -33,7 +33,7 @@
     },
     methods: {
       isComplete(entry) {
-        return (entry.media.episodes && entry.progress >= entry.media.episodes) || (entry.media.chapters && entry.progress >= entry.media.chapters);
+        return (!entry.media.nextAiringEpisode && entry.media.episodes && entry.progress >= entry.media.episodes) || (entry.media.chapters && entry.progress >= entry.media.chapters);
       },
       loadList() {
         this.media.airing = [];
