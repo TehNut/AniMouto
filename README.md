@@ -1,6 +1,6 @@
 # AniMouto
 
-<a href="https://www.animouto.moe/"><img alight="right" src="https://www.animouto.moe/static/logo_128px_bg.png"></a>
+<a href="https://www.animouto.moe/"><img align="right" src="https://www.animouto.moe/static/logo_128px_bg.png"></a>
 
 ### Let an imouto enhance your AniList experience.
 
