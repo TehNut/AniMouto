@@ -1,10 +1,11 @@
 query ($id: Int) {
   Media(id: $id) {
+    siteUrl
     title {
       romaji
       userPreferred
     }
-    coverImage{
+    coverImage {
       extraLarge
       color
     }
@@ -27,6 +28,21 @@ query ($id: Int) {
           }
           format
           status
+        }
+      }
+    }
+    characters(sort: ID, perPage: 12) {
+      edges {
+        role
+        node {
+          name {
+            first
+            last
+          }
+          image {
+            large
+          }
+          siteUrl
         }
       }
     }

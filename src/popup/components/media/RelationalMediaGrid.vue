@@ -8,6 +8,7 @@
 </template>
 
 <script>
+  import {displayify} from "../../../assets/js/utils";
   import MediaCard from "../medialist/MediaCard";
   export default {
     name: "SimpleGrid",
@@ -17,10 +18,7 @@
     ],
     methods: {
       displayify(value) {
-        value = value.split("_");
-        let ret = "";
-        value.forEach(e => ret += (ret.length === 0 ? "" : " " ) + e.charAt(0) + e.substring(1).toLowerCase());
-        return ret;
+        return displayify(value);
       }
     }
   }

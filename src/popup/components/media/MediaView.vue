@@ -25,10 +25,19 @@
 
       <div v-if="media.relations && media.relations.edges.length > 0">
         <h1 class="section-title">Relations</h1>
-        <div class="section relation">
+        <div class="section">
           <RelationalMediaGrid :relations="media.relations.edges"/>
         </div>
       </div>
+
+      <!--<div v-if="media.characters && media.characters.edges.length > 0">-->
+        <h1 class="section-title">
+          <a :href="media.siteUrl + '/' + media.title.romaji.replace(/ /g, '-').replace(/[^a-zA-Z0-9\-]/, '') + '/characters'" target="_blank">Characters</a>
+        </h1>
+        <div class="section character-grid">
+          <CharacterRelation v-for="(character, index) in media.characters.edges" :character="character.node" :role="character.role" :left="index % 4 > 1"/>
+        </div>
+      <!--</div>-->
     </div>
   </div>
 </template>
@@ -38,10 +47,11 @@
   import mediaQuery from "../../../assets/graphql/media.graphql";
   import Spinner from "../base/Spinner";
   import RelationalMediaGrid from "./RelationalMediaGrid";
+  import CharacterRelation from "./CharacterRelation";
 
   export default {
     name: "MediaView",
-    components: {RelationalMediaGrid, Spinner},
+    components: {CharacterRelation, RelationalMediaGrid, Spinner},
     data() {
       return {
         media: null
@@ -93,5 +103,13 @@
 
   .cover {
     width: 128px;
+  }
+
+  .character-grid {
+    display: grid;
+    grid-gap: 16px;
+    grid-template-columns: repeat(auto-fill, 85px);
+    grid-template-rows: repeat(auto-fill, 115px);
+    justify-content: center;
   }
 </style>

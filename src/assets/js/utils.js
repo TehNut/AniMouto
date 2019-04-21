@@ -22,6 +22,13 @@ export function queryAL(query, variables, token) {
   }).then(res => res.json());
 }
 
+export function displayify(value) {
+  value = value.split("_");
+  let ret = "";
+  value.forEach(e => ret += (ret.length === 0 ? "" : " " ) + e.charAt(0) + e.substring(1).toLowerCase());
+  return ret;
+}
+
 export function parseTime(secs) {
   let seconds = parseInt(secs, 10);
 
