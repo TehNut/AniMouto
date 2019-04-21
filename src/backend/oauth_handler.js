@@ -4,6 +4,7 @@ const isChrome = typeof InstallTrigger === 'undefined';
 const clientId = isChrome ? 1387 : 1336;
 const redirectUri = isChrome ? chrome.identity.getRedirectURL("oauth") : "https://anilist.co/api/v2/oauth/pin";
 const authUrl = "https://anilist.co/api/v2/oauth/authorize?client_id=" + clientId + "&response_type=token";
+const viewerQuery = "{Viewer{id name siteUrl avatar{large}}}";
 
 function beginAuthorizationFlow() {
   console.log("Beginning AniList authentication");
@@ -28,17 +29,18 @@ async function handleToken(token) {
   console.log("Token obtained and stored.");
 
   console.log("Requesting basic user information.");
-  queryAL(await getQuery("viewer"), {}, token).then(viewerRes => viewerRes.json())
+  queryAL(viewerQuery, {}, token).then(viewerRes => viewerRes.json())
     .then(viewerRes => viewerRes.data.Viewer)
     .then(viewerRes => completeLogin(viewerRes));
 }
 
 async function validateToken(token) {
-  queryAL(getQuery("viewer"), {}, token).then(viewerRes => viewerRes.json())
+  queryAL(viewerQuery, {}, token).then(viewerRes => viewerRes.json())
     .then(res => {
       if (res.errors) {
+        console.log(res.errors)
         console.log("Invalid token provided.");
-        chrome.runtime.sendMessage({ type: "display_toast", toast: { type: "burnt", text: "Invalid authentication code" } })
+        chrome.runtime.sendMessage({ type: "display_toast", toast: { type: "burnt", text: "Invalid authentication code" } });
         chrome.runtime.sendMessage({ type: "login_failure" });
       } else {
         chrome.storage.local.set({ access_token: token });
