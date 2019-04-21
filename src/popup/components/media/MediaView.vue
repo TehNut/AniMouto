@@ -18,16 +18,16 @@
         </div>
       </div>
 
-      <div v-if="media.stats.statusDistribution">
-        <h1 class="section-title"><a :href="getContextualLink('stats')" target="_blank">Status Distribution</a></h1>
-        <StatusDistribution :status="formatStatus()"/>
-      </div>
-
       <div v-if="media.description">
         <h1 class="section-title">Description</h1>
         <div class="section" style="padding:10px 20px;">
           <span v-html="media.description"></span>
         </div>
+      </div>
+
+      <div v-if="media.stats.statusDistribution">
+        <h1 class="section-title"><a :href="getContextualLink('stats')" target="_blank">Status Distribution</a></h1>
+        <StatusDistribution :status="formatStatus()"/>
       </div>
 
       <div v-if="media.relations && media.relations.edges.length > 0">
