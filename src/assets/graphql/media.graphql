@@ -46,5 +46,11 @@ query ($id: Int) {
         }
       }
     }
+    stats {
+      statusDistribution {
+        status
+        amount
+      }
+    }
   }
 }

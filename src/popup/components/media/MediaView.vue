@@ -18,6 +18,11 @@
         </div>
       </div>
 
+      <div v-if="media.stats.statusDistribution">
+        <h1 class="section-title"><a :href="getContextualLink('stats')" target="_blank">Status Distribution</a></h1>
+        <StatusDistribution :status="formatStatus()"/>
+      </div>
+
       <div v-if="media.description">
         <h1 class="section-title">Description</h1>
         <div class="section" style="padding:10px 20px;">
@@ -34,7 +39,7 @@
 
       <!--<div v-if="media.characters && media.characters.edges.length > 0">-->
         <h1 class="section-title">
-          <a :href="media.siteUrl + '/' + media.title.romaji.replace(/ /g, '-').replace(/[^a-zA-Z0-9\-]/, '') + '/characters'" target="_blank">Characters</a>
+          <a :href="getContextualLink('characters')" target="_blank">Characters</a>
         </h1>
         <div class="section character-grid">
           <CharacterRelation v-for="(character, index) in media.characters.edges" :character="character.node" :role="character.role" :left="index % 4 > 1"/>
@@ -50,10 +55,11 @@
   import Spinner from "../base/Spinner";
   import RelationalMediaGrid from "./RelationalMediaGrid";
   import CharacterRelation from "./CharacterRelation";
+  import StatusDistribution from "./StatusDistribution";
 
   export default {
     name: "MediaView",
-    components: {CharacterRelation, RelationalMediaGrid, Spinner},
+    components: {StatusDistribution, CharacterRelation, RelationalMediaGrid, Spinner},
     data() {
       return {
         media: null
@@ -62,6 +68,16 @@
     props: [
       "id"
     ],
+    methods: {
+      formatStatus() {
+        const status = {};
+        this.media.stats.statusDistribution.forEach(e => status[e.status.toLowerCase()] = e.amount);
+        return status;
+      },
+      getContextualLink(context) {
+        return this.media.siteUrl + "/" + this.media.title.romaji.replace(/ /g, "-").replace(/[^a-zA-Z0-9\-]/, "") + "/" + context;
+      }
+    },
     activated() {
       const _self = this;
       chrome.storage.local.get({ access_token: null }, value => {
