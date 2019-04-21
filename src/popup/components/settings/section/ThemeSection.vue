@@ -1,11 +1,5 @@
 <template>
   <div>
-    <h1 class="section-title">Account</h1>
-    <div class="section">
-      <h2 class="title">Logged in as <a :href="user.url" class="highlight">{{ user.name }}</a></h2>
-      <div class="button" @click="logout">Logout</div>
-    </div>
-
     <h1 class="section-title">Theme</h1>
     <div class="section">
       <h2 class="title">Primary Scheme</h2>
@@ -23,16 +17,10 @@
 </template>
 
 <script>
-  import {updateUser} from "../../assets/js/utils";
-
   export default {
-    name: "Settings",
+    name: "ThemeSection",
     data() {
       return {
-        user: {
-          name: "",
-          url: ""
-        },
         themes: [
           {
             name: "light",
@@ -65,11 +53,6 @@
       }
     },
     methods: {
-      logout() {
-        chrome.storage.local.clear();
-        this.$router.push("login");
-        updateUser();
-      },
       changeTheme(theme) {
         chrome.storage.local.set({ theme: theme.name }, value => {});
         this.$emit("update-theme");
@@ -78,13 +61,6 @@
         chrome.storage.local.set({ accent_color: "color-" + accent }, value => {});
         this.$emit("update-theme");
       }
-    },
-    created() {
-      const _self = this;
-      chrome.storage.local.get({ user_info: { name: "", site_url: "https://anilist.co" } }, value => {
-        _self.user.name = value.user_info.name;
-        _self.user.url = value.user_info.site_url;
-      });
     }
   }
 </script>
