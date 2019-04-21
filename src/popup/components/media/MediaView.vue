@@ -5,9 +5,9 @@
     </transition>
 
     <div v-if="media" style="display:flex;flex-flow:column">
-      <div class="banner" :style="'background-image:url(' + media.bannerImage + ');background-color:' + media.coverImage.background"></div>
+      <div class="banner" :style="'background-image:url(' + media.bannerImage + ')'"></div>
 
-      <div class="upper-container">
+      <div class="upper-container" :style="media.bannerImage ? '' : 'padding-top:0'">
         <div class="left-container">
           <img class="cover" :src="media.coverImage.extraLarge" :style="'background-color:' + media.coverImage.color"/>
         </div>
