@@ -32,7 +32,6 @@
     data() {
       return {
         searching: false,
-        displayMulti: 1,
         results: {
           anime: [],
           manga: []
