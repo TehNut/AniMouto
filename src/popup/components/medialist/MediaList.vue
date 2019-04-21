@@ -46,27 +46,31 @@
             return;
 
           queryAL(mediaList, { user: value.user_info.id }, value.access_token).then(res => res.data).then(res => {
-            let animeEntries = res.anime.lists[0].entries;
-            if (res.anime.lists.length > 1)
-              animeEntries = animeEntries.concat(res.anime.lists[1].entries);
+            if (res.anime.lists.length > 0) {
+              let animeEntries = res.anime.lists[0].entries;
+              if (res.anime.lists.length > 1)
+                animeEntries = animeEntries.concat(res.anime.lists[1].entries);
 
-            animeEntries.forEach(e => {
-              if (e.media.nextAiringEpisode)
-                _self.media.airing.push(e);
-              else
-                _self.media.watching.push(e);
-            });
+              animeEntries.forEach(e => {
+                if (e.media.nextAiringEpisode)
+                  _self.media.airing.push(e);
+                else
+                  _self.media.watching.push(e);
+              });
 
-            _self.media.airing.sort((o1, o2) => o1.media.nextAiringEpisode.timeUntilAiring - o2.media.nextAiringEpisode.timeUntilAiring);
-            _self.media.watching.sort((o1, o2) => o2.updatedAt - o1.updatedAt);
+              _self.media.airing.sort((o1, o2) => o1.media.nextAiringEpisode.timeUntilAiring - o2.media.nextAiringEpisode.timeUntilAiring);
+              _self.media.watching.sort((o1, o2) => o2.updatedAt - o1.updatedAt);
+            }
 
-            let mangaEntries = res.manga.lists[0].entries;
-            if (res.manga.lists.length > 1)
-              mangaEntries = mangaEntries.concat(res.manga.lists[1].entries);
+            if (res.manga.lists.length > 0) {
+              let mangaEntries = res.manga.lists[0].entries;
+              if (res.manga.lists.length > 1)
+                mangaEntries = mangaEntries.concat(res.manga.lists[1].entries);
 
-            mangaEntries.forEach(e => _self.media.reading.push(e));
+              mangaEntries.forEach(e => _self.media.reading.push(e));
 
-            _self.media.reading.sort((o1, o2) => o2.updatedAt - o1.updatedAt);
+              _self.media.reading.sort((o1, o2) => o2.updatedAt - o1.updatedAt);
+            }
           });
         });
       }
