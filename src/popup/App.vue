@@ -127,9 +127,9 @@ export default {
     position: absolute;
     overflow-y: scroll;
     padding: 20px 10px 10px;
-    width: 440px;
+    width: 449px;
     height: 570px;
-    left: 65px;
+    left: 56px;
   }
 
   .fade-enter-active, .fade-leave-active {

@@ -34,5 +34,6 @@
     grid-template-columns: repeat(auto-fill, 85px);
     grid-template-rows: repeat(auto-fill, 115px);
     margin-bottom: 25px;
+    justify-content: center;
   }
 </style>
