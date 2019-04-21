@@ -1,5 +1,5 @@
 <script>
-  import {updateUser} from "../assets/js/utils";
+  import {updateUser} from "../../assets/js/utils";
 
   export default {
     name: "Messages",

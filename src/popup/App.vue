@@ -15,7 +15,7 @@
 
 <script>
 import Sidebar from "./components/Sidebar";
-import Messages from "./Messages";
+import Messages from "./components/Messages";
 
 export default {
   components: {Messages, Sidebar},
