@@ -1,0 +1,97 @@
+<template>
+  <div>
+    <transition>
+      <Spinner v-if="!media"/>
+    </transition>
+
+    <div v-if="media" style="display:flex;flex-flow:column">
+      <div class="banner" :style="'background-image:url(' + media.bannerImage + ');background-color:' + media.coverImage.background"></div>
+
+      <div class="upper-container">
+        <div class="left-container">
+          <img class="cover" :src="media.coverImage.extraLarge" :style="'background-color:' + media.coverImage.color"/>
+        </div>
+        <div class="right-container">
+          <h1 class="title" style="font-size:large">{{ media.title.userPreferred || media.title.romaji }}</h1>
+        </div>
+      </div>
+
+      <div v-if="media.description">
+        <h1 class="section-title">Description</h1>
+        <div class="section" style="padding:10px 20px;">
+          <span v-html="media.description"></span>
+        </div>
+      </div>
+
+      <div v-if="media.relations && media.relations.edges.length > 0">
+        <h1 class="section-title">Relations</h1>
+        <div class="section relation">
+          <RelationalMediaGrid :relations="media.relations.edges"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import {queryAL} from "../../../assets/js/utils";
+  import mediaQuery from "../../../assets/graphql/media.graphql";
+  import Spinner from "../base/Spinner";
+  import RelationalMediaGrid from "./RelationalMediaGrid";
+
+  export default {
+    name: "MediaView",
+    components: {RelationalMediaGrid, Spinner},
+    data() {
+      return {
+        media: null
+      }
+    },
+    props: [
+      "id"
+    ],
+    activated() {
+      const _self = this;
+      chrome.storage.local.get({ access_token: null }, value => {
+        queryAL(mediaQuery, { id: this.id }, value.access_token).then(res => _self.media = res.data.Media);
+      });
+    },
+    beforeRouteLeave(to, from, next) {
+      this.media = null;
+      next();
+    }
+  }
+</script>
+
+<style scoped>
+  .banner {
+    width: 470px;
+    height: 150px;
+    top: 0;
+    right: 0;
+    position: absolute;
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+  }
+
+  .upper-container {
+    padding-top: 50px;
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .left-container {
+    margin-right: 16px;
+  }
+
+  .right-container {
+    margin-top: 100px;
+  }
+
+  .cover {
+    width: 128px;
+  }
+</style>

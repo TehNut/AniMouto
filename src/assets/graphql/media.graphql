@@ -1,0 +1,34 @@
+query ($id: Int) {
+  Media(id: $id) {
+    title {
+      romaji
+      userPreferred
+    }
+    coverImage{
+      extraLarge
+      color
+    }
+    bannerImage
+    description(asHtml: true)
+    episodes
+    chapters
+    relations {
+      edges {
+        relationType(version: 2)
+        node {
+          siteUrl
+          title {
+            romaji
+            userPreferred
+          }
+          coverImage {
+            large
+            color
+          }
+          format
+          status
+        }
+      }
+    }
+  }
+}

@@ -5,6 +5,11 @@
         <img class="entry-image no-select" :src="result.img.large">
         <span class="entry-title">{{ result.title.userPreferred }}</span>
         <span class="entry-icons">
+          <i class="material-icons entry-icon enabled"
+             title="Detailed view"
+             @click.prevent="$router.push({ name: 'media-view', params: { id: result.id } })"
+          >format_align_left</i>
+
           <i :class="'material-icons entry-icon' + (!result.mediaListEntry || result.mediaListEntry.status === 'PLANNING' ? ' enabled' : '')"
              v-if="result.status !== 'NOT_YET_RELEASED'"
              :title="!result.mediaListEntry || result.mediaListEntry.status === 'PLANNING' ? 'Add to current' : 'Already listed'"

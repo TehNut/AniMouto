@@ -7,6 +7,7 @@ import Settings from "./components/settings/Settings";
 import Search from "./components/search/Search";
 import Notifications from "./components/notifications/Notifications";
 import Spinner from "./components/base/Spinner";
+import MediaView from "./components/media/MediaView";
 
 Vue.use(VueRouter);
 
@@ -44,6 +45,12 @@ const router = new VueRouter({
       path: "/about",
       component: Spinner
     },
+    {
+      path: "/media",
+      name: "media-view",
+      component: MediaView,
+      props: true
+    }
   ]
 });
 

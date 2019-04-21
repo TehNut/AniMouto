@@ -18,7 +18,9 @@
       </transition>
 
       <transition name="fade">
-        <MediaCardPopout v-if="displayExtras" :left="left" :media="mediaInternal" :entry="entry"/>
+        <MediaCardPopout v-if="displayExtras" :left="left" :media="mediaInternal" :entry="entry">
+          <slot></slot>
+        </MediaCardPopout>
       </transition>
 
       <div v-if="entry && mediaInternal.nextAiringEpisode && mediaInternal.nextAiringEpisode.episode - 1 > entry.progress" class="is-behind"></div>

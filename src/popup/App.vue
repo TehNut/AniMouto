@@ -108,10 +108,11 @@ export default {
 
   ::-webkit-scrollbar {
     width: 10px;
+    height: 10px;
   }
 
   ::-webkit-scrollbar-track {
-    background: rgb(var(--color-background));
+    background: none;
   }
 
   ::-webkit-scrollbar-thumb {

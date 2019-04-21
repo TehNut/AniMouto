@@ -5,10 +5,8 @@
       <span class="progress" v-if="entry">
         Progress: {{ entry.progress }}<span v-if="getTotalCount() > 0">/{{ getTotalCount() }}</span>
         <br/>
-        <span v-if="media.nextAiringEpisode && media.nextAiringEpisode.episode - 1 > entry.progress" class="behind">
-          {{ getEpisodesBehind() }}
-        </span>
       </span>
+      <slot></slot>
     </div>
   </div>
 </template>
@@ -22,10 +20,6 @@
       "left"
     ],
     methods: {
-      getEpisodesBehind() {
-        const behind = this.media.nextAiringEpisode.episode - 1 - this.entry.progress;
-        return `${behind} episode${behind > 1 ? 's' : ''} behind`;
-      },
       getTotalCount() {
         if (this.media.episodes)
           return this.media.episodes;
@@ -64,11 +58,5 @@
   .progress {
     font-size: small;
     color: rgb(var(--color-text));
-  }
-
-  .behind {
-    color: rgb(var(--color-red));
-    position: absolute;
-    bottom: 10px;
   }
 </style>
