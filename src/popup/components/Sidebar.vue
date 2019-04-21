@@ -59,8 +59,14 @@
     },
     methods: {
       changePage(page) {
-        chrome.storage.local.set({ last_page: page.id });
-        this.$router.push(page.id);
+        const _self = this;
+        chrome.storage.local.get({ access_token: "" }, value => {
+          if (value.access_token === "")
+            return;
+
+          chrome.storage.local.set({ last_page: page.id });
+          _self.$router.push(page.id);
+        });
       },
       getIcon(page) {
         if (page.id === "notifications" && this.unreadNotifications > 0)

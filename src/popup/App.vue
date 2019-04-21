@@ -41,8 +41,8 @@ export default {
     this.updateTheme();
 
     const _self = this;
-    chrome.storage.local.get({ theme: "light", accent_color: "color-blue", last_page: "login", notifications: { lastCheck: 0 } }, value => {
-      _self.$router.push(value.last_page);
+    chrome.storage.local.get({ access_token: "", theme: "light", accent_color: "color-blue", last_page: "login", notifications: { lastCheck: 0 } }, value => {
+      _self.$router.push(value.access_token === "" ? "login" : value.last_page);
 
       _self.updateNotifications(value.notifications.lastCheck);
     });
