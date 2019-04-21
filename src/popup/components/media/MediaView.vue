@@ -37,14 +37,14 @@
         </div>
       </div>
 
-      <!--<div v-if="media.characters && media.characters.edges.length > 0">-->
+      <div v-if="media.characters && media.characters.edges.length > 0">
         <h1 class="section-title">
           <a :href="getContextualLink('characters')" target="_blank">Characters</a>
         </h1>
         <div class="section character-grid">
           <CharacterRelation v-for="(character, index) in media.characters.edges" :character="character.node" :role="character.role" :left="index % 4 > 1"/>
         </div>
-      <!--</div>-->
+      </div>
     </div>
   </div>
 </template>
