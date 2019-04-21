@@ -46,12 +46,8 @@
             return;
 
           queryAL(mediaList, { user: value.user_info.id }, value.access_token).then(res => res.data).then(res => {
-            if (res.anime.lists.length > 0) {
-              let animeEntries = res.anime.lists[0].entries;
-              if (res.anime.lists.length > 1)
-                animeEntries = animeEntries.concat(res.anime.lists[1].entries);
-
-              animeEntries.forEach(e => {
+            if (res.anime.mediaList.length > 0) {
+              res.anime.mediaList.forEach(e => {
                 if (e.media.nextAiringEpisode)
                   _self.media.airing.push(e);
                 else
@@ -62,12 +58,8 @@
               _self.media.watching.sort((o1, o2) => o2.updatedAt - o1.updatedAt);
             }
 
-            if (res.manga.lists.length > 0) {
-              let mangaEntries = res.manga.lists[0].entries;
-              if (res.manga.lists.length > 1)
-                mangaEntries = mangaEntries.concat(res.manga.lists[1].entries);
-
-              mangaEntries.forEach(e => _self.media.reading.push(e));
+            if (res.manga.mediaList.length > 0) {
+              res.manga.mediaList.forEach(e => _self.media.reading.push(e));
 
               _self.media.reading.sort((o1, o2) => o2.updatedAt - o1.updatedAt);
             }
