@@ -12,7 +12,9 @@
           <img class="cover" :src="media.coverImage.extraLarge" :style="'background-color:' + media.coverImage.color"/>
         </div>
         <div class="right-container">
-          <h1 class="title" style="font-size:large">{{ media.title.userPreferred || media.title.romaji }}</h1>
+          <h1 class="title" style="font-size:large">
+            <a :href="media.siteUrl" target="_blank">{{ media.title.userPreferred || media.title.romaji }}</a>
+          </h1>
         </div>
       </div>
 
