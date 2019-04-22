@@ -48,7 +48,8 @@
           "peach",
           "orange",
           "yellow",
-          "green"
+          "green",
+          "purple"
         ]
       }
     },
