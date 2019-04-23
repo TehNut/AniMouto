@@ -79,6 +79,7 @@ export default {
     --color-orange: 247, 154, 99;
     --color-yellow: 247, 191, 99;
     --color-green: 123, 213, 85;
+    --color-purple: 146, 86, 243;
     /* Changeable option */
     --color-accent: var(--color-blue);
   }
