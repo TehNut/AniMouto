@@ -6,8 +6,8 @@
       <input v-model="token" type="text" class="text-input" ref="codeField" placeholder="Authorization Code" autocomplete="off" />
     </div>
 
-    <div class="button no-select" @click="getCode()" style="background:rgb(var(--color-orange))" ref="codeButton">Get Code</div>
-    <div class="button no-select" @click="handleLogin()" ref="loginButton">Login</div>
+    <div class="button no-select ripple" @click="getCode()" style="background:rgb(var(--color-orange))" ref="codeButton">Get Code</div>
+    <div class="button no-select ripple" @click="handleLogin()" ref="loginButton">Login</div>
     <transition name="fade">
       <Spinner v-if="active"/>
     </transition>

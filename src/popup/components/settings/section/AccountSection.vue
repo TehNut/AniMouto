@@ -3,7 +3,7 @@
     <h1 class="section-title">Account</h1>
     <div class="section">
       <h2 class="title">Logged in as <a :href="user.url" class="highlight">{{ user.name }}</a></h2>
-      <div class="button" @click="logout">Logout</div>
+      <div class="button no-select ripple" @click="logout">Logout</div>
     </div>
   </div>
 </template>

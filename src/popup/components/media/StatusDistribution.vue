@@ -1,7 +1,7 @@
 <template>
   <div class="section distribution-container">
     <div v-for="entry in Object.entries(status)" v-if="entry[1] > 0" :class="'entry ' + entry[0]">
-      <div class="button distribution">{{ displayify(entry[0]) }}</div>
+      <div class="button no-select ripple distribution">{{ displayify(entry[0]) }}</div>
       <span style="text-align:center">{{ entry[1] }}</span>
     </div>
     <div class="bar">

@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="title">Login with AniList to use AniMouto</h2>
-    <div class="button no-select" @click="handleLogin()" ref="loginButton">Login</div>
+    <div class="button no-select ripple" @click="handleLogin()" ref="loginButton">Login</div>
     <transition name="fade">
       <Spinner v-if="active"/>
     </transition>

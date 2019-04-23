@@ -1,6 +1,6 @@
 <template>
   <div class="checkbox">
-    <input type="checkbox" :id="identifier" :value="value" @change="$emit('input', $event.target.checked)"/>
+    <input type="checkbox" :id="identifier" v-model="value" @change="$emit('input', $event.target.checked)"/>
     <label :for="identifier"></label>
     <p class="highlight checkbox-label">{{ title }}</p>
   </div>
