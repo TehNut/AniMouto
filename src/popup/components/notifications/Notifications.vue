@@ -2,10 +2,9 @@
   <div>
     <div class="buttons">
       <i class="material-icons icon" @click="loadNotifications">refresh</i>
-      <a href="https://anilist.co/notifications" target="_blank"><i class="material-icons icon">open_in_new</i></a>
       <i class="material-icons icon" @click="markRead">done_all</i>
     </div>
-    <h1 class="section-title">Recent Notifications</h1>
+    <h1 class="section-title"><a href="https://anilist.co/notifications" target="_blank">Recent Notifications</a></h1>
     <transition name="fade">
       <Spinner v-if="notifications.length === 0"/>
     </transition>
