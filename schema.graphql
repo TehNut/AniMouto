@@ -9,7 +9,7 @@ schema {
 union ActivityUnion = ListActivity | MessageActivity | TextActivity
 
 "Notification union type"
-union NotificationUnion = ActivityLikeNotification | ActivityMentionNotification | ActivityMessageNotification | ActivityReplyLikeNotification | ActivityReplyNotification | ActivityReplySubscribedNotification | AiringNotification | FollowingNotification | ThreadCommentLikeNotification | ThreadCommentMentionNotification | ThreadCommentReplyNotification | ThreadCommentSubscribedNotification | ThreadLikeNotification
+union NotificationUnion = ActivityLikeNotification | ActivityMentionNotification | ActivityMessageNotification | ActivityReplyLikeNotification | ActivityReplyNotification | ActivityReplySubscribedNotification | AiringNotification | FollowingNotification | RelatedMediaAdditionNotification | ThreadCommentLikeNotification | ThreadCommentMentionNotification | ThreadCommentReplyNotification | ThreadCommentSubscribedNotification | ThreadLikeNotification
 
 "Notification for when a activity is liked"
 type ActivityLikeNotification {
@@ -860,6 +860,8 @@ type InternalPage {
   threadComments(
     #Filter by the comment id
     id: Int,
+    #The order the results will be returned in
+    sort: [ThreadCommentSort],
     #Filter by the thread id
     threadId: Int,
     #Filter by the user id of the comment's creator
@@ -2125,6 +2127,8 @@ type Page {
   threadComments(
     #Filter by the comment id
     id: Int,
+    #The order the results will be returned in
+    sort: [ThreadCommentSort],
     #Filter by the thread id
     threadId: Int,
     #Filter by the user id of the comment's creator
@@ -2692,6 +2696,8 @@ type Query {
   ThreadComment(
     #Filter by the comment id
     id: Int,
+    #The order the results will be returned in
+    sort: [ThreadCommentSort],
     #Filter by the thread id
     threadId: Int,
     #Filter by the user id of the comment's creator
@@ -2710,6 +2716,22 @@ type Query {
   ): User
   "Get the currently authenticated user"
   Viewer: User
+}
+
+"Notification for when new media is added to the site"
+type RelatedMediaAdditionNotification {
+  "The notification context text"
+  context: String
+  "The time the notification was created at"
+  createdAt: Int
+  "The id of the Notification"
+  id: Int!
+  "The associated media of the airing schedule"
+  media: Media
+  "The id of the new media"
+  mediaId: Int!
+  "The type of notification"
+  type: NotificationType
 }
 
 type Report {
@@ -3080,6 +3102,8 @@ type ThreadComment {
   likes: [User]
   "The url for the comment page on the AniList website"
   siteUrl: String
+  "The thread the comment belongs to"
+  thread: Thread
   "The id of thread the comment belongs to"
   threadId: Int
   "The time of the comments last update"
@@ -3610,6 +3634,8 @@ enum NotificationType {
   AIRING
   #A user has followed you
   FOLLOWING
+  #A new anime or manga has been added to the site where its related media is on the user's list
+  RELATED_MEDIA_ADDITION
   #A user has liked your forum comment
   THREAD_COMMENT_LIKE
   #A user has mentioned you in a forum comment
@@ -3717,6 +3743,12 @@ enum SubmissionStatus {
   PARTIALLY_ACCEPTED
   PENDING
   REJECTED
+}
+
+"Thread comments sort enums"
+enum ThreadCommentSort {
+  ID
+  ID_DESC
 }
 
 "Thread sort enums"

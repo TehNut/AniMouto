@@ -11,9 +11,7 @@
     <div>
       <span v-for="notification in notifications">
         <Notification :notification="notification" :unread="notification.unread">
-          <ActivityNotification v-if="notification.__typename.startsWith('Activity') || notification.__typename === 'FollowingNotification'" :notification="notification"/>
-          <AiringNotification v-else-if="notification.__typename === 'AiringNotification'" :notification="notification"/>
-          <ThreadNotification v-else-if="notification.__typename .startsWith('ThreadComment')" :notification="notification"/>
+          <component :is="getNotificationType(notification)" :notification="notification"></component>
         </Notification>
       </span>
     </div>
@@ -27,11 +25,12 @@
   import ActivityNotification from "./type/ActivityNotification";
   import AiringNotification from "./type/AiringNotification";
   import ThreadNotification from "./type/ThreadNotification";
+  import UnknownNotification from "./type/UnknownNotification";
   import Notification from "./Notification";
 
   export default {
     name: "Notifications",
-    components: {Notification, ThreadNotification, AiringNotification, ActivityNotification, Spinner},
+    components: {Notification, ThreadNotification, AiringNotification, ActivityNotification, UnknownNotification, Spinner},
     data() {
       return {
         notifications: [],
@@ -58,6 +57,25 @@
       markRead() {
         this.$emit("update-notifications", 0);
         this.notifications.filter(n => n.unread).forEach(n => n.unread = false);
+      },
+      getNotificationType(notification) {
+        // These are to be kept in the same order as the API for consistency
+        switch (notification.type) {
+          case "ACTIVITY_LIKE":
+          case "ACTIVITY_MENTION":
+          case "ACTIVITY_MESSAGE":
+          case "ACTIVITY_REPLY":
+          case "ACTIVITY_REPLY_LIKE":
+          case "ACTIVITY_REPLY_SUBSCRIBED": return "ActivityNotification";
+          case "AIRING": return "AiringNotification";
+          case "FOLLOWING": return "ActivityNotification";
+          case "THREAD_COMMENT_LIKE":
+          case "THREAD_COMMENT_MENTION":
+          case "THREAD_COMMENT_REPLY":
+          case "THREAD_LIKE":
+          case "THREAD_SUBSCRIBED": return "ThreadNotification";
+          default: return "UnknownNotification";
+        }
       }
     },
     created() {
