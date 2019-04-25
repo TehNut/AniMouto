@@ -16,6 +16,7 @@
 
     <SearchSection :title="'Anime'" :results="results.anime"/>
     <SearchSection :title="'Manga'" :results="results.manga"/>
+    <SearchSection :title="'Light Novels'" :results="results.novels"/>
   </div>
 </template>
 
@@ -34,7 +35,8 @@
         searching: false,
         results: {
           anime: [],
-          manga: []
+          manga: [],
+          novels: []
         }
       }
     },
@@ -54,6 +56,7 @@
 
           _self.results.anime = [];
           _self.results.manga = [];
+          _self.results.novels = [];
           _self.searching = true;
 
           lastSearch = trimmed;
@@ -62,10 +65,18 @@
               res.data.Page.media.forEach(e => {
                 _self.searching = false;
 
-                if (e.format !== "MANGA" && e.format !== "NOVEL" && e.format !== "ONE_SHOT")
-                  _self.results.anime.push(e);
-                else
-                  _self.results.manga.push(e);
+                switch (e.format) {
+                  case "MANGA":
+                  case "ONE_SHOT": _self.results.manga.push(e); break;
+                  case "NOVEL": _self.results.novels.push(e); break;
+                  case "MOVIE":
+                  case "MUSIC":
+                  case "ONA":
+                  case "OVA":
+                  case "SPECIAL":
+                  case "TV":
+                  case "TV_SHORT": _self.results.anime.push(e); break;
+                }
               })
             });
           });
