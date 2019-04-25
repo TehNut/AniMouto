@@ -67,7 +67,8 @@
           case "ACTIVITY_REPLY":
           case "ACTIVITY_REPLY_LIKE":
           case "ACTIVITY_REPLY_SUBSCRIBED": return "ActivityNotification";
-          case "AIRING": return "AiringNotification";
+          case "AIRING":
+          case "RELATED_MEDIA_ADDITION": return "AiringNotification";
           case "FOLLOWING": return "ActivityNotification";
           case "THREAD_COMMENT_LIKE":
           case "THREAD_COMMENT_MENTION":
