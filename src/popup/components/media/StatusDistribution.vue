@@ -28,8 +28,7 @@
       }
     },
     mounted() {
-      let total = 0;
-      Object.values(this.status).forEach(e => total += e);
+      const total = Object.values(this.status).reduce((a, b) => a + b);
       Object.entries(this.status).forEach(e => {
         this.$refs[e[0].toLowerCase() + "Bar"].style.width = (e[1] / total * 100) + "%";
       });

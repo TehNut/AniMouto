@@ -13,14 +13,14 @@
 
       <transition name="fade">
         <div v-if="!entry && displayExtras" class="cover-overlay">
-          <i class="material-icons overlay-text details-icon" @click.prevent="$router.push({ name: 'media-view', params: { id: mediaInternal.id } })">forward</i>
+          <i class="material-icons overlay-text details-icon" @click.prevent="navigate">forward</i>
         </div>
       </transition>
 
       <transition name="fade">
         <div v-if="entry && displayExtras" class="cover-overlay">
           <span class="overlay-text progress-text" @click.prevent="handleProgressClick">{{ entry.progress }} +</span>
-          <i class="material-icons overlay-text details-icon entry" @click.prevent="$router.push({ name: 'media-view', params: { id: mediaInternal.id } })">forward</i>
+          <i class="material-icons overlay-text details-icon entry" @click.prevent="navigate">forward</i>
         </div>
       </transition>
 
@@ -62,6 +62,9 @@
       this.$refs.cover.style.backgroundColor = this.mediaInternal.coverImage.color;
     },
     methods: {
+      navigate() {
+        this.$router.push({ name: 'media-view', params: { id: this.mediaInternal.id } });
+      },
       timeUntilAiring() {
         return formatTime(this.mediaInternal.nextAiringEpisode.timeUntilAiring)
       },

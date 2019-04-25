@@ -65,7 +65,7 @@
             return;
 
           chrome.storage.local.set({ last_page: page.id });
-          _self.$router.push(page.id);
+          _self.$router.push("/" + page.id);
         });
       },
       getIcon(page) {

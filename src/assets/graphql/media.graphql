@@ -17,6 +17,7 @@ query ($id: Int) {
       edges {
         relationType(version: 2)
         node {
+          id
           siteUrl
           title {
             romaji

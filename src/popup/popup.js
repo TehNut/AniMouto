@@ -46,7 +46,7 @@ const router = new VueRouter({
       component: Spinner
     },
     {
-      path: "/media",
+      path: "/media/:id",
       name: "media-view",
       component: MediaView,
       props: true
