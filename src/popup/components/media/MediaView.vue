@@ -5,7 +5,7 @@
     </transition>
 
     <div v-if="media" style="display:flex;flex-flow:column">
-      <div class="banner" :style="'background-image:url(' + media.bannerImage ? media.bannerImage : '' + ')'"></div>
+      <div class="banner" :style="'background-image:url(' + (media.bannerImage ? media.bannerImage : '') + ')'"></div>
 
       <div class="upper-container" :style="media.bannerImage ? '' : 'padding-top:0'">
         <div class="left-container">
