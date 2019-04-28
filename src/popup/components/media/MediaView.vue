@@ -53,7 +53,16 @@
           <a :href="getContextualLink('characters')" target="_blank">Characters</a>
         </h1>
         <div class="section character-grid">
-          <CharacterRelation v-for="(character, index) in media.characters.edges" :character="character.node" :role="character.role" :left="index % 4 > 1"/>
+          <NamedRelation v-for="(character, index) in media.characters.edges" :entity="character.node" :role="character.role" :left="index % 4 > 1"/>
+        </div>
+      </div>
+
+      <div v-if="media.staff && media.staff.edges.length > 0">
+        <h1 class="section-title">
+          <a :href="getContextualLink('staff')" target="_blank">Staff</a>
+        </h1>
+        <div class="section character-grid">
+          <NamedRelation v-for="(staff, index) in media.staff.edges" :entity="staff.node" :role="staff.role" :left="index % 4 > 1"/>
         </div>
       </div>
     </div>
@@ -65,12 +74,12 @@
   import mediaQuery from "../../../assets/graphql/media.graphql";
   import Spinner from "../base/Spinner";
   import RelationalMediaGrid from "./RelationalMediaGrid";
-  import CharacterRelation from "./CharacterRelation";
+  import NamedRelation from "./NamedRelation";
   import StatusDistribution from "./StatusDistribution";
 
   export default {
     name: "MediaView",
-    components: {StatusDistribution, CharacterRelation, RelationalMediaGrid, Spinner},
+    components: {StatusDistribution, NamedRelation, RelationalMediaGrid, Spinner},
     data() {
       return {
         media: null

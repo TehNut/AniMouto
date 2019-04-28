@@ -1,10 +1,10 @@
 <template>
-  <a :href="character.siteUrl" target="_blank">
+  <a :href="entity.siteUrl" target="_blank">
     <div class="cover" ref="cover" @mouseenter="displayExtras = true" @mouseleave="displayExtras = false">
       <transition name="fade">
         <div v-if="displayExtras" :class="'popout' + (left ? ' left' : '')">
           <div class="contents">
-            <p class="title">{{ character.name.first + (character.name.last ? " " + character.name.last : "") }}</p>
+            <p class="title">{{ entity.name.first + (entity.name.last ? " " + entity.name.last : "") }}</p>
             <span class="status">{{ displayify(role) }}</span>
           </div>
         </div>
@@ -17,14 +17,14 @@
   import {displayify} from "../../../assets/js/utils";
 
   export default {
-    name: "CharacterRelation",
+    name: "NamedRelation",
     data() {
       return {
         displayExtras: false
       }
     },
     props: [
-      "character",
+      "entity",
       "role",
       "left"
     ],
@@ -34,7 +34,7 @@
       }
     },
     mounted() {
-      this.$refs.cover.style.backgroundImage = `url(${this.character.image.large})`;
+      this.$refs.cover.style.backgroundImage = `url(${this.entity.image.large})`;
     },
   }
 </script>

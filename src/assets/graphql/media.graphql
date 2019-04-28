@@ -50,6 +50,21 @@ query ($id: Int) {
         }
       }
     }
+    staff(perPage: 12) {
+      edges {
+        role
+        node {
+          siteUrl
+          image {
+            large
+          }
+          name {
+            first
+            last
+          }
+        }
+      }
+    }
     stats {
       statusDistribution {
         status

@@ -23,6 +23,9 @@ export function queryAL(query, variables, token) {
 }
 
 export function displayify(value) {
+  if (!value)
+    return "";
+
   value = value.split("_");
   let ret = "";
   value.forEach(e => ret += (ret.length === 0 ? "" : " " ) + e.charAt(0) + e.substring(1).toLowerCase());
