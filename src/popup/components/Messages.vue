@@ -18,8 +18,8 @@
         if (message.type === "change_page")
           _self.$router.push(message.page);
 
-        // if (message.type === "display_toast")
-        //   displayToast(message.toast);
+        if (message.type === "display_toast")
+          _self.$emit("add-toast", message.toast);
       });
     }
   }

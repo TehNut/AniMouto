@@ -28,6 +28,7 @@
         this.$router.push("login");
         this.$emit("update-theme");
         updateUser();
+        this.$emit("add-toast", { message: "Logout successful" })
       }
     },
     created() {

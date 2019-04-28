@@ -1,14 +1,20 @@
 <template>
   <div class="container">
-    <Messages/>
-    <Sidebar :unreadNotifications="unreadNotifications"/>
+    <Messages @add-toast="addToast"/>
+    <Sidebar :unreadNotifications="unreadNotifications" @add-toast="addToast"/>
     <div class="content">
       <keep-alive>
         <router-view
           @update-notifications="updateNotifications"
           @update-theme="updateTheme"
+          @add-toast="addToast"
         />
       </keep-alive>
+    </div>
+    <div class="content toasts">
+      <transition-group name="fade">
+        <Toast v-for="toast in toasts" :toast="toast" @pop="toasts.shift()" :key="toast.message"/>
+      </transition-group>
     </div>
   </div>
 </template>
@@ -16,12 +22,14 @@
 <script>
 import Sidebar from "./components/Sidebar";
 import Messages from "./components/Messages";
+import Toast from "./components/base/Toast";
 
 export default {
-  components: {Messages, Sidebar},
+  components: {Toast, Messages, Sidebar},
   data () {
     return {
-      unreadNotifications: 0
+      unreadNotifications: 0,
+      toasts: []
     }
   },
   methods: {
@@ -35,10 +43,22 @@ export default {
         document.documentElement.style.setProperty("--color-accent", `var(--${value.accent_color})`);
         document.getElementsByTagName("body")[0].className = `theme-${value.theme}`;
       });
+    },
+    addToast(toast) {
+      toast.born = new Date().getTime();
+      this.toasts.push(toast);
     }
   },
   created() {
     this.updateTheme();
+
+    setInterval(() => {
+      const now = new Date().getTime();
+      this.toasts = this.toasts.filter(toast => {
+        const lifeSpan = toast.time || 5000;
+        return now - toast.born < lifeSpan;
+      });
+    }, 1);
 
     const _self = this;
     chrome.storage.local.get({ access_token: "", theme: "light", accent_color: "color-blue", last_page: "login", currentNotifications: 0 }, value => {
@@ -132,6 +152,12 @@ export default {
     width: 449px;
     height: 570px;
     left: 56px;
+  }
+
+  .toasts {
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 2;
   }
 
   .fade-enter-active, .fade-leave-active {

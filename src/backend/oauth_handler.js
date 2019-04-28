@@ -39,7 +39,7 @@ async function validateToken(token) {
       if (res.errors) {
         console.log(res.errors);
         console.log("Invalid token provided.");
-        chrome.runtime.sendMessage({ type: "display_toast", toast: { type: "burnt", text: "Invalid authentication code" } });
+        chrome.runtime.sendMessage({ type: "display_toast", toast: { error: true, message: "Invalid authentication code" } });
         chrome.runtime.sendMessage({ type: "login_failure" });
       } else {
         chrome.storage.local.set({ access_token: token });
