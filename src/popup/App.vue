@@ -28,7 +28,7 @@ export default {
     updateNotifications(unread) {
       this.unreadNotifications = unread;
       chrome.browserAction.setBadgeText({ text: unread > 0 ? unread.toString() : "" });
-      chrome.storage.local.set({ notifications: { lastCheck: unread }}, () => {});
+      chrome.storage.local.set({ currentNotifications: unread}, () => {});
     },
     updateTheme() {
       chrome.storage.local.get({theme: "light", accent_color: "color-blue"}, value => {
@@ -41,10 +41,10 @@ export default {
     this.updateTheme();
 
     const _self = this;
-    chrome.storage.local.get({ access_token: "", theme: "light", accent_color: "color-blue", last_page: "login", notifications: { lastCheck: 0 } }, value => {
+    chrome.storage.local.get({ access_token: "", theme: "light", accent_color: "color-blue", last_page: "login", currentNotifications: 0 }, value => {
       _self.$router.push("/" + (value.access_token === "" ? "login" : value.last_page));
 
-      _self.updateNotifications(value.notifications.lastCheck);
+      _self.updateNotifications(value.currentNotifications);
     });
   }
 }

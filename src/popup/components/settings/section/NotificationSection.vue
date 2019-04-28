@@ -11,7 +11,10 @@
 
       <h2 class="title">Check Interval</h2>
       <p class="subtext">The amount of time <span class="highlight">in minutes</span> between checks for new notifications.</p>
+      <input type="number" v-model="interval" class="text-input settings-text-input" placeholder="Minutes" autocomplete="off"/>
+      <span class="highlight settings-text-input-label">Minute(s)</span>
 
+      <br/>
       <br/>
       <br/>
 
@@ -21,7 +24,7 @@
 
       <br/>
 
-      <div class="button" @click="save">Save</div>
+      <div class="button no-select ripple" @click="save">Save</div>
     </div>
   </div>
 </template>
@@ -34,24 +37,29 @@
     data() {
       return {
         periodicCheck: true,
-        desktopNotifications: true
+        desktopNotifications: true,
+        interval: 1
       }
+    },
+    created() {
+      const _self = this;
+      this.$browser.storage.local.get().then(v => {
+        _self.periodicCheck = v.notifications.enabled;
+        _self.desktopNotifications = v.notifications.desktop;
+        _self.interval = v.notifications.interval || 1;
+      });
     },
     methods: {
       save() {
-        chrome.storage.local.set({ notifications: { enabled: this.periodicCheck, desktop: false } });
+        this.$browser.storage.local.set({ notifications: { enabled: this.periodicCheck, desktop: false } }).then(v => console.log(v));
+        const _self = this;
 
         if (this.desktopNotifications) {
-          chrome.permissions.request({ permissions: ["notifications"] }, granted => {
-            chrome.storage.local.set({ notifications: { desktop: granted } });
+          this.$browser.permissions.request({ permissions: ["notifications"] }).then(granted => {
+            _self.$browser.storage.local.set({ notifications: { enabled: _self.periodicCheck, desktop: granted } });
           });
         }
-
       }
     }
   }
 </script>
-
-<style scoped>
-
-</style>
