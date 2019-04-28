@@ -24,7 +24,6 @@ function beginAuthorizationFlow() {
 }
 
 async function handleToken(token) {
-  console.log(token);
   chrome.storage.local.set({ access_token: token });
   console.log("Token obtained and stored.");
 
@@ -38,7 +37,7 @@ async function validateToken(token) {
   queryAL(viewerQuery, {}, token).then(viewerRes => viewerRes.json())
     .then(res => {
       if (res.errors) {
-        console.log(res.errors)
+        console.log(res.errors);
         console.log("Invalid token provided.");
         chrome.runtime.sendMessage({ type: "display_toast", toast: { type: "burnt", text: "Invalid authentication code" } });
         chrome.runtime.sendMessage({ type: "login_failure" });
