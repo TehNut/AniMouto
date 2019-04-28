@@ -1,6 +1,6 @@
 <template>
   <div>
-    <AccountSection/>
+    <AccountSection @update-theme="emit('update-theme')"/>
     <ThemeSection @update-theme="$emit('update-theme')"/>
     <NotificationSection/>
   </div>

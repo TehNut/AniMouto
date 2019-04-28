@@ -4,6 +4,7 @@
     <div class="section">
       <h2 class="title">Logged in as <a :href="user.url" class="highlight">{{ user.name }}</a></h2>
       <div class="button no-select ripple" @click="logout">Logout</div>
+      <p style="margin:0">Remember to revoke the access token from your <a href="https://anilist.co/settings/apps">Apps page</a> after logging out.</p>
     </div>
   </div>
 </template>
@@ -23,8 +24,9 @@
     },
     methods: {
       logout() {
-        chrome.storage.local.clear();
+        this.$browser.storage.local.clear();
         this.$router.push("login");
+        this.$emit("update-theme");
         updateUser();
       }
     },
