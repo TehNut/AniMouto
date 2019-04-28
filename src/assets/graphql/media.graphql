@@ -1,5 +1,6 @@
 query ($id: Int) {
   Media(id: $id) {
+    id
     siteUrl
     title {
       romaji
@@ -9,10 +10,12 @@ query ($id: Int) {
       extraLarge
       color
     }
+    isFavourite
     bannerImage
     description(asHtml: true)
     episodes
     chapters
+    format
     relations {
       edges {
         relationType(version: 2)
@@ -32,7 +35,7 @@ query ($id: Int) {
         }
       }
     }
-    characters(sort: ID, perPage: 12) {
+    characters(sort: [ROLE, ID], perPage: 12) {
       edges {
         role
         node {
@@ -52,6 +55,10 @@ query ($id: Int) {
         status
         amount
       }
+    }
+    externalLinks {
+      url
+      site
     }
   }
 }

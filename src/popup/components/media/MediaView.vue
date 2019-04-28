@@ -12,10 +12,21 @@
           <img class="cover" :src="media.coverImage.extraLarge" :style="'background-color:' + media.coverImage.color"/>
         </div>
         <div class="right-container">
-          <h1 class="title" style="font-size:large">
-            <a :href="media.siteUrl" target="_blank">{{ media.title.userPreferred || media.title.romaji }}</a>
-          </h1>
+          <div class="title-container">
+            <h1 class="title" style="font-size:large">
+              <a :href="media.siteUrl" target="_blank">{{ media.title.userPreferred || media.title.romaji }}</a>
+            </h1>
+          </div>
+          <div class="button-container">
+            <div class="button ripple like-button" @click="favorite"><i class="material-icons" :style="'font-size:initial;color:rgba(255, 255, 255, ' + (media.isFavourite ? '0.5' : '1.0') + ')'">favorite</i></div>
+          </div>
         </div>
+      </div>
+
+      <div v-if="media.externalLinks" class="external-links">
+        <a v-for="link in media.externalLinks" :href="link.url" target="_blank">
+          <div class="button ripple link-button" :style="'background-color:' + getSiteColor(link.site)">{{ link.site }}</div>
+        </a>
       </div>
 
       <div v-if="media.description">
@@ -76,6 +87,27 @@
       },
       getContextualLink(context) {
         return this.media.siteUrl + "/" + this.media.title.romaji.replace(/ /g, "-").replace(/[^a-zA-Z0-9\-]/, "") + "/" + context;
+      },
+      getSiteColor(site) {
+        switch (site) {
+          case "Crunchyroll": return "rgb(var(--color-orange))";
+          case "Funimation":
+          case "Animelab": return "#c063ff";
+          case "Hulu": return "rgb(var(--color-green))";
+          default: return "rgb(var(--color-accent))";
+        }
+      },
+      favorite() {
+        const _self = this;
+        const isManga = this.media.format === "MANGA" || this.media.format === "ONE_SHOT";
+        this.$browser.storage.local.get().then(v => {
+          if (v.access_token === "")
+            return;
+
+          queryAL(`mutation($id:Int){ToggleFavourite(${isManga ? "manga" : "anime"}Id: $id){__typename}}`, { id: _self.media.id }, v.access_token).then(res => {
+            _self.media.isFavourite = !_self.media.isFavourite
+          })
+        });
       }
     },
     activated() {
@@ -125,10 +157,37 @@
 
   .right-container {
     margin-top: 100px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
   }
 
   .cover {
     width: 128px;
+  }
+
+  .button-container {
+    display: flex;
+    flex-flow: column;
+  }
+
+  .like-button {
+    background-color: rgb(var(--color-peach));
+    margin-top: 0;
+    padding: 10px 10px;
+  }
+
+  .external-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: -10px;
+    margin-bottom: 10px;
+  }
+
+  .link-button {
+    margin-left: 0;
+    margin-top: 0;
   }
 
   .character-grid {
