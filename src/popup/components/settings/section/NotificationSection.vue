@@ -44,6 +44,9 @@
     created() {
       const _self = this;
       this.$browser.storage.local.get().then(v => {
+        if (!v.notifications)
+          v.notifications = { enabled: true, desktop: false, interval: 1 };
+
         _self.periodicCheck = v.notifications.enabled;
         _self.desktopNotifications = v.notifications.desktop;
         _self.interval = v.notifications.interval || 1;
