@@ -9,6 +9,7 @@ import Notifications from "./components/notifications/Notifications";
 import Spinner from "./components/base/Spinner";
 import MediaView from "./components/media/MediaView";
 import ForumOverview from "./components/forum/ForumOverview";
+import About from "./components/About";
 
 Vue.use(VueRouter);
 
@@ -44,7 +45,7 @@ const router = new VueRouter({
     },
     {
       path: "/about",
-      component: Spinner
+      component: About
     },
     {
       path: "/media/:id",
