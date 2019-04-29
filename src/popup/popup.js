@@ -17,7 +17,7 @@ const router = new VueRouter({
   routes: [
     {
       path: "/",
-      component: Login
+      component: Spinner
     },
     {
       path: "/login",
