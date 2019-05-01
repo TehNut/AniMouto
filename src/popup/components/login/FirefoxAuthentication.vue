@@ -8,11 +8,13 @@
 
     <div class="button no-select ripple" @click="getCode()" style="background:rgb(var(--color-orange))" ref="codeButton">Get Code</div>
     <div class="button no-select ripple" @click="handleLogin()" ref="loginButton">Login</div>
+    <a href="https://anilist.co/signup" target="_blank"><div class="button no-select ripple">Sign Up</div></a>
     <transition name="fade">
       <Spinner v-if="active"/>
     </transition>
     <div id="chrome-loader" class="loader" style="display:none;position:absolute;top:60px;"></div>
     <p style="color:rgb(var(--color-text))">Paste your authorization code into the text field to authenticate. Don't forget to close the extra window when you finish.</p>
+    <p style="color:rgb(var(--color-text))">Once authentication is complete, the page will change.</p>
   </div>
 </template>
 

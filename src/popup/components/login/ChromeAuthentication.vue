@@ -2,6 +2,7 @@
   <div>
     <h2 class="title">Login with AniList to use AniMouto</h2>
     <div class="button no-select ripple" @click="handleLogin()" ref="loginButton">Login</div>
+    <a href="https://anilist.co/signup" target="_blank"><div class="button no-select ripple">Sign Up</div></a>
     <transition name="fade">
       <Spinner v-if="active"/>
     </transition>
