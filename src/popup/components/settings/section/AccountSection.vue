@@ -41,11 +41,10 @@
           }
 
           queryAL(viewerQuery, {}, v.access_token).then(res => res.data.Viewer).then(viewer => {
-            this.$browser.storage.local.set({ user_info: { name: viewer.name, id: viewer.id, site_url: viewer.siteUrl, avatar: viewer.avatar.large } }).then(v => {
-              updateUser();
-              _self.user.name = v.user_info.name;
-              _self.user.url = v.user_info.site_url;
-            });
+            this.$browser.storage.local.set({ user_info: { name: viewer.name, id: viewer.id, site_url: viewer.siteUrl, avatar: viewer.avatar.large } });
+            updateUser();
+            _self.user.name = viewer.name;
+            _self.user.url = viewer.siteUrl;
           });
         })
       }
