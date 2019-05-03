@@ -8,13 +8,12 @@
     <transition name="fade">
       <Spinner v-if="notifications.length === 0"/>
     </transition>
-    <div>
-      <span v-for="notification in notifications">
-        <Notification :notification="notification" :unread="notification.unread">
-          <component :is="getNotificationType(notification)" :notification="notification"></component>
-        </Notification>
-      </span>
-    </div>
+
+    <span v-for="notification in notifications">
+      <Notification :notification="notification" :unread="notification.unread">
+        <component :is="getNotificationType(notification)" :notification="notification"></component>
+      </Notification>
+    </span>
   </div>
 </template>
 

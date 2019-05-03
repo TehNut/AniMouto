@@ -1,11 +1,12 @@
 <template>
   <div>
+    <div class="buttons">
+      <i class="material-icons icon" @click="loadList">refresh</i>
+    </div>
+
     <transition name="fade">
       <Spinner v-if="loading"/>
     </transition>
-    <div class="buttons" v-if="!loading">
-      <i class="material-icons icon" @click="loadList">refresh</i>
-    </div>
 
     <MediaGrid :list="media.airing" :title="{ url: 'https://anilist.co/airing', text: 'Airing' }"/>
     <MediaGrid :list="media.watching" :title="'Anime in Progress'"/>

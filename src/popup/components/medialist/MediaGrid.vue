@@ -1,17 +1,19 @@
 <template>
-  <div v-if="list.length > 0">
+  <transition name="fade">
+    <div v-if="list.length > 0">
       <h1 class="section-title">
         <a v-if="title.url" :href="title.url" target="_blank">{{ title.text }}</a>
         <span v-else>{{ title.text || title }}</span>
       </h1>
-      <div class="section media-grid">
-        <MediaCard v-for="(entry, index) in list" v-if="!isComplete(entry)" :entry="entry" :left="index % 4 >= 2">
+      <transition-group name="fade" tag="div" class="section media-grid">
+        <MediaCard v-for="(entry, index) in list" v-if="!isComplete(entry)" :entry="entry" :left="index % 4 >= 2" :key="entry.media.id">
           <span v-if="entry.media.nextAiringEpisode && entry.media.nextAiringEpisode.episode - 1 > entry.progress" class="behind">
             {{ getEpisodesBehind(entry) }}
           </span>
         </MediaCard>
-      </div>
+      </transition-group>
     </div>
+  </transition>
 </template>
 
 <script>
