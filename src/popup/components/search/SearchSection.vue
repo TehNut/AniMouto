@@ -6,6 +6,9 @@
       <div class="highlight-hover show-more" v-if="displayMultiplier * getDisplayIncrement() < results.length && getNextJump() > 0" @click="displayMultiplier++">
         Show {{ getNextJump() }} more
       </div>
+      <div class="highlight-hover show-more" v-else-if="results.length > getDisplayIncrement()" @click="displayMultiplier = 1">
+        Wait no go back ＼(º □ º l|l)/
+      </div>
     </div>
   </div>
 </template>
