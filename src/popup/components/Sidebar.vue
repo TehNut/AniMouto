@@ -47,9 +47,6 @@
           about: {
             id: "about",
             icon: "info"
-          },
-          login: {
-            id: "login"
           }
         }
       }
