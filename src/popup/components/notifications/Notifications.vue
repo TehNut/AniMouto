@@ -40,7 +40,7 @@
       loadNotifications() {
         const _self = this;
         this.notifications = [];
-        chrome.storage.local.get({ access_token: "" }, value => {
+        this.$browser.storage.local.get({ access_token: "" }).then(value => {
           if (value.access_token === "")
             return;
 

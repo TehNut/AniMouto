@@ -60,11 +60,11 @@
     methods: {
       changePage(page) {
         const _self = this;
-        chrome.storage.local.get({ access_token: "" }, value => {
+        this.$browser.storage.local.get({ access_token: "" }).then(value => {
           if (value.access_token === "")
             return;
 
-          chrome.storage.local.set({ last_page: page.id });
+          this.$browser.storage.local.set({ last_page: page.id });
           _self.$router.push("/" + page.id);
         });
       },

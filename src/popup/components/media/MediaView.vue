@@ -122,14 +122,14 @@
     },
     activated() {
       const _self = this;
-      chrome.storage.local.get({ access_token: null }, value => {
+      this.$browser.storage.local.get({ access_token: null }).then(value => {
         queryAL(mediaQuery, { id: this.id }, value.access_token).then(res => _self.media = res.data.Media);
       });
     },
     beforeRouteUpdate(to, from, next) {
       this.media = null;
       const _self = this;
-      chrome.storage.local.get({ access_token: null }, value => {
+      this.$browser.storage.local.get({ access_token: null }).then(value => {
         queryAL(mediaQuery, { id: to.params.id }, value.access_token).then(res => _self.media = res.data.Media);
       });
       next();

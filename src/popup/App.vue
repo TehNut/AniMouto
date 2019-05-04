@@ -35,11 +35,11 @@ export default {
   methods: {
     updateNotifications(unread) {
       this.unreadNotifications = unread;
-      chrome.browserAction.setBadgeText({ text: unread > 0 ? unread.toString() : "" });
-      chrome.storage.local.set({ currentNotifications: unread}, () => {});
+      this.$browser.browserAction.setBadgeText({ text: unread > 0 ? unread.toString() : "" });
+      this.$browser.storage.local.set({ currentNotifications: unread});
     },
     updateTheme() {
-      chrome.storage.local.get({theme: "light", accent_color: "color-blue"}, value => {
+      this.$browser.storage.local.get({theme: "light", accent_color: "color-blue"}).then(value => {
         document.documentElement.style.setProperty("--color-accent", `var(--${value.accent_color})`);
         document.getElementsByTagName("body")[0].className = `theme-${value.theme}`;
       });
@@ -61,7 +61,7 @@ export default {
     }, 1);
 
     const _self = this;
-    chrome.storage.local.get({ access_token: "", theme: "light", accent_color: "color-blue", last_page: "login", currentNotifications: 0 }, value => {
+    this.$browser.storage.local.get({ access_token: "", theme: "light", accent_color: "color-blue", last_page: "login", currentNotifications: 0 }).then(value => {
       _self.$router.push("/" + (value.access_token === "" ? "login" : value.last_page));
 
       _self.updateNotifications(value.currentNotifications);

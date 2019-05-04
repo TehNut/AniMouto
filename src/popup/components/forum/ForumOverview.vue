@@ -31,7 +31,7 @@
       loadForum() {
         const _self = this;
         this.threads = [];
-        chrome.storage.local.get({ access_token: "" }, value => {
+        this.$browser.storage.local.get({ access_token: "" }).then(value => {
           if (value.access_token === "")
             return;
 

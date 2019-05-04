@@ -80,7 +80,7 @@
           completionDate = { year: currentDate.getFullYear(), month: currentDate.getMonth() + 1, day: currentDate.getDate() };
         }
 
-        chrome.storage.local.get({ access_token: "" }, value => {
+        this.$browser.storage.local.get({ access_token: "" }).then(value => {
           if (value.access_token === "")
             return;
 

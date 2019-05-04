@@ -55,11 +55,11 @@
     },
     methods: {
       changeTheme(theme) {
-        chrome.storage.local.set({ theme: theme.name }, value => {});
+        this.$browser.storage.local.set({ theme: theme.name }).then(value => {});
         this.$emit("update-theme");
       },
       changeAccent(accent) {
-        chrome.storage.local.set({ accent_color: "color-" + accent }, value => {});
+        this.$browser.storage.local.set({ accent_color: "color-" + accent });
         this.$emit("update-theme");
       }
     }

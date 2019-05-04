@@ -43,7 +43,7 @@
           return;
 
         const _self = this;
-        chrome.storage.local.get({ access_token: ""}, value => {
+        this.$browser.storage.local.get({ access_token: ""}).then(value => {
           if (value.access_token === "")
             return;
           queryAL(updateViewingStatus, { mediaId: media.id, status: "PLANNING" }, value.access_token).then(res => {
@@ -56,7 +56,7 @@
           return;
 
         const _self = this;
-        chrome.storage.local.get({ access_token: ""}, value => {
+        this.$browser.storage.local.get({ access_token: ""}).then(value => {
           if (value.access_token === "")
             return;
           queryAL(updateViewingStatus, { mediaId: media.id, status: "CURRENT" }, value.access_token).then(res => {

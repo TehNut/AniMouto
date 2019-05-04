@@ -31,11 +31,11 @@
     },
     methods: {
       getCode() {
-        chrome.runtime.getBackgroundPage(page => page.beginAuthorizationFlow());
+        this.$browser.runtime.getBackgroundPage().beginAuthorizationFlow();
       },
       handleLogin() {
         const _self = this;
-        chrome.runtime.getBackgroundPage(page => page.validateToken(_self.token));
+        this.$browser.runtime.getBackgroundPage().validateToken(_self.token);
       }
     }
   }

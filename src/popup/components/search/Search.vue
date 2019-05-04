@@ -60,7 +60,7 @@
           _self.searching = true;
 
           lastSearch = trimmed;
-          chrome.storage.local.get({access_token: ""}, value => {
+          this.$browser.storage.local.get({access_token: ""}).then(value => {
             queryAL(mediaSearchQuery, { search: trimmed }, value.access_token).then(res => {
               res.data.Page.media.forEach(e => {
                 _self.searching = false;

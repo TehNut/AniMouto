@@ -8,7 +8,7 @@
     },
     created() {
       const _self = this;
-      chrome.runtime.onMessage.addListener((message, sender, response) => {
+      this.$browser.runtime.onMessage.addListener((message, sender, response) => {
         if (message.type === "update_user")
           updateUser();
 

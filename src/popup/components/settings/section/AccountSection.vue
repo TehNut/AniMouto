@@ -51,7 +51,7 @@
     },
     created() {
       const _self = this;
-      chrome.storage.local.get({ user_info: { name: "", site_url: "https://anilist.co" } }, value => {
+      this.$browser.storage.local.get({ user_info: { name: "", site_url: "https://anilist.co" } }).then(value => {
         _self.user.name = value.user_info.name;
         _self.user.url = value.user_info.site_url;
       });

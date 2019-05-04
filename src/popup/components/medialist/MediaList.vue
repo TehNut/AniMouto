@@ -42,7 +42,7 @@
         this.media.reading = [];
 
         const _self = this;
-        chrome.storage.local.get({ access_token: "", user_info: { id: -1 } }, value => {
+        this.$browser.storage.local.get({ access_token: "", user_info: { id: -1 } }).then(value => {
           if (value.access_token === "" || value.user_info.id === -1)
             return;
 
