@@ -63,6 +63,7 @@
     },
     methods: {
       navigate() {
+        this.displayExtras = false;
         this.$router.push({ name: 'media-view', params: { id: this.mediaInternal.id } });
       },
       timeUntilAiring() {
