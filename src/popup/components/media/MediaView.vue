@@ -103,6 +103,7 @@
           case "Funimation":
           case "Animelab": return "#c063ff";
           case "Hulu": return "rgb(var(--color-green))";
+          case "Youtube": return "rgb(var(--color-red))";
           default: return "rgb(var(--color-accent))";
         }
       },
