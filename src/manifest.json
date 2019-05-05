@@ -18,7 +18,8 @@
     "scripts": [
       "backend/anilist_util.js",
       "backend/alarms.js",
-      "backend/oauth_handler.js"
+      "backend/oauth_handler.js",
+      "backend/update_listener.js"
     ],
     "persistent": false
   },
