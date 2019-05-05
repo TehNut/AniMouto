@@ -5,7 +5,10 @@
     </div>
 
     <transition name="fade">
-      <Spinner v-if="loading"/>
+      <div v-if="loading">
+        <h1 class="section-title" style="position:absolute">Media List</h1>
+        <Spinner/>
+      </div>
     </transition>
 
     <MediaGrid :list="media.airing" :title="{ url: 'https://anilist.co/airing', text: 'Airing' }"/>
