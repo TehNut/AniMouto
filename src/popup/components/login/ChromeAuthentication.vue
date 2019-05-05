@@ -29,7 +29,7 @@
 
         this.active = true;
         button.classList.add("disabled");
-        this.$browser.runtime.getBackgroundPage().beginAuthorizationFlow;
+        this.$browser.runtime.getBackgroundPage().then(page => page.beginAuthorizationFlow());
       }
     },
     mounted() {

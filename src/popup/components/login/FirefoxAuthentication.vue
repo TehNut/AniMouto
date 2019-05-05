@@ -31,11 +31,11 @@
     },
     methods: {
       getCode() {
-        this.$browser.runtime.getBackgroundPage().beginAuthorizationFlow();
+        this.$browser.runtime.getBackgroundPage().then(page => page.beginAuthorizationFlow());
       },
       handleLogin() {
         const _self = this;
-        this.$browser.runtime.getBackgroundPage().validateToken(_self.token);
+        this.$browser.runtime.getBackgroundPage().then(page => page.validateToken(_self.token));
       }
     }
   }
