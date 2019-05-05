@@ -2,7 +2,6 @@
   <div>
     <div class="buttons">
       <i class="material-icons icon" @click="loadNotifications">refresh</i>
-      <i class="material-icons icon" @click="markRead">done_all</i>
     </div>
     <h1 class="section-title"><a href="https://anilist.co/notifications" target="_blank">Recent Notifications</a></h1>
     <transition name="fade">
@@ -52,10 +51,6 @@
               _self.notifications[i].unread = true;
           });
         });
-      },
-      markRead() {
-        this.$emit("update-notifications", 0);
-        this.notifications.filter(n => n.unread).forEach(n => n.unread = false);
       },
       getNotificationType(notification) {
         // These are to be kept in the same order as the API for consistency
