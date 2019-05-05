@@ -13,7 +13,7 @@
     </div>
     <div class="content toasts">
       <transition-group name="fade">
-        <Toast v-for="toast in toasts" :toast="toast" @pop="toasts.shift()" :key="toast.message"/>
+        <Toast v-for="toast in toasts" :toast="toast" :key="toast.message"/>
       </transition-group>
     </div>
   </div>
