@@ -25,7 +25,7 @@
       </transition>
 
       <transition name="fade">
-        <MediaCardPopout v-if="displayExtras" :left="left" :media="mediaInternal" :entry="entry">
+        <MediaCardPopout v-if="displayExtras" :left="left" :media="mediaInternal">
           <slot></slot>
         </MediaCardPopout>
       </transition>
