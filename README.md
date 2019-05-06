@@ -8,7 +8,7 @@ AniMouto is an unofficial AniList extension which allows quick access to many fe
 
 AniMouto is designed to feel like a true extension to AniList by providing a very similar look and feel.
 
-Get it for [Chrome](https://chrome.google.com/webstore/detail/animouto/ilhjhegbgdghfkdgeahkpikkjgaaoklh) or [Firefox](https://www.animouto.moe/extension/firefox/animouto-1.0.13-fx.xpi).
+Get it for [Chrome](https://chrome.google.com/webstore/detail/animouto/ilhjhegbgdghfkdgeahkpikkjgaaoklh) or [Firefox](https://addons.mozilla.org/en-US/firefox/addon/animouto/).
 
 ## Contributing
 
