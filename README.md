@@ -10,7 +10,6 @@ AniMouto is designed to feel like a true extension to AniList by providing a ver
 
 Get it for [Chrome](https://chrome.google.com/webstore/detail/animouto/ilhjhegbgdghfkdgeahkpikkjgaaoklh) or [Firefox](https://www.animouto.moe/extension/firefox/animouto-1.0.13-fx.xpi).
 
-
 ## Contributing
 
 ### `npm run build`
@@ -19,4 +18,4 @@ Builds the extension into `dist` for testing in the browser
 
 ### `npm run build-zip`
 
-Builds a zip file and places it in `dist-zip`.
+Builds a zip file from the files in `dist` and places it in `dist-zip`. This command should be paired with `build`.
