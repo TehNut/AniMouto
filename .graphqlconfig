@@ -1,0 +1,15 @@
+{
+  "name": "AniList",
+  "schemaPath": "schema.graphql",
+  "extensions": {
+    "endpoints": {
+      "AniList": {
+        "url": "https://graphql.anilist.co",
+        "headers": {
+          "user-agent": "JS GraphQL"
+        },
+        "introspect": true
+      }
+    }
+  }
+}

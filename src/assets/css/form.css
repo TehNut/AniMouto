@@ -1,0 +1,74 @@
+.button {
+  background: rgb(var(--color-accent));
+  color: rgb(var(--color-text-bright));
+  align-items: center;
+  border-radius: 4px;
+  display: inline-flex;
+  cursor: pointer;
+  margin: 10px;
+  padding: 10px 15px;
+  transition: .3s;
+}
+
+.ripple {
+  position: relative;
+  overflow: hidden;
+  transform: translate3d(0, 0, 0);
+}
+
+.ripple:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  transform: scale(10, 10);
+  opacity: 0;
+  transition: transform .5s, opacity 1s;
+}
+
+.ripple:active:after {
+  transform: scale(0, 0);
+  opacity: .3;
+  transition: 0s;
+}
+
+.text-input-container {
+  background: rgb(var(--color-foreground));
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+  height: 35px;
+  border-radius: 4px;
+}
+
+.text-input {
+  background: rgb(var(--color-foreground));
+  color: rgb(var(--color-text));
+  width: 95%;
+  border: none;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  padding: 5px 8px 5px 8px;
+}
+
+.text-input::placeholder {
+  color: rgba(var(--color-text-lighter), 0.8);
+}
+
+.text-input:focus {
+  outline: none;
+}
+
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

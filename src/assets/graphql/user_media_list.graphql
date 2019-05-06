@@ -1,0 +1,36 @@
+query ($user: Int) {
+  anime: Page(perPage: 48) {
+    mediaList(userId: $user, status_in: [CURRENT, REPEATING], type: ANIME) {
+      ...active
+    }
+  }
+  manga: Page(perPage: 48) {
+    mediaList(userId: $user, status_in: [CURRENT, REPEATING], type: MANGA, sort: UPDATED_TIME_DESC) {
+      ...active
+    }
+  }
+}
+
+fragment active on MediaList {
+  id
+  media {
+    title {
+      userPreferred
+    }
+    id
+    episodes
+    chapters
+    siteUrl
+    coverImage {
+      large
+      color
+    }
+    nextAiringEpisode {
+      episode
+      airingAt
+      timeUntilAiring
+    }
+  }
+  progress
+  updatedAt
+}

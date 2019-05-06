@@ -1,0 +1,79 @@
+query ($id: Int) {
+  Media(id: $id) {
+    id
+    siteUrl
+    title {
+      romaji
+      userPreferred
+    }
+    coverImage {
+      extraLarge
+      color
+    }
+    isFavourite
+    bannerImage
+    description(asHtml: true)
+    episodes
+    chapters
+    format
+    relations {
+      edges {
+        relationType(version: 2)
+        node {
+          id
+          siteUrl
+          title {
+            romaji
+            userPreferred
+          }
+          coverImage {
+            large
+            color
+          }
+          format
+          status
+        }
+      }
+    }
+    characters(sort: [ROLE, ID], perPage: 12) {
+      edges {
+        role
+        node {
+          name {
+            first
+            last
+          }
+          image {
+            large
+          }
+          siteUrl
+        }
+      }
+    }
+    staff(perPage: 12) {
+      edges {
+        role
+        node {
+          siteUrl
+          image {
+            large
+          }
+          name {
+            first
+            last
+          }
+        }
+      }
+    }
+    stats {
+      statusDistribution {
+        status
+        amount
+      }
+    }
+    externalLinks {
+      url
+      site
+    }
+  }
+}
