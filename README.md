@@ -12,10 +12,22 @@ Get it for [Chrome](https://chrome.google.com/webstore/detail/animouto/ilhjhegbg
 
 ## Contributing
 
-### `npm run build`
+Make sure you have [Node.js](https://nodejs.org/) installed.
 
-Builds the extension into `dist` for testing in the browser
+Run these commands to get the project locally:
 
-### `npm run build-zip`
+```sh
+git clone https://github.com/TehNut/AniMouto.git # or clone your own fork
+cd AniMouto
+npm install
+```
+
+### Packaging
+
+#### `npm run build`
+
+Builds the extension into `dist` for testing in the browser. You can load this directory as a temporary extension.
+
+#### `npm run build-zip`
 
 Builds a zip file from the files in `dist` and places it in `dist-zip`. This command should be paired with `build`.
