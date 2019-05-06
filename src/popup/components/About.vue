@@ -11,10 +11,10 @@
       </a>
       <p class="subtext">My personal page. Has links to other projects and places to find me.</p>
 
-      <a href="#">
-        <h2 class="bad-link title" title="Not yet public">GitHub</h2>
+      <a href="https://github.com/TehNut/AniMouto">
+        <h2 class="title">GitHub</h2>
       </a>
-      <p class="subtext">AniMouto is open source and licensed under the <a href="https://www.gnu.org/licenses/lgpl-3.0.en.html" target="_blank" class="highlight">LGPLv3</a>.</p>
+      <p class="subtext">AniMouto is open source and licensed under the <a href="https://opensource.org/licenses/MIT" target="_blank" class="highlight">MIT</a> license.</p>
 
       <a href="https://anilist.co/" target="_blank">
         <h2 class="highlight-hover title">AniList</h2>
@@ -28,8 +28,6 @@
         <h2 class="highlight-hover title">AniList</h2>
       </a>
       <p class="subtext">AniList provides the styling and theme that this extension follows as well as the API that powers it.</p>
-
-      <div class="spacer"></div>
 
       <a href="https://material.io/" target="_blank">
         <h2 class="highlight-hover title">Material Design</h2>
