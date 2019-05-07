@@ -154,14 +154,13 @@ query($amount: Int, $reset: Boolean) {
         createdAt
         type
       }
-      ... on ThreadCommentLikeNotification {
+      ... on ThreadLikeNotification {
         thread {
           ...thread
         }
         user {
           ...user
         }
-        commentId
         context
         createdAt
         type
