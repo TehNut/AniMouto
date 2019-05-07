@@ -5,7 +5,7 @@
       <h2 class="title">Logged in as <a :href="user.url" class="highlight">{{ user.name }}</a></h2>
       <div class="button no-select ripple" @click="logout">Logout</div>
       <div class="button no-select ripple" @click="updateUser">Refresh User</div>
-      <p style="margin:0">Remember to revoke the access token from your <a href="https://anilist.co/settings/apps">Apps page</a> after logging out.</p>
+      <p style="margin:0">Remember to revoke the access token from your <a href="https://anilist.co/settings/apps" target="_blank">Apps page</a> after logging out.</p>
     </div>
   </div>
 </template>
