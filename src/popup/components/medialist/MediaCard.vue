@@ -13,14 +13,14 @@
 
       <transition name="fade">
         <div v-if="!entry && displayExtras" class="cover-overlay">
-          <i class="material-icons overlay-text details-icon" @click.prevent="navigate">forward</i>
+          <div class="ellipsis overlay-text details-icon" @click.prevent="navigate"></div>
         </div>
       </transition>
 
       <transition name="fade">
         <div v-if="entry && displayExtras" class="cover-overlay">
           <span class="overlay-text progress-text" @click.prevent="handleProgressClick">{{ entry.progress }} +</span>
-          <i class="material-icons overlay-text details-icon entry" @click.prevent="navigate">forward</i>
+          <div class="ellipsis overlay-text details-icon entry" @click.prevent="navigate"></div>
         </div>
       </transition>
 
@@ -147,5 +147,9 @@
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
     bottom: 0;
+  }
+
+  .ellipsis:after {
+    content: '\2807';
   }
 </style>
