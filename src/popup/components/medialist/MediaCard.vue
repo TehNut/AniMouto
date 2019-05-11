@@ -75,21 +75,26 @@
       handleProgressClick() {
         const _self = this;
 
-        let completionDate = null;
-        if (this.isComplete(this.entry)) {
-          let currentDate = new Date(Date.now());
-          completionDate = { year: currentDate.getFullYear(), month: currentDate.getMonth() + 1, day: currentDate.getDate() };
-        }
-
         this.$browser.storage.local.get({ access_token: "" }).then(value => {
           if (value.access_token === "")
             return;
 
-          queryAL(updateProgressQuery, { listId: this.entry.id, progress: this.entry.progress + 1, completionDate: completionDate }, value.access_token)
+          const variables = { listId: this.entry.id, progress: this.entry.progress + 1 };
+          if (variables.progress === 1)
+            variables.startDate = getToday();
+          if (this.isComplete(_self.entry))
+            variables.completionDate = getToday();
+
+          queryAL(updateProgressQuery, variables, value.access_token)
             .then(() => _self.entry.progress++);
         });
       }
     }
+  }
+
+  function getToday() {
+    let currentDate = new Date(Date.now());
+    return { year: currentDate.getFullYear(), month: currentDate.getMonth() + 1, day: currentDate.getDate() };
   }
 </script>
 
