@@ -13,6 +13,7 @@
       <Spinner v-if="active"/>
     </transition>
     <div id="chrome-loader" class="loader" style="display:none;position:absolute;top:60px;"></div>
+    <p style="color:rgb(var(--color-text))">To obtain an authorization code, click the "Get Code" button above. It should open a new window that will let you authenticate with AniList. Once authenticated, it will provide an authorization code for you to copy.</p>
     <p style="color:rgb(var(--color-text))">Paste your authorization code into the text field to authenticate. Don't forget to close the extra window when you finish.</p>
     <p style="color:rgb(var(--color-text))">Once authentication is complete, the page will change.</p>
   </div>
