@@ -11,7 +11,7 @@
 
       <h2 class="title">Check Interval</h2>
       <p class="subtext">The amount of time <span class="highlight">in minutes</span> between checks for new notifications.</p>
-      <input type="number" v-model="interval" class="text-input settings-text-input" placeholder="Minutes" autocomplete="off"/>
+      <input type="number" v-model.number="interval" class="text-input settings-text-input" placeholder="Minutes" autocomplete="off"/>
       <span class="highlight settings-text-input-label">Minute(s)</span>
 
       <br/>
