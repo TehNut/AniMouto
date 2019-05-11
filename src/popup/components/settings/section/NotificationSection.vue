@@ -54,14 +54,16 @@
     },
     methods: {
       save() {
-        this.$browser.storage.local.set({ notifications: { enabled: this.periodicCheck, desktop: false } }).then(v => console.log(v));
+        this.$browser.storage.local.set({ notifications: { enabled: this.periodicCheck, desktop: false, interval: this.interval } });
         const _self = this;
 
         if (this.desktopNotifications) {
           this.$browser.permissions.request({ permissions: ["notifications"] }).then(granted => {
-            _self.$browser.storage.local.set({ notifications: { enabled: _self.periodicCheck, desktop: granted } });
+            _self.$browser.storage.local.set({ notifications: { enabled: _self.periodicCheck, desktop: granted, interval: _self.interval } });
           });
         }
+
+        this.$browser.runtime.getBackgroundPage().then(page => page.modifyAlarmTime("notification_updater", this.interval));
       }
     }
   }
