@@ -11,8 +11,8 @@
       </a>
       <p class="subtext">My personal page. Has links to other projects and places to find me.</p>
 
-      <a href="https://github.com/TehNut/AniMouto">
-        <h2 class="title">GitHub</h2>
+      <a href="https://github.com/TehNut/AniMouto" target="_blank">
+        <h2 class="highlight-hover title">GitHub</h2>
       </a>
       <p class="subtext">AniMouto is open source and licensed under the <a href="https://opensource.org/licenses/MIT" target="_blank" class="highlight">MIT</a> license.</p>
 
