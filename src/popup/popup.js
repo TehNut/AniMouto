@@ -9,7 +9,7 @@ import Notifications from "./components/notifications/Notifications";
 import Spinner from "./components/base/Spinner";
 import MediaView from "./components/media/MediaView";
 import ForumOverview from "./components/forum/ForumOverview";
-import About from "./components/About";
+import About from "./components/about/About";
 
 Vue.use(VueRouter);
 
