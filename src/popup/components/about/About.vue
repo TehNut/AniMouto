@@ -41,6 +41,13 @@
     const link = Marked.Renderer.prototype.link.apply(Marked, [href, title, text]);
     return link.replace("<a", "<a target='_blank'");
   };
+  renderer.heading = (text, level, raw, slugger) => {
+    level -= 1;
+    if (level !== 1)
+      return Marked.Renderer.prototype.heading.apply(Marked, [text, level, raw, slugger]);
+
+    return `<a href="${"https://github.com/TehNut/AniMouto/releases/tag/v" + text}" target="_blank"><h1>${text}</h1></a>`
+  };
   Marked.setOptions({
     renderer: renderer
   });
