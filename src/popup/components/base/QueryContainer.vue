@@ -34,9 +34,18 @@
         type: String
       }
     },
+    methods: {
+      runQuery() {
+        // First clear out any prior data in case of a refresh
+        this.response = null;
+        this.error = false;
+
+        const _self = this;
+        this.query().then(res => _self.response = res).catch(err => _self.error = true);
+      }
+    },
     created() {
-      const _self = this;
-      this.query().then(res => _self.response = res).catch(err => _self.error = true);
+      this.runQuery();
     }
   }
 </script>
