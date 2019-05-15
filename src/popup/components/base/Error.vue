@@ -1,10 +1,12 @@
 <template>
   <div class="error-container">
-    <span style="font-size:32px;">{{ getRandomEmoji() }}</span>
-    <br/>
-    <slot>
-      Oopsy doopsy
-    </slot>
+    <div class="error">
+      <span style="font-size:32px;">{{ getRandomEmoji() }}</span>
+      <br/>
+      <slot>
+        <span>Oopsy doopsy</span>
+      </slot>
+    </div>
   </div>
 </template>
 
@@ -38,6 +40,14 @@
   .error-container {
     width: 100%;
     height: auto;
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+  }
+
+  .error {
+    position: absolute;
+    top: 35%;
     text-align: center;
     color: rgb(var(--color-red));
   }
