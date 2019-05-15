@@ -1,10 +1,16 @@
 <template>
   <div>
-    <Spinner v-if="!response && !error"/>
-    <Error v-if="error">
-      {{ errorText }}
-    </Error>
-    <slot scope="response" v-if="response" :response="response"></slot>
+    <transition name="fade">
+      <Spinner v-if="!response && !error"/>
+    </transition>
+    <transition name="fade">
+      <Error v-if="error">
+        {{ errorText }}
+      </Error>
+    </transition>
+    <transition name="fade">
+      <slot scope="response" v-if="response" :response="response"/>
+    </transition>
   </div>
 </template>
 
