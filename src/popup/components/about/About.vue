@@ -21,19 +21,20 @@
     </div>
 
     <h1 class="section-title"><a href="https://github.com/TehNut/AniMouto/releases" target="_blank">Changelog</a></h1>
-    <div class="section changelog" :style="'height:' + (changelog ? 'unset' : '400px')">
-      <Spinner v-if="!changelog"/>
-      <div v-if="changelog" v-for="(version, index) in changelog">
-        <span v-html="version"></span>
-        <div v-if="index !== changelog.length - 1" class="spacer" style="top:8px;"></div>
-      </div>
-    </div>
+    <QueryContainer :query="getChangelog" class="section changelog" :style="'height:' + (changelog ? 'unset' : '400px')">
+      <template scope="{response}">
+        <div v-for="version in getValidChanges(response)">
+          <span v-html="version.text"></span>
+          <div v-if="!version.last" class="spacer" style="top:8px;"></div>
+        </div>
+      </template>
+    </QueryContainer>
   </div>
 </template>
 
 <script>
   import Link from "./Link";
-  import Spinner from "../base/Spinner";
+  import QueryContainer from "../base/QueryContainer";
   import Marked from "marked";
 
   const renderer = new Marked.Renderer();
@@ -54,20 +55,20 @@
 
   export default {
     name: "About",
-    components: {Spinner, Link},
-    data() {
-      return {
-        changelog: null
+    components: {QueryContainer, Link},
+    methods: {
+      getChangelog() {
+        return fetch("https://api.github.com/repos/TehNut/AniMouto/releases").then(res => res.json());
+      },
+      getValidChanges(response) {
+        const changes = [];
+        for (let i = 0; i < Math.min(5, response.length); i++)
+          if (response[i].tag_name.startsWith("v2"))
+            changes.push({text: Marked.parse(response[i].body)});
+
+        changes[changes.length - 1].last = true;
+        return changes;
       }
-    },
-    created() {
-      const _self = this;
-      fetch("https://api.github.com/repos/TehNut/AniMouto/releases").then(res => res.json()).then(res => {
-        _self.changelog = [];
-        for (let i = 0; i < Math.min(5, res.length); i++)
-          if (res[i].tag_name.startsWith("v2"))
-            _self.changelog.push(Marked.parse(res[i].body))
-      });
     }
   }
 </script>
