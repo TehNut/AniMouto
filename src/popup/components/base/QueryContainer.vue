@@ -6,9 +6,6 @@
     <transition name="fade">
       <Error v-if="error">
         {{ errorText }}
-        <span v-if="typeof error !== 'boolean'">
-          {{ JSON.stringify(error) }}
-        </span>
       </Error>
     </transition>
     <transition name="fade">
@@ -46,7 +43,10 @@
         this.reset();
 
         const _self = this;
-        this.query().then(res => _self.response = this.responsifier ? this.responsifier(res) : res).catch(err => _self.error = true);
+        this.query().then(res => _self.response = this.responsifier ? this.responsifier(res) : res).catch(err => {
+          _self.error = true;
+          console.log(err);
+        });
       },
       reset() {
         this.response = null;

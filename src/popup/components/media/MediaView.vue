@@ -1,101 +1,107 @@
 <template>
-  <div>
-    <transition>
-      <Spinner v-if="!media"/>
-    </transition>
+  <QueryContainer ref="query" :query="getMedia" :responsifier="res => res.data.Media" error-text="Failed to get this media">
+    <template scope="{response}">
+      <div style="display:flex;flex-flow:column">
+        <div class="banner" :style="'background-image:url(' + (response.bannerImage ? response.bannerImage : '') + ')'"></div>
 
-    <div v-if="media" style="display:flex;flex-flow:column">
-      <div class="banner" :style="'background-image:url(' + (media.bannerImage ? media.bannerImage : '') + ')'"></div>
-
-      <div class="upper-container" :style="media.bannerImage ? '' : 'padding-top:0'">
-        <div class="left-container">
-          <img class="cover" :src="media.coverImage.extraLarge" :style="'background-color:' + media.coverImage.color"/>
-        </div>
-        <div class="right-container">
-          <div class="title-container">
-            <h1 class="title" style="font-size:large">
-              <a :href="media.siteUrl" target="_blank">{{ media.title.userPreferred || media.title.romaji }}</a>
-            </h1>
+        <div class="upper-container" :style="response.bannerImage ? '' : 'padding-top:0'">
+          <div class="left-container">
+            <img class="cover" :src="response.coverImage.extraLarge" :style="'background-color:' + response.coverImage.color"/>
           </div>
-          <div class="button-container">
-            <div class="button ripple like-button" @click="favorite"><i class="material-icons" :style="'font-size:initial;color:rgba(255, 255, 255, ' + (media.isFavourite ? '0.5' : '1.0') + ')'">favorite</i></div>
+          <div class="right-container">
+            <div class="title-container">
+              <h1 class="title" style="font-size:large">
+                <a :href="response.siteUrl" target="_blank">{{ response.title.userPreferred || response.title.romaji }}</a>
+              </h1>
+            </div>
+            <div class="button-container">
+              <div class="button ripple like-button" @click="favorite(response)"><i class="material-icons" :style="'font-size:initial;color:rgba(255, 255, 255, ' + (response.isFavourite ? '0.5' : '1.0') + ')'">favorite</i></div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div v-if="media.externalLinks" class="external-links">
-        <a v-for="link in media.externalLinks" :href="link.url" target="_blank">
-          <div class="button ripple link-button" :style="'background-color:' + getSiteColor(link.site)">{{ link.site }}</div>
-        </a>
-      </div>
+        <div v-if="response.externalLinks" class="external-links">
+          <a v-for="link in response.externalLinks" :href="link.url" target="_blank">
+            <div class="button ripple link-button" :style="'background-color:' + getSiteColor(link.site)">{{ link.site }}</div>
+          </a>
+        </div>
 
-      <div v-if="media.description">
-        <h1 class="section-title">Description</h1>
-        <div class="section" style="padding:10px 20px;">
-          <span v-html="media.description"></span>
+        <div v-if="response.description">
+          <h1 class="section-title">Description</h1>
+          <div class="section" style="padding:10px 20px;">
+            <span v-html="response.description"></span>
+          </div>
+        </div>
+
+        <div v-if="response.stats.statusDistribution">
+          <h1 class="section-title"><a :href="getContextualLink(response, 'stats')" target="_blank">Status Distribution</a></h1>
+          <StatusDistribution :status="formatStatus(response)"/>
+        </div>
+
+        <div v-if="response.relations && response.relations.edges.length > 0">
+          <h1 class="section-title">Relations</h1>
+          <div class="section">
+            <RelationalMediaGrid :relations="response.relations.edges"/>
+          </div>
+        </div>
+
+        <div v-if="response.characters && response.characters.edges.length > 0">
+          <h1 class="section-title">
+            <a :href="getContextualLink(response, 'characters')" target="_blank">Characters</a>
+          </h1>
+          <div class="section character-grid">
+            <NamedRelation v-for="(character, index) in response.characters.edges" :entity="character.node" :role="character.role" :left="index % 4 > 1"/>
+          </div>
+        </div>
+
+        <div v-if="response.staff && response.staff.edges.length > 0">
+          <h1 class="section-title">
+            <a :href="getContextualLink(response, 'staff')" target="_blank">Staff</a>
+          </h1>
+          <div class="section character-grid">
+            <NamedRelation v-for="(staff, index) in response.staff.edges" :entity="staff.node" :role="staff.role" :left="index % 4 > 1"/>
+          </div>
         </div>
       </div>
-
-      <div v-if="media.stats.statusDistribution">
-        <h1 class="section-title"><a :href="getContextualLink('stats')" target="_blank">Status Distribution</a></h1>
-        <StatusDistribution :status="formatStatus()"/>
-      </div>
-
-      <div v-if="media.relations && media.relations.edges.length > 0">
-        <h1 class="section-title">Relations</h1>
-        <div class="section">
-          <RelationalMediaGrid :relations="media.relations.edges"/>
-        </div>
-      </div>
-
-      <div v-if="media.characters && media.characters.edges.length > 0">
-        <h1 class="section-title">
-          <a :href="getContextualLink('characters')" target="_blank">Characters</a>
-        </h1>
-        <div class="section character-grid">
-          <NamedRelation v-for="(character, index) in media.characters.edges" :entity="character.node" :role="character.role" :left="index % 4 > 1"/>
-        </div>
-      </div>
-
-      <div v-if="media.staff && media.staff.edges.length > 0">
-        <h1 class="section-title">
-          <a :href="getContextualLink('staff')" target="_blank">Staff</a>
-        </h1>
-        <div class="section character-grid">
-          <NamedRelation v-for="(staff, index) in media.staff.edges" :entity="staff.node" :role="staff.role" :left="index % 4 > 1"/>
-        </div>
-      </div>
-    </div>
-  </div>
+    </template>
+  </QueryContainer>
 </template>
 
 <script>
   import {queryAL} from "../../../assets/js/utils";
   import mediaQuery from "../../../assets/graphql/media.graphql";
-  import Spinner from "../base/Spinner";
   import RelationalMediaGrid from "./RelationalMediaGrid";
   import NamedRelation from "./NamedRelation";
   import StatusDistribution from "./StatusDistribution";
+  import QueryContainer from "../base/QueryContainer";
 
   export default {
     name: "MediaView",
-    components: {StatusDistribution, NamedRelation, RelationalMediaGrid, Spinner},
+    components: {QueryContainer, StatusDistribution, NamedRelation, RelationalMediaGrid},
     data() {
       return {
-        media: null
+        routeId: null
       }
     },
     props: [
       "id"
     ],
     methods: {
-      formatStatus() {
+      getMedia() {
+        return this.$browser.storage.local.get().then(v => {
+          if (v.access_token === "")
+            return Promise.reject("Invalid token");
+
+          return queryAL(mediaQuery, { id: this.routeId || this.id }, v.access_token);
+        });
+      },
+      formatStatus(response) {
         const status = {};
-        this.media.stats.statusDistribution.forEach(e => status[e.status.toLowerCase()] = e.amount);
+        response.stats.statusDistribution.forEach(e => status[e.status.toLowerCase()] = e.amount);
         return status;
       },
-      getContextualLink(context) {
-        return this.media.siteUrl + "/" + this.media.title.romaji.replace(/ /g, "-").replace(/[^a-zA-Z0-9\-]/, "") + "/" + context;
+      getContextualLink(response, context) {
+        return response.siteUrl + "/" + response.title.romaji.replace(/ /g, "-").replace(/[^a-zA-Z0-9\-]/, "") + "/" + context;
       },
       getSiteColor(site) {
         switch (site) {
@@ -107,35 +113,29 @@
           default: return "rgb(var(--color-accent))";
         }
       },
-      favorite() {
-        const _self = this;
-        const isManga = this.media.format === "MANGA" || this.media.format === "ONE_SHOT";
+      favorite(response) {
+        const isManga = response.format === "MANGA" || response.format === "ONE_SHOT";
         this.$browser.storage.local.get().then(v => {
           if (v.access_token === "")
             return;
 
-          queryAL(`mutation($id:Int){ToggleFavourite(${isManga ? "manga" : "anime"}Id: $id){__typename}}`, { id: _self.media.id }, v.access_token).then(res => {
-            _self.media.isFavourite = !_self.media.isFavourite
+          queryAL(`mutation($id:Int){ToggleFavourite(${isManga ? "manga" : "anime"}Id: $id){__typename}}`, { id: response.id }, v.access_token).then(res => {
+            response.isFavourite = !response.isFavourite
           })
         });
       }
     },
     activated() {
-      const _self = this;
-      this.$browser.storage.local.get({ access_token: null }).then(value => {
-        queryAL(mediaQuery, { id: this.id }, value.access_token).then(res => _self.media = res.data.Media);
-      });
+      this.$refs.query.runQuery();
     },
     beforeRouteUpdate(to, from, next) {
-      this.media = null;
-      const _self = this;
-      this.$browser.storage.local.get({ access_token: null }).then(value => {
-        queryAL(mediaQuery, { id: to.params.id }, value.access_token).then(res => _self.media = res.data.Media);
-      });
+      this.routeId = to.params.id;
+      this.$refs.query.runQuery();
       next();
     },
     beforeRouteLeave(to, from, next) {
-      this.media = null;
+      this.routeId = null;
+      this.$refs.query.reset();
       next();
     }
   }

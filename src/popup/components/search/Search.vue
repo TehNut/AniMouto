@@ -14,15 +14,15 @@
       <Spinner v-if="searching"/>
     </transition>
 
-    <SearchSection :title="'Anime'" :results="results.anime"/>
-    <SearchSection :title="'Manga'" :results="results.manga"/>
-    <SearchSection :title="'Light Novels'" :results="results.novels"/>
+    <SearchSection title="Anime" :results="results.anime"/>
+    <SearchSection title="Manga" :results="results.manga"/>
+    <SearchSection title="Light Novels" :results="results.novels"/>
   </div>
 </template>
 
 <script>
   import Spinner from "../base/Spinner";
-  import {queryAL, getQuery} from "../../../assets/js/utils";
+  import {queryAL} from "../../../assets/js/utils";
   import SearchResult from "./SearchResult";
   import mediaSearchQuery from "../../../assets/graphql/media_search.graphql";
   import SearchSection from "./SearchSection";

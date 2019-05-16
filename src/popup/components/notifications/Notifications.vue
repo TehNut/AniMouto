@@ -1,56 +1,58 @@
 <template>
   <div>
     <div class="buttons">
-      <i class="material-icons icon" @click="loadNotifications">refresh</i>
+      <i class="material-icons icon" @click="$refs.query.runQuery()">refresh</i>
     </div>
-    <h1 class="section-title"><a href="https://anilist.co/notifications" target="_blank">Recent Notifications</a></h1>
-    <transition name="fade">
-      <Spinner v-if="notifications.length === 0"/>
-    </transition>
 
-    <span v-for="notification in notifications">
-      <Notification :notification="notification" :unread="notification.unread">
-        <component :is="getNotificationType(notification)" :notification="notification"></component>
-      </Notification>
-    </span>
+    <h1 class="section-title"><a href="https://anilist.co/notifications" target="_blank">Recent Notifications</a></h1>
+    <QueryContainer ref="query" :query="getNotifications" :responsifier="parseNotifications" error-text="Oopsy doopsy! Looks like your notifications got misplaced!">
+      <template scope="{response}">
+        <div>
+          <span v-for="notification in response.notifications">
+            <Notification :notification="notification" :unread="notification.unread">
+              <component :is="getNotificationType(notification)" :notification="notification"></component>
+            </Notification>
+          </span>
+        </div>
+      </template>
+    </QueryContainer>
+
   </div>
 </template>
 
 <script>
   import {queryAL} from "../../../assets/js/utils";
   import notificationQuery from "../../../assets/graphql/notifications.graphql";
-  import Spinner from "../base/Spinner";
   import ActivityNotification from "./type/ActivityNotification";
   import AiringNotification from "./type/AiringNotification";
   import ThreadNotification from "./type/ThreadNotification";
   import UnknownNotification from "./type/UnknownNotification";
   import Notification from "./Notification";
+  import QueryContainer from "../base/QueryContainer";
 
   export default {
     name: "Notifications",
-    components: {Notification, ThreadNotification, AiringNotification, ActivityNotification, UnknownNotification, Spinner},
-    data() {
-      return {
-        notifications: [],
-        unreadCount: -1
-      }
-    },
+    components: {
+      QueryContainer, Notification, ThreadNotification, AiringNotification, ActivityNotification, UnknownNotification},
     methods: {
-      loadNotifications() {
-        const _self = this;
-        this.notifications = [];
-        this.$browser.storage.local.get({ access_token: "" }).then(value => {
+      getNotifications() {
+        return this.$browser.storage.local.get({ access_token: "" }).then(value => {
           if (value.access_token === "")
-            return;
+            return Promise.reject("Invalid token");
 
-          queryAL(notificationQuery, { amount: 25, reset: true }, value.access_token).then(res => {
-            _self.notifications = res.data.Page.notifications;
-            _self.unreadCount = res.data.Viewer.unreadNotificationCount;
-
-            for (let i = 0; i < _self.unreadCount; i++)
-              _self.notifications[i].unread = true;
-          });
+          return queryAL(notificationQuery, {amount: 25, reset: true}, value.access_token);
         });
+      },
+      parseNotifications(response) {
+        const res = {
+          notifications: response.data.Page.notifications,
+          unreadCount: response.data.Viewer.unreadNotificationCount
+        };
+
+        for (let i = 0; i < res.unreadCount; i++)
+          res.notifications[i].unread = true;
+
+        return res;
       },
       getNotificationType(notification) {
         // These are to be kept in the same order as the API for consistency
@@ -72,9 +74,6 @@
           default: return "UnknownNotification";
         }
       }
-    },
-    created() {
-      this.loadNotifications();
     },
     mounted() {
       this.$emit("update-notifications", 0);
