@@ -20,16 +20,19 @@
           </div>
         </div>
 
-        <div v-if="response.externalLinks" class="external-links">
-          <a v-for="link in response.externalLinks" :href="link.url" target="_blank">
-            <div class="button ripple link-button" :style="'background-color:' + getSiteColor(link.site)">{{ link.site }}</div>
-          </a>
-        </div>
-
         <div v-if="response.description">
           <h1 class="section-title">Description</h1>
           <div class="section" style="padding:10px 20px;">
             <span v-html="response.description"></span>
+          </div>
+        </div>
+
+        <div v-if="response.externalLinks">
+          <h1 class="section-title">External Links</h1>
+          <div class="section external-links">
+            <a v-for="link in response.externalLinks" :href="link.url" target="_blank">
+              <div class="button ripple link-button" :style="'background-color:' + getSiteColor(link.site)">{{ link.site }}</div>
+            </a>
           </div>
         </div>
 
@@ -191,8 +194,7 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    margin-top: -10px;
-    margin-bottom: 10px;
+    padding-bottom: 10px;
   }
 
   .link-button {
