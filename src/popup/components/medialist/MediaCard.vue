@@ -18,7 +18,7 @@
       </transition>
 
       <transition name="fade">
-        <div v-if="entry && displayExtras" class="cover-overlay">
+        <div v-if="entry && displayExtras" class="cover-overlay ripple">
           <span class="overlay-text progress-text" @click.prevent="handleProgressClick">{{ entry.progress }} +</span>
           <div class="ellipsis overlay-text details-icon entry" @click.prevent="navigate"></div>
         </div>
