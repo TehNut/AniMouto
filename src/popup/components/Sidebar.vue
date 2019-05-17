@@ -58,8 +58,10 @@
       changePage(page) {
         const _self = this;
         this.$browser.storage.local.get({ access_token: "" }).then(value => {
-          if (value.access_token === "")
+          if (value.access_token === "") {
+            _self.$router.push("/");
             return;
+          }
 
           this.$browser.storage.local.set({ last_page: page.id });
           _self.$router.push("/" + page.id);
@@ -87,12 +89,10 @@
   }
 
   .avatar img {
-    position: inherit;
+    display: block;
     width: 90%;
     border-radius: 50%;
-    margin-left: 2px;
-    margin-bottom: 6px;
-    margin-top: 6px;
+    margin: 6px auto;
     object-fit: cover;
   }
 
