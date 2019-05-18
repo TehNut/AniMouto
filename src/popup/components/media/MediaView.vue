@@ -27,7 +27,7 @@
           </div>
         </div>
 
-        <div v-if="response.externalLinks">
+        <div v-if="response.externalLinks && response.externalLinks.length > 0">
           <h1 class="section-title">External Links</h1>
           <div class="section external-links">
             <a v-for="link in response.externalLinks" :href="link.url" target="_blank">
@@ -77,10 +77,11 @@
   import NamedRelation from "./NamedRelation";
   import StatusDistribution from "./StatusDistribution";
   import QueryContainer from "../base/QueryContainer";
+  import MediaTags from "./MediaTags";
 
   export default {
     name: "MediaView",
-    components: {QueryContainer, StatusDistribution, NamedRelation, RelationalMediaGrid},
+    components: {MediaTags, QueryContainer, StatusDistribution, NamedRelation, RelationalMediaGrid},
     data() {
       return {
         routeId: null
