@@ -27,11 +27,13 @@
     left: 100%;
     z-index: 1;
     pointer-events: none;
+    border-radius: 0 3px 3px 0;
   }
 
   .popout.left {
     left: unset;
     right: 100%;
+    border-radius: 3px 0 0 3px;
   }
 
   .contents {
