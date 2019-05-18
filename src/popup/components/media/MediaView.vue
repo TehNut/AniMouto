@@ -27,6 +27,11 @@
           </div>
         </div>
 
+        <div v-if="response.tags && response.tags.length > 0">
+          <h1 class="section-title">Tags</h1>
+          <MediaTags :tags="response.tags" :is-manga="response.format === 'MANGA' || response.format === 'NOVEL'"/>
+        </div>
+
         <div v-if="response.externalLinks && response.externalLinks.length > 0">
           <h1 class="section-title">External Links</h1>
           <div class="section external-links">

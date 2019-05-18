@@ -75,5 +75,12 @@ query ($id: Int) {
       url
       site
     }
+    tags {
+      name
+      description
+      isMediaSpoiler
+      isGeneralSpoiler
+      isAdult
+    }
   }
 }
