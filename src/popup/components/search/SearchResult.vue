@@ -80,7 +80,7 @@
     background-color: rgb(var(--color-foreground-blue-dark));
     display: flex;
     border-radius: 5px;
-    height: 30px;
+    height: 35px;
     margin-bottom: 5px;
     transition: .3s;
   }
@@ -90,7 +90,9 @@
   }
 
   .entry-image {
+    width: 25px;
     height: inherit;
+    object-fit: cover;
     padding-right: 5px;
     border-radius: 5px;
   }
