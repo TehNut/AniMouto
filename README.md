@@ -1,4 +1,4 @@
-# AniMouto
+# AniMouto ![GitHub package.json version](https://img.shields.io/github/package-json/v/TehNut/AniMouto.svg?color=%230098fd&style=for-the-badge) ![GitHub](https://img.shields.io/github/license/TehNut/AniMouto.svg?style=for-the-badge) [![Chrome Web Store](https://img.shields.io/chrome-web-store/rating/ilhjhegbgdghfkdgeahkpikkjgaaoklh.svg?label=Chrome&style=for-the-badge&logo=google-chrome)](https://chrome.google.com/webstore/detail/animouto/ilhjhegbgdghfkdgeahkpikkjgaaoklh) [![Mozilla Add-on](https://img.shields.io/amo/rating/animouto.svg?label=Firefox&style=for-the-badge&logo=mozilla-firefox)](https://addons.mozilla.org/en-US/firefox/addon/animouto/)
 
 <a href="https://www.animouto.moe/"><img align="right" src="https://www.animouto.moe/static/logo_128px_bg.png"></a>
 
