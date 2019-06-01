@@ -46,7 +46,7 @@
           if (value.access_token === "")
             return Promise.reject("Invalid token");
 
-          return queryAL(notificationQuery, {amount: 25, reset: true, types: value.notifications.hideLikes ? noLikeNotifications : allNotifications}, value.access_token);
+          return queryAL(notificationQuery, {amount: 25, reset: true, types: value.notifications && value.notifications.hideLikes ? noLikeNotifications : allNotifications}, value.access_token);
         });
       },
       parseNotifications(response) {
