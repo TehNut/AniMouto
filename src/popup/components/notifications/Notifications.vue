@@ -30,17 +30,23 @@
   import Notification from "./Notification";
   import QueryContainer from "../base/QueryContainer";
 
+  const allNotifications = [
+    "ACTIVITY_LIKE", "ACTIVITY_MENTION", "ACTIVITY_MESSAGE", "ACTIVITY_REPLY", "ACTIVITY_REPLY_LIKE", "ACTIVITY_REPLY_SUBSCRIBED", "AIRING", "FOLLOWING", "RELATED_MEDIA_ADDITION", "THREAD_COMMENT_LIKE", "THREAD_COMMENT_MENTION", "THREAD_COMMENT_REPLY", "THREAD_LIKE", "THREAD_SUBSCRIBED"
+  ];
+  const noLikeNotifications = allNotifications.filter(e => !e.endsWith("_LIKE"));
+  
   export default {
     name: "Notifications",
     components: {
-      QueryContainer, Notification, ThreadNotification, AiringNotification, ActivityNotification, UnknownNotification},
+      QueryContainer, Notification, ThreadNotification, AiringNotification, ActivityNotification, UnknownNotification
+    },
     methods: {
       getNotifications() {
-        return this.$browser.storage.local.get({ access_token: "" }).then(value => {
+        return this.$browser.storage.local.get().then(value => {
           if (value.access_token === "")
             return Promise.reject("Invalid token");
 
-          return queryAL(notificationQuery, {amount: 25, reset: true}, value.access_token);
+          return queryAL(notificationQuery, {amount: 25, reset: true, types: value.notifications.hideLikes ? noLikeNotifications : allNotifications}, value.access_token);
         });
       },
       parseNotifications(response) {

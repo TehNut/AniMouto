@@ -24,6 +24,12 @@
 
       <br/>
 
+      <h2 class="title">Hide Like Notifications</h2>
+      <p class="subtext">Hides like notifications from both the notifications page as well as in desktop notifications.</p>
+      <Checkbox v-model="hideLikes" title="Hide likes" identifier="hide-likes"/>
+
+      <br/>
+
       <div class="button no-select ripple" @click="save">Save</div>
     </div>
   </div>
@@ -38,6 +44,7 @@
       return {
         periodicCheck: true,
         desktopNotifications: true,
+        hideLikes: false,
         interval: 1
       }
     },
@@ -45,21 +52,22 @@
       const _self = this;
       this.$browser.storage.local.get().then(v => {
         if (!v.notifications)
-          v.notifications = { enabled: true, desktop: false, interval: 1 };
+          v.notifications = { enabled: true, desktop: false, hideLikes: false, interval: 1 };
 
         _self.periodicCheck = v.notifications.enabled;
         _self.desktopNotifications = v.notifications.desktop;
+        _self.hideLikes= v.notifications.hideLikes;
         _self.interval = v.notifications.interval || 1;
       });
     },
     methods: {
       save() {
-        this.$browser.storage.local.set({ notifications: { enabled: this.periodicCheck, desktop: false, interval: this.interval } });
+        this.$browser.storage.local.set({ notifications: { enabled: this.periodicCheck, desktop: false, hideLikes: this.hideLikes, interval: this.interval } });
         const _self = this;
 
         if (this.desktopNotifications) {
           this.$browser.permissions.request({ permissions: ["notifications"] }).then(granted => {
-            _self.$browser.storage.local.set({ notifications: { enabled: _self.periodicCheck, desktop: granted, interval: _self.interval } });
+            _self.$browser.storage.local.set({ notifications: { enabled: _self.periodicCheck, desktop: granted, hideLikes: _self.hideLikes, interval: _self.interval } });
           });
         }
 

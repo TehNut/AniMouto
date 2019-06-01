@@ -21,7 +21,7 @@ if (chrome.notifications) {
 }
 
 function checkForNotifications() {
-  chrome.storage.local.get({ access_token: "", currentNotifications: 0 }, value => {
+  chrome.storage.local.get({ access_token: "", currentNotifications: 0, notifications: { hideLikes: false } }, value => {
     if (value.access_token === "")
       return;
 
@@ -36,7 +36,7 @@ function checkForNotifications() {
         chrome.browserAction.setBadgeBackgroundColor({ color: [61, 180, 242, Math.floor(255 * 0.8)] }, () => {});
 
         if (count > 0 && count - lastCheck > 0)
-          handleDesktopNotifications(count - lastCheck, value.access_token);
+          handleDesktopNotifications(count - lastCheck, value.access_token, value.notifications.hideLikes);
 
         chrome.storage.local.set({ currentNotifications: count });
       });
@@ -57,10 +57,13 @@ function modifyAlarmTime(name, time) {
   chrome.alarms.create(name, { delayInMinutes: time, periodInMinutes: time });
 }
 
-function handleDesktopNotifications(amount, token) {
+function handleDesktopNotifications(amount, token, hideLikes) {
   fetch("../assets/graphql/notifications.graphql").then(res => res.text()).then(res => {
     queryAL(res, { amount: amount, reset: false }, token).then(res => res.json()).then(res => res.data).then(res => {
       res.Page.notifications.forEach(notification => {
+        if (hideLikes && notification.type.endsWith("_LIKE"))
+          return;
+
         switch (notification.type) {
           case "ACTIVITY_LIKE":
           case "ACTIVITY_MENTION":

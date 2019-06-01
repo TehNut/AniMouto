@@ -43,7 +43,7 @@
         this.reset();
 
         const _self = this;
-        this.query().then(res => _self.response = this.responsifier ? this.responsifier(res) : res).catch(err => {
+        this.query().then(res => this.responsifier ? this.responsifier(res) : res).then(res => this.response = res).catch(err => {
           _self.error = true;
           console.log(err);
         });
