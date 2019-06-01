@@ -190,17 +190,21 @@ fragment user on User {
 fragment thread on Thread {
   title
   url: siteUrl
+  id
 }
 
 fragment activity on ActivityUnion {
   __typename
   ... on TextActivity {
     url: siteUrl
+    id
   }
   ... on ListActivity {
     url: siteUrl
+    id
   }
   ... on MessageActivity {
     url: siteUrl
+    id
   }
 }

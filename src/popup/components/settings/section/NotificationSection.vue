@@ -4,7 +4,7 @@
     <div class="section">
       <h2 class="title">Timed Check</h2>
       <p class="subtext">Whether or not AniMouto should regularly check for new notifications in the background.</p>
-      <Checkbox v-model="periodicCheck" :title="'Enable automatic checks'" :identifier="'periodic-check'"/>
+      <Checkbox v-model="periodicCheck" title="Enable automatic checks" identifier="periodic-check"/>
 
       <br/>
       <br/>
@@ -20,7 +20,14 @@
 
       <h2 class="title">Desktop Notifications</h2>
       <p class="subtext">Allow AniMouto to send desktop notifications when a new notification is found.</p>
-      <Checkbox v-model="desktopNotifications" :title="'Enable desktop notifications'" :identifier="'desktop-notifications'"/>
+      <Checkbox v-model="desktopNotifications" title="Enable desktop notifications" identifier="desktop-notifications"/>
+
+      <br/>
+      <br/>
+
+      <h2 class="title">Condense Notifications</h2>
+      <p class="subtext">Condense notifications in the notifications page where applicable.</p>
+      <Checkbox v-model="condenseNotifications" title="Condense notifications" identifier="condense-notifications"/>
 
       <br/>
 
@@ -38,7 +45,8 @@
       return {
         periodicCheck: true,
         desktopNotifications: true,
-        interval: 1
+        interval: 1,
+        condenseNotifications: false
       }
     },
     created() {
@@ -54,12 +62,12 @@
     },
     methods: {
       save() {
-        this.$browser.storage.local.set({ notifications: { enabled: this.periodicCheck, desktop: false, interval: this.interval } });
+        this.$browser.storage.local.set({ notifications: { enabled: this.periodicCheck, desktop: false, interval: this.interval, condense: this.condenseNotifications } });
         const _self = this;
 
         if (this.desktopNotifications) {
           this.$browser.permissions.request({ permissions: ["notifications"] }).then(granted => {
-            _self.$browser.storage.local.set({ notifications: { enabled: _self.periodicCheck, desktop: granted, interval: _self.interval } });
+            _self.$browser.storage.local.set({ notifications: { enabled: _self.periodicCheck, desktop: granted, interval: _self.interval, condense: _self.condenseNotifications } });
           });
         }
 

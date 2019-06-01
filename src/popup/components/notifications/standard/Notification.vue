@@ -6,7 +6,7 @@
 </template>
 
 <script>
-  import {formatTimeShort} from "../../../assets/js/utils";
+  import {formatTimeShort} from "../../../../assets/js/utils";
 
   export default {
     name: "Notification",
