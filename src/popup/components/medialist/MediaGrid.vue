@@ -2,7 +2,7 @@
   <transition name="fade">
     <div v-if="list.length > 0">
       <h1 class="section-title">
-        <a v-if="title.url" :href="title.url" target="_blank">{{ title.text }}</a>
+        <a v-if="hasUrl && url" :href="url" target="_blank">{{ title.text }}</a>
         <span v-else>{{ title.text || title }}</span>
       </h1>
       <transition-group name="fade" tag="div" class="section media-grid">
@@ -24,6 +24,12 @@
   export default {
     name: "MediaGrid",
     components: {MediaCard},
+    data() {
+      return {
+        url: null,
+        hasUrl: false
+      }
+    },
     props: [
       "list",
       "title"
@@ -43,6 +49,21 @@
           return media.chapters;
 
         return -1;
+      }
+    },
+    created() {
+      if (typeof this.title.url === "function") {
+        this.title.url().then(val => {
+          this.url = val;
+          if (this.title.urlFlavor)
+            this.url += this.title.urlFlavor;
+        });
+        this.hasUrl = true;
+      } else if (this.title.url) {
+        this.url = this.title.url;
+        if (this.title.urlFlavor)
+          this.url += this.title.urlFlavor;
+        this.hasUrl = true;
       }
     }
   }

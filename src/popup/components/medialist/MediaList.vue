@@ -8,8 +8,8 @@
       <template scope="{response}">
         <div>
           <MediaGrid :list="response.airing" :title="{ url: 'https://anilist.co/airing', text: 'Airing' }"/>
-          <MediaGrid :list="response.watching" :title="'Anime in Progress'"/>
-          <MediaGrid :list="response.reading" :title="'Manga in Progress'"/>
+          <MediaGrid :list="response.watching" :title="{ url: getUserUrl, urlFlavor: '/animelist', text: 'Anime in Progress' }"/>
+          <MediaGrid :list="response.reading" :title="{ url: getUserUrl, urlFlavor: '/mangalist', text: 'Manga in Progress' }"/>
         </div>
       </template>
     </QueryContainer>
@@ -71,6 +71,9 @@
         }
 
         return res;
+      },
+      async getUserUrl() {
+        return await this.$browser.storage.local.get().then(value => value.user_info.site_url);
       }
     }
   }
