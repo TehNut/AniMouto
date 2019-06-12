@@ -90,7 +90,8 @@
 
   .avatar img {
     display: block;
-    width: 90%;
+    width: 46px;
+    height: 46px;
     border-radius: 50%;
     margin: 6px auto;
     object-fit: cover;
