@@ -79,13 +79,14 @@
     justify-content: center;
   }
 
-  .progress {
-    font-size: small;
-    color: rgb(var(--color-text));
-  }
-
   .behind {
     color: rgb(var(--color-red));
+    font-size: small;
+    font-weight: 500;
+  }
+
+  .progress {
+    color: rgb(var(--color-text));
     position: absolute;
     left: 10px;
     bottom: 10px;
