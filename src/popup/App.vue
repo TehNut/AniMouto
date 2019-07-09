@@ -148,6 +148,7 @@ export default {
   .content {
     position: absolute;
     overflow-y: scroll;
+    overflow-x: hidden;
     padding: 20px 10px 10px;
     width: 449px;
     height: 570px;
