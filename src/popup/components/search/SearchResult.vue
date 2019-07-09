@@ -129,7 +129,7 @@
   }
 
   .detail {
-    padding-left: 2px;
+    padding-left: 5px;
   }
 
   .detail:after {
