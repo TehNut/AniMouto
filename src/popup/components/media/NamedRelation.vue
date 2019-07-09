@@ -4,7 +4,7 @@
       <transition name="fade">
         <div v-if="displayExtras" :class="'popout' + (left ? ' left' : '')">
           <div class="contents">
-            <p class="title">{{ entity.name.first + (entity.name.last ? " " + entity.name.last : "") }}</p>
+            <p class="title">{{ entity.name.full }}</p>
             <span class="status">{{ displayify(role) }}</span>
           </div>
         </div>
