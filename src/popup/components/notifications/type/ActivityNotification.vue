@@ -3,8 +3,10 @@
     <a :href="notification.user.url" target="_blank">
       <img class="avatar notification-icon no-select" :src="notification.user.img.large">
     </a>
-    <a :href="notification.activity ? notification.activity.url : notification.user.url" class="notification-body" target="_blank">
-      <span class="highlight">{{ notification.user.name }}</span> {{ notification.context }}
+    <a :href="getUrl()" class="notification-body" target="_blank">
+      <div>
+        <a :href="notification.user.url" class="highlight" target="_blank">{{ notification.user.name }}</a> {{ notification.context }}
+      </div>
     </a>
   </span>
 </template>
@@ -14,6 +16,17 @@
     name: "ActivityNotification",
     props: [
       "notification"
-    ]
+    ],
+    methods: {
+      getUrl() {
+        if (this.notification.activity)
+          return this.notification.activity.url;
+
+        if (this.notification.activityId)
+          return `https://anilist.co/activity/${this.notification.activityId}`;
+
+        return this.notification.user.url;
+      }
+    }
   }
 </script>

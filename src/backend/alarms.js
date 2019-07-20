@@ -67,11 +67,14 @@ function handleDesktopNotifications(amount, token, hideLikes) {
         switch (notification.type) {
           case "ACTIVITY_LIKE":
           case "ACTIVITY_MENTION":
-          case "ACTIVITY_MESSAGE":
           case "ACTIVITY_REPLY":
           case "ACTIVITY_REPLY_LIKE":
           case "ACTIVITY_REPLY_SUBSCRIBED": {
             createNotification(notification.activity ? notification.activity.url : notification.user.url, notification.user.img.large, "New Activity", notification.user.name + notification.context);
+            break;
+          }
+          case "ACTIVITY_MESSAGE": {
+            createNotification(`https://anilist.co/activity/${notification.activityId}`, notification.user.img.large, "New Message", notification.user.name + notification.context);
             break;
           }
           case "AIRING":

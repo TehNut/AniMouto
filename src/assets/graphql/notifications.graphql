@@ -33,6 +33,7 @@ query($amount: Int, $reset: Boolean, $types: [NotificationType]) {
         activity: message {
           url: siteUrl
         }
+        activityId
         context
         createdAt
         type
