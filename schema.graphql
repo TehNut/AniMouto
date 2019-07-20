@@ -1226,9 +1226,9 @@ type MediaListOptions {
   "The score format the user is using for media lists"
   scoreFormat: ScoreFormat
   "The list theme options for both lists"
-  sharedTheme: Json @deprecated(reason : "This field has not yet been fully implemented and may change without warning")
+  sharedTheme: Json @deprecated(reason : "No longer used")
   "If the shared theme should be used instead of the individual list themes"
-  sharedThemeEnabled: Boolean @deprecated(reason : "This field has not yet been fully implemented and may change without warning")
+  sharedThemeEnabled: Boolean @deprecated(reason : "No longer used")
   "(Site only) If the user should be using legacy css-supporting list versions"
   useLegacyLists: Boolean
 }
@@ -3345,7 +3345,7 @@ type User {
   "The url for the user page on the AniList website"
   siteUrl: String
   "The users anime & manga list statistics"
-  statistics: UserStatisticTypes @deprecated(reason : "Not yet stable.")
+  statistics: UserStatisticTypes
   "The user's statistics"
   stats: UserStats @deprecated(reason : "Deprecated. Replaced with statistics field.")
   "The number of unread notifications the user has"
