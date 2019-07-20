@@ -10,6 +10,14 @@ AniMouto is designed to feel like a true extension to AniList by providing a ver
 
 Get it for [Chrome](https://chrome.google.com/webstore/detail/animouto/ilhjhegbgdghfkdgeahkpikkjgaaoklh) or [Firefox](https://addons.mozilla.org/en-US/firefox/addon/animouto/).
 
+## Images
+
+<img src="https://www.animouto.moe/static/preview_watching.png" width="300">
+<img src="https://www.animouto.moe/static/preview_search.png" width="300">
+<img src="https://www.animouto.moe/static/preview_detail.png" width="300">
+<img src="https://www.animouto.moe/static/preview_notifications.png" width="300">
+<img src="https://www.animouto.moe/static/preview_forum.png" width="300">
+
 ## Contributing
 
 Make sure you have [Node.js](https://nodejs.org/) installed.
