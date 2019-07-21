@@ -18,7 +18,7 @@
       </transition>
 
       <transition name="fade">
-        <div v-if="entry && displayExtras" class="cover-overlay ripple">
+        <div v-if="entry && displayExtras" class="cover-overlay extras-overlay ripple">
           <span class="overlay-text progress-text" @click.prevent="handleProgressClick">{{ entry.progress }} +</span>
           <div class="ellipsis overlay-text details-icon entry" @click.prevent="navigate"></div>
         </div>
@@ -119,6 +119,11 @@
     transition: .1s;
   }
 
+  .extras-overlay {
+    display: flex;
+    justify-content: space-between;
+  }
+
   .overlay-text {
     color: rgba(var(--color-text-bright), .9);
     padding: 8px;
@@ -128,20 +133,29 @@
 
   .details-icon {
     font-size: 18px;
+    transition: .2s;
   }
 
   .details-icon.entry {
     position: absolute;
-    right: -3px;
+    width: 30%;
+    right: -8px;
     top: -3px;
+  }
+
+  .details-icon:hover {
+    color: rgb(var(--color-accent));
   }
 
   .progress-text {
     transition: .1s;
+    width: 50%;
+    text-align: right;
   }
 
   .progress-text:hover {
     font-weight: bold;
+    color: rgb(var(--color-accent));
   }
 
   .is-behind {
