@@ -5,13 +5,19 @@
     </div>
     <div class="spacer" style="margin-top:10px;margin-bottom:10px;"></div>
     <transition name="fade">
-      <div class="blank-marker" v-if="results.anime.length === 0 && results.manga.length === 0 && !searching">
+      <div class="blank-marker" v-if="results.anime.length === 0 && results.manga.length === 0 && !searching && !error">
         <i class="material-icons no-select" style="font-size:200px;position:relative;">search</i>
       </div>
     </transition>
 
     <transition name="fade">
       <Spinner v-if="searching"/>
+    </transition>
+
+    <transition name="fade">
+      <Error v-if="error">
+        {{ error }}
+      </Error>
     </transition>
 
     <SearchSection title="Anime" :results="results.anime"/>
@@ -26,12 +32,14 @@
   import SearchResult from "./SearchResult";
   import mediaSearchQuery from "../../../assets/graphql/media_search.graphql";
   import SearchSection from "./SearchSection";
+  import Error from "../base/Error";
 
   export default {
     name: "Search",
-    components: {SearchSection, SearchResult, Spinner},
+    components: {Error, SearchSection, SearchResult, Spinner},
     data() {
       return {
+        error: null,
         searching: false,
         results: {
           anime: [],
@@ -62,6 +70,11 @@
           lastSearch = trimmed;
           this.$browser.storage.local.get({access_token: ""}).then(value => {
             queryAL(mediaSearchQuery, { search: trimmed }, value.access_token).then(res => {
+              if (res.errors && res.errors.length > 0)
+                throw res.errors[0].message;
+
+              return res;
+            }).then(res => {
               res.data.Page.media.forEach(e => {
                 _self.searching = false;
 
@@ -78,6 +91,9 @@
                   case "TV_SHORT": _self.results.anime.push(e); break;
                 }
               })
+            }).catch(e => {
+              _self.searching = false;
+              _self.error = e;
             });
           });
         }, 700)
