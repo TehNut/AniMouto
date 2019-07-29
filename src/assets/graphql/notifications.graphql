@@ -5,6 +5,7 @@ query($amount: Int, $reset: Boolean, $types: [NotificationType]) {
   Page(perPage: $amount) {
     notifications(resetNotificationCount: $reset, type_in: $types) {
       ... on ActivityLikeNotification {
+        activityId
         user {
           ...user
         }
@@ -16,6 +17,7 @@ query($amount: Int, $reset: Boolean, $types: [NotificationType]) {
         type
       }
       ... on ActivityMentionNotification {
+        activityId
         user {
           ...user
         }
@@ -27,6 +29,7 @@ query($amount: Int, $reset: Boolean, $types: [NotificationType]) {
         type
       }
       ... on ActivityMessageNotification {
+        activityId
         user {
           ...user
         }
@@ -39,6 +42,7 @@ query($amount: Int, $reset: Boolean, $types: [NotificationType]) {
         type
       }
       ... on ActivityReplyLikeNotification {
+        activityId
         user {
           ...user
         }
@@ -50,6 +54,7 @@ query($amount: Int, $reset: Boolean, $types: [NotificationType]) {
         type
       }
       ... on ActivityReplyNotification {
+        activityId
         user {
           ...user
         }
@@ -61,6 +66,7 @@ query($amount: Int, $reset: Boolean, $types: [NotificationType]) {
         type
       }
       ... on ActivityLikeNotification {
+        activityId
         user {
           ...user
         }
@@ -72,6 +78,7 @@ query($amount: Int, $reset: Boolean, $types: [NotificationType]) {
         type
       }
       ... on ActivityReplySubscribedNotification {
+        activityId
         user {
           ...user
         }

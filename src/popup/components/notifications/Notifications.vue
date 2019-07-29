@@ -49,7 +49,7 @@
           return queryAL(notificationQuery, {amount: 25, reset: true, types: value.notifications && value.notifications.hideLikes ? noLikeNotifications : allNotifications}, value.access_token);
         });
       },
-      parseNotifications(response) {
+      async parseNotifications(response) {
         const res = {
           notifications: response.data.Page.notifications,
           unreadCount: response.data.Viewer.unreadNotificationCount
@@ -57,6 +57,14 @@
 
         for (let i = 0; i < res.unreadCount; i++)
           res.notifications[i].unread = true;
+
+        // Condense after setting the unread status so we can carry it over later
+        const shouldCondense = await this.$browser.storage.local.get().then(value => {
+          return value.notifications && value.notifications.condenseNotifications;
+        });
+
+        if (shouldCondense)
+          res.notifications = condense(res.notifications);
 
         return res;
       },
@@ -84,6 +92,56 @@
     mounted() {
       this.$emit("update-notifications", 0);
     }
+  }
+
+  const condensables = [
+    "ACTIVITY_LIKE",
+    "ACTIVITY_REPLY_LIKE",
+    "FOLLOWING",
+    "THREAD_COMMENT_LIKE",
+    "THREAD_LIKE",
+  ];
+  const timeThreshold = 60 * 60 * 12; // 12 hours, matches activity condensing
+
+  function condense(notifications) {
+    const internal = [];
+    notifications.forEach(notification => {
+      // Make sure this notification is one that we support condensing of
+      if (condensables.includes(notification.type)) {
+        // Find a notification we've already checked that matches the new one in some way. Also make sure they're within the time threshold
+        const condensed = internal.filter(n => n.type === notification.type).filter(n => {
+          switch (notification.type) {
+            case "ACTIVITY_LIKE":
+            case "ACTIVITY_REPLY_LIKE": return n.activityId === notification.activityId;
+            case "FOLLOWING": return true;
+            case "THREAD_COMMENT_LIKE": return n.commentId === notification.commentId;
+            case "THREAD_LIKE": return n.thread.id === notification.thread.id;
+          }
+
+          return false;
+        }).find(n => Math.abs(n.createdAt - notification.createdAt) <= timeThreshold);
+
+        // If there isn't already a notification related to this one, create the users array and push it to the master notification list
+        if (!condensed) {
+          notification.users = [ notification.user ];
+          // delete notification.user;
+          internal.push(notification);
+          return;
+        }
+
+        // Push just the user of the new notification to the existing one
+        condensed.users.push(notification.user);
+
+        // Carry over the unread status if needed
+        if (notification.unread)
+          condensed.unread = true;
+      } else {
+        // We don't want to condense this, so just push it as is
+        internal.push(notification);
+      }
+    });
+
+    return internal;
   }
 </script>
 

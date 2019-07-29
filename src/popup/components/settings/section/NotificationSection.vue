@@ -30,6 +30,12 @@
 
       <br/>
 
+      <h2 class="title">Condense Notifications</h2>
+      <p class="subtext">Condense similar notifications into a single entry.</p>
+      <Checkbox v-model="condenseNotifications" title="Condense Notifications" identifier="condense-notifications"/>
+
+      <br/>
+
       <div class="button no-select ripple" @click="save">Save</div>
     </div>
   </div>
@@ -45,6 +51,7 @@
         periodicCheck: true,
         desktopNotifications: true,
         hideLikes: false,
+        condenseNotifications: false,
         interval: 1
       }
     },
@@ -52,22 +59,23 @@
       const _self = this;
       this.$browser.storage.local.get().then(v => {
         if (!v.notifications)
-          v.notifications = { enabled: true, desktop: false, hideLikes: false, interval: 1 };
+          v.notifications = { enabled: true, desktop: false, hideLikes: false, condenseNotifications: false, interval: 1 };
 
         _self.periodicCheck = v.notifications.enabled;
         _self.desktopNotifications = v.notifications.desktop;
         _self.hideLikes= v.notifications.hideLikes;
+        _self.condenseNotifications = v.notifications.condenseNotifications;
         _self.interval = v.notifications.interval || 1;
       });
     },
     methods: {
       save() {
-        this.$browser.storage.local.set({ notifications: { enabled: this.periodicCheck, desktop: false, hideLikes: this.hideLikes, interval: this.interval } });
+        this.$browser.storage.local.set({ notifications: { enabled: this.periodicCheck, desktop: false, hideLikes: this.hideLikes, condenseNotifications: this.condenseNotifications, interval: this.interval } });
         const _self = this;
 
         if (this.desktopNotifications) {
           this.$browser.permissions.request({ permissions: ["notifications"] }).then(granted => {
-            _self.$browser.storage.local.set({ notifications: { enabled: _self.periodicCheck, desktop: granted, hideLikes: _self.hideLikes, interval: _self.interval } });
+            _self.$browser.storage.local.set({ notifications: { enabled: _self.periodicCheck, desktop: granted, hideLikes: _self.hideLikes, condenseNotifications: _self.condenseNotifications, interval: _self.interval } });
           });
         }
 
