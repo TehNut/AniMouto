@@ -59,7 +59,7 @@
         const _self = this;
         this.$browser.storage.local.get({ access_token: "" }).then(value => {
           if (value.access_token === "") {
-            _self.$router.push("/");
+            _self.$router.push("/login");
             return;
           }
 
