@@ -47,7 +47,7 @@
     background: transparent;
     top: 4px;
     left: 3px;
-    border: 3px solid rgb(var(--color-text-bright));
+    border: 3px solid rgb(var(--color-text));
     border-top: none;
     border-right: none;
     transform: rotate(-55deg);
