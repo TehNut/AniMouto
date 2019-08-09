@@ -21,6 +21,7 @@ fragment active on MediaList {
     episodes
     chapters
     siteUrl
+    duration
     coverImage {
       large
       color

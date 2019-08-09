@@ -1,9 +1,12 @@
 <template>
   <transition name="fade">
-    <div v-if="list.length > 0">
+    <div v-if="list.length > 0" @mouseenter="$refs.titleSlot.style.opacity = '1'" @mouseleave="$refs.titleSlot.style.opacity = '0'">
       <h1 class="section-title">
         <a v-if="hasUrl && url" :href="url" target="_blank">{{ title.text }}</a>
         <span v-else>{{ title.text || title }}</span>
+        <span ref="titleSlot" style="opacity:0;transition:.3s">
+          <slot/>
+        </span>
       </h1>
       <transition-group name="fade" tag="div" class="section media-grid">
         <MediaCard v-for="(entry, index) in list" v-if="!isComplete(entry)" :entry="entry" :left="index % 4 >= 2" :key="entry.media.id">
