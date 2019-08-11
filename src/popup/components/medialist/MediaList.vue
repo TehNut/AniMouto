@@ -8,7 +8,7 @@
       <template scope="{response}">
         <div>
           <MediaGrid :list="response.airing" :title="{ url: 'https://anilist.co/airing', text: 'Airing' }">
-            <span v-if="response.behindTime" style="color:rgb(var(--color-red));font-size:10px;">{{ response.behindTime }} behind</span>
+            <span v-if="response.behind" style="color:rgb(var(--color-red));font-size:10px;">{{ response.behind.time }} behind ({{ response.behind.count }} episodes)</span>
           </MediaGrid>
           <MediaGrid :list="response.watching" :title="{ url: getUserUrl, urlFlavor: '/animelist', text: 'Anime in Progress' }"/>
           <MediaGrid :list="response.reading" :title="{ url: getUserUrl, urlFlavor: '/mangalist', text: 'Manga in Progress' }"/>
@@ -55,7 +55,7 @@
 
           res.airing = res.airing.sort((o1, o2) => o1.media.nextAiringEpisode.timeUntilAiring - o2.media.nextAiringEpisode.timeUntilAiring);
           res.watching = res.watching.sort((o1, o2) => o2.updatedAt - o1.updatedAt);
-          res.behindTime = this.calculateTimeBehind(res.airing);
+          res.behind = this.calculateTimeBehind(res.airing);
         }
 
         if (data.manga.mediaList.length > 0) {
@@ -71,13 +71,16 @@
       },
       calculateTimeBehind(list) {
         let total = 0;
+        let count = 0;
         list.forEach(e => {
           const behind = e.media.nextAiringEpisode.episode - 1 - e.progress;
-          if (behind > 0)
+          if (behind > 0) {
+            count += behind;
             total += e.media.duration * behind;
+          }
         });
 
-        return total <= 0 ? null : formatTime(total * 60);
+        return total <= 0 ? null : { count, time: formatTime(total * 60) };
       }
     }
   }
