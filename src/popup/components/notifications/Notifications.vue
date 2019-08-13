@@ -34,7 +34,7 @@
     "ACTIVITY_LIKE", "ACTIVITY_MENTION", "ACTIVITY_MESSAGE", "ACTIVITY_REPLY", "ACTIVITY_REPLY_LIKE", "ACTIVITY_REPLY_SUBSCRIBED", "AIRING", "FOLLOWING", "RELATED_MEDIA_ADDITION", "THREAD_COMMENT_LIKE", "THREAD_COMMENT_MENTION", "THREAD_COMMENT_REPLY", "THREAD_LIKE", "THREAD_SUBSCRIBED"
   ];
   const noLikeNotifications = allNotifications.filter(e => !e.endsWith("_LIKE"));
-  
+
   export default {
     name: "Notifications",
     components: {
@@ -55,7 +55,7 @@
           unreadCount: response.data.Viewer.unreadNotificationCount
         };
 
-        for (let i = 0; i < res.unreadCount; i++)
+        for (let i = 0; i < res.unreadCount && i < res.notifications.length; i++)
           res.notifications[i].unread = true;
 
         // Condense after setting the unread status so we can carry it over later
