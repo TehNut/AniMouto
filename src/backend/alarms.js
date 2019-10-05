@@ -28,6 +28,9 @@ function checkForNotifications() {
     console.debug("Checking for new notifications");
     queryAL("{Viewer{unreadNotificationCount}}", {}, value.access_token)
       .then(res => res.json()).then(res => {
+        if (!res.data || !res.data.Viewer)
+          return;
+
         let lastCheck = value.currentNotifications;
         let count = res.data.Viewer.unreadNotificationCount;
         console.debug("Found " + count + " unread notification(s)");
