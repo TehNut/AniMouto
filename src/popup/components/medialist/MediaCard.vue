@@ -86,7 +86,11 @@
             variables.completionDate = getToday();
 
           queryAL(updateProgressQuery, variables, value.access_token)
-            .then(() => _self.entry.progress++);
+            .then(res => {
+              const diff = res.data.SaveMediaListEntry.progress - _self.entry.progress;
+              _self.$emit("updateTime", { diff, timeDiff: diff * _self.mediaInternal.duration });
+              _self.entry.progress = res.data.SaveMediaListEntry.progress;
+            });
         });
       }
     }

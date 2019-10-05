@@ -9,7 +9,7 @@
         </span>
       </h1>
       <transition-group name="fade" tag="div" class="section media-grid">
-        <MediaCard v-for="(entry, index) in list" v-if="!isComplete(entry)" :entry="entry" :left="index % 4 >= 2" :key="entry.media.id">
+        <MediaCard v-for="(entry, index) in list" v-if="!isComplete(entry)" :entry="entry" :left="index % 2" :key="entry.media.id" @updateTime="$emit('updateTime', $event)">
           <span class="progress">
             Progress: {{ entry.progress }}<span v-if="getTotalCount(entry.media) > 0">/{{ getTotalCount(entry.media) }}</span>
           </span>

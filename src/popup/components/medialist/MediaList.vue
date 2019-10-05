@@ -7,8 +7,8 @@
     <QueryContainer ref="query" :query="getMediaList" :responsifier="parseMediaList" error-text="I tried my best but couldn't find your list">
       <template scope="{response}">
         <div>
-          <MediaGrid :list="response.airing" :title="{ url: 'https://anilist.co/airing', text: 'Airing' }">
-            <span v-if="response.behind" style="color:rgb(var(--color-red));font-size:10px;">{{ response.behind.time }} behind ({{ response.behind.count }} episodes)</span>
+          <MediaGrid :list="response.airing" :title="{ url: 'https://anilist.co/airing', text: 'Airing' }" @updateTime="updateTimeBehind($event, response.behind)">
+            <span v-if="response.behind && response.behind.count > 0" style="color:rgb(var(--color-red));font-size:10px;">{{ response.behind.time.pretty }} behind ({{ response.behind.count }} episodes)</span>
           </MediaGrid>
           <MediaGrid :list="response.watching" :title="{ url: getUserUrl, urlFlavor: '/animelist', text: 'Anime in Progress' }"/>
           <MediaGrid :list="response.reading" :title="{ url: getUserUrl, urlFlavor: '/mangalist', text: 'Manga in Progress' }"/>
@@ -80,7 +80,12 @@
           }
         });
 
-        return total <= 0 ? null : { count, time: formatTime(total * 60) };
+        return total <= 0 ? null : { count, time: { value: total * 60, pretty: formatTime(total * 60) } };
+      },
+      updateTimeBehind(diff, behind) {
+        behind.count -= diff.diff;
+        behind.time.value -= diff.timeDiff * 60;
+        behind.time.pretty = formatTime(behind.time.value)
       }
     }
   }
