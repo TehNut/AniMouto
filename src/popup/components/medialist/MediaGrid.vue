@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div v-if="list.length > 0" @mouseenter="$refs.titleSlot.style.opacity = '1'" @mouseleave="$refs.titleSlot.style.opacity = '0'">
+    <div v-if="list.length > 0" @mouseenter="toggleTitleSlot(true)" @mouseleave="toggleTitleSlot(false)">
       <h1 class="section-title">
         <a v-if="hasUrl && url" :href="url" target="_blank">{{ title.text }}</a>
         <span v-else>{{ title.text || title }}</span>
@@ -52,6 +52,13 @@
           return media.chapters;
 
         return -1;
+      },
+      toggleTitleSlot(state) {
+        const slot = this.$refs.titleSlot;
+        if (!slot)
+          return;
+
+        slot.style.opacity = state ? "1" : "0";
       }
     },
     created() {
