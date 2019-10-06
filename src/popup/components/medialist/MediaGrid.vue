@@ -9,7 +9,7 @@
         </span>
       </h1>
       <transition-group name="fade" tag="div" class="section media-grid">
-        <MediaCard v-for="(entry, index) in list" v-if="!isComplete(entry)" :entry="entry" :left="index % 2" :key="entry.media.id" @updateTime="$emit('updateTime', $event)">
+        <MediaCard v-for="(entry, index) in list" v-if="!isComplete(entry)" :entry="entry" :left="index % rowCount >= rowCount / 2" :key="entry.media.id" @updateTime="$emit('updateTime', $event)">
           <span class="progress">
             Progress: {{ entry.progress }}<span v-if="getTotalCount(entry.media) > 0">/{{ getTotalCount(entry.media) }}</span>
           </span>
@@ -30,7 +30,8 @@
     data() {
       return {
         url: null,
-        hasUrl: false
+        hasUrl: false,
+        rowCount: 4
       }
     },
     props: [
@@ -62,6 +63,10 @@
       }
     },
     created() {
+      this.$browser.storage.local.get().then(v => {
+        this.rowCount = v.wide ? 6 : 4;
+      });
+
       if (typeof this.title.url === "function") {
         this.title.url().then(val => {
           this.url = val;
@@ -75,7 +80,12 @@
           this.url += this.title.urlFlavor;
         this.hasUrl = true;
       }
-    }
+    },
+    activated() {
+      this.$browser.storage.local.get().then(v => {
+        this.rowCount = v.wide ? 6 : 4;
+      });
+    },
   }
 </script>
 

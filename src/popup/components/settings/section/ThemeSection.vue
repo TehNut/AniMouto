@@ -12,13 +12,29 @@
       <div class="accents">
         <div class="accent-button" v-for="accent in accents" :style="'background-color:rgb(var(--color-' + accent + '))'" @click="changeAccent(accent)"></div>
       </div>
+
+      <br/>
+      <br/>
+
+      <h2 class="title">Wide View</h2>
+      <p class="subtext">Widens AniMouto for more horizontal space.</p>
+      <Checkbox v-model="widen" title="Widen" identifier="widen-animouto"/>
+
+      <br/>
+
+      <div class="button no-select ripple" @click="save">Save</div>
     </div>
   </div>
 </template>
 
 <script>
+  import Checkbox from "../../base/Checkbox";
+
   export default {
     name: "ThemeSection",
+    components: {
+      Checkbox
+    },
     data() {
       return {
         themes: [
@@ -50,17 +66,26 @@
           "yellow",
           "green",
           "purple"
-        ]
+        ],
+        widen: false
       }
+    },
+    created() {
+      this.$browser.storage.local.get().then(v => this.widen = v.wide);
     },
     methods: {
       changeTheme(theme) {
-        this.$browser.storage.local.set({ theme: theme.name }).then(value => {});
+        this.$browser.storage.local.set({ theme: theme.name });
         this.$emit("update-theme");
       },
       changeAccent(accent) {
         this.$browser.storage.local.set({ accent_color: "color-" + accent });
         this.$emit("update-theme");
+      },
+      save() {
+        this.$browser.storage.local.set({ wide: this.widen }).then(() => {
+          this.$emit("update-theme")
+        });
       }
     }
   }

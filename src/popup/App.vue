@@ -39,8 +39,9 @@ export default {
       this.$browser.storage.local.set({ currentNotifications: unread});
     },
     updateTheme() {
-      this.$browser.storage.local.get({theme: "light", accent_color: "color-blue"}).then(value => {
+      this.$browser.storage.local.get({theme: "light", accent_color: "color-blue", wide: false}).then(value => {
         document.documentElement.style.setProperty("--color-accent", `var(--${value.accent_color})`);
+        document.documentElement.style.setProperty("--content-width", value.wide ? "716px" : "525px");
         document.getElementsByTagName("body")[0].className = `theme-${value.theme}`;
       });
     },
@@ -102,6 +103,7 @@ export default {
     --color-purple: 146, 86, 243;
     /* Changeable option */
     --color-accent: var(--color-blue);
+    --content-width: 525px;
   }
 
   /* Global tag modifiers */
@@ -141,7 +143,7 @@ export default {
   }
 
   .container {
-    width: 525px;
+    width: var(--content-width);
     height: 600px;
   }
 
@@ -150,7 +152,7 @@ export default {
     overflow-y: scroll;
     overflow-x: hidden;
     padding: 20px 10px 10px;
-    width: 449px;
+    width: calc(var(--content-width) - 76px);
     height: 570px;
     left: 56px;
   }

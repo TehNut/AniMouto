@@ -1,6 +1,6 @@
 <template>
   <div class="grid">
-    <MediaCard v-for="(relation, index) in relations" :media="relation.node" :left="index % 4 >= 2">
+    <MediaCard v-for="(relation, index) in relations" :media="relation.node" :left="index % rowCount >= rowCount / 2">
       <span class="highlight" style="font-weight:bold">{{ displayify(relation.relationType) }}</span>
       <span class="status">{{ displayify(relation.node.format) + " · " + displayify(relation.node.status) }}</span>
     </MediaCard>
@@ -13,6 +13,11 @@
   export default {
     name: "SimpleGrid",
     components: {MediaCard},
+    data() {
+      return {
+        rowCount: 4
+      }
+    },
     props: [
       "relations"
     ],
@@ -20,6 +25,11 @@
       displayify(value) {
         return displayify(value);
       }
+    },
+    created() {
+      this.$browser.storage.local.get().then(v => {
+        this.rowCount = v.wide ? 6 : 4;
+      });
     }
   }
 </script>

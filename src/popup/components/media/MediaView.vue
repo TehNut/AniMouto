@@ -58,7 +58,7 @@
             <a :href="getContextualLink(response, 'characters')" target="_blank">Characters</a>
           </h1>
           <div class="section character-grid">
-            <NamedRelation v-for="(character, index) in response.characters.edges" :entity="character.node" :role="character.role" :left="index % 4 > 1"/>
+            <NamedRelation v-for="(character, index) in response.characters.edges" :entity="character.node" :role="character.role" :left="index % rowCount >= rowCount / 2"/>
           </div>
         </div>
 
@@ -67,7 +67,7 @@
             <a :href="getContextualLink(response, 'staff')" target="_blank">Staff</a>
           </h1>
           <div class="section character-grid">
-            <NamedRelation v-for="(staff, index) in response.staff.edges" :entity="staff.node" :role="staff.role" :left="index % 4 > 1"/>
+            <NamedRelation v-for="(staff, index) in response.staff.edges" :entity="staff.node" :role="staff.role" :left="index % rowCount >= rowCount / 2"/>
           </div>
         </div>
       </div>
@@ -89,7 +89,8 @@
     components: {MediaTags, QueryContainer, StatusDistribution, NamedRelation, RelationalMediaGrid},
     data() {
       return {
-        routeId: null
+        routeId: null,
+        rowCount: 4
       }
     },
     props: [
@@ -136,10 +137,12 @@
     },
     activated() {
       this.$refs.query.runQuery();
+      setRowCount(this);
     },
     beforeRouteUpdate(to, from, next) {
       this.routeId = to.params.id;
       this.$refs.query.runQuery();
+      setRowCount(this);
       next();
     },
     beforeRouteLeave(to, from, next) {
@@ -148,11 +151,17 @@
       next();
     }
   }
+
+  function setRowCount(self) {
+    self.$browser.storage.local.get().then(v => {
+      self.rowCount = v.wide ? 6 : 4;
+    });
+  }
 </script>
 
 <style scoped>
   .banner {
-    width: 470px;
+    width: 100%;
     height: 150px;
     top: 0;
     right: 0;
