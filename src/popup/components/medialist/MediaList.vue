@@ -7,7 +7,7 @@
     <QueryContainer ref="query" :query="getMediaList" :responsifier="parseMediaList" error-text="I tried my best but couldn't find your list">
       <template scope="{response}">
         <div>
-          <MediaGrid :list="response.airing" :title="{ url: 'https://anilist.co/airing', text: 'Airing' }" @updateTime="updateTimeBehind($event, response.behind)">
+          <MediaGrid :list="response.airing" :title="{ url: 'https://anilist.co/airing', text: 'Airing' }" @updateProgress="updateTimeBehind($event.diff, response.behind)">
             <span v-if="response.behind && response.behind.count > 0" style="color:rgb(var(--color-red));font-size:10px;">{{ response.behind.time.pretty }} behind ({{ response.behind.count }} episodes)</span>
           </MediaGrid>
           <MediaGrid :list="response.watching" :title="{ url: getUserUrl, urlFlavor: '/animelist', text: 'Anime in Progress' }"/>

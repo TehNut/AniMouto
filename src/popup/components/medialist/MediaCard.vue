@@ -88,8 +88,8 @@
           queryAL(updateProgressQuery, variables, value.access_token)
             .then(res => {
               const diff = res.data.SaveMediaListEntry.progress - _self.entry.progress;
-              _self.$emit("updateTime", { diff, timeDiff: diff * _self.mediaInternal.duration });
               _self.entry.progress = res.data.SaveMediaListEntry.progress;
+              _self.$emit("updateProgress", { id: _self.entry.media.id, newProgress: _self.entry.progress, diff: { progress: diff, timeDiff: diff * _self.mediaInternal.duration } });
             });
         });
       }

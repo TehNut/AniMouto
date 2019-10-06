@@ -9,7 +9,7 @@
         </span>
       </h1>
       <transition-group name="fade" tag="div" class="section media-grid">
-        <MediaCard v-for="(entry, index) in list" v-if="!isComplete(entry)" :entry="entry" :left="index % rowCount >= rowCount / 2" :key="entry.media.id" @updateTime="$emit('updateTime', $event)">
+        <MediaCard v-for="(entry, index) in stateList" v-if="!isComplete(entry)" :entry="entry" :left="index % rowCount >= rowCount / 2" :key="entry.media.id" @updateProgress="handleProgressChange">
           <span class="progress">
             Progress: {{ entry.progress }}<span v-if="getTotalCount(entry.media) > 0">/{{ getTotalCount(entry.media) }}</span>
           </span>
@@ -31,7 +31,8 @@
       return {
         url: null,
         hasUrl: false,
-        rowCount: 4
+        rowCount: 4,
+        stateList: null,
       }
     },
     props: [
@@ -60,12 +61,20 @@
           return;
 
         slot.style.opacity = state ? "1" : "0";
+      },
+      handleProgressChange(progressUpdate) {
+        this.$emit('updateProgress', progressUpdate);
+        const entry = this.list.find(e => e.media.id === progressUpdate.id);
+        const total = entry.media.episodes || entry.media.chapters || 0;
+        if (progressUpdate.newProgress >= total)
+          this.stateList = this.stateList.filter(e => e.media.id !== progressUpdate.id);
       }
     },
     created() {
       this.$browser.storage.local.get().then(v => {
         this.rowCount = v.wide ? 6 : 4;
       });
+      this.stateList = this.list;
 
       if (typeof this.title.url === "function") {
         this.title.url().then(val => {
