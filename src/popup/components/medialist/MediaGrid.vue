@@ -65,8 +65,8 @@
       handleProgressChange(progressUpdate) {
         this.$emit('updateProgress', progressUpdate);
         const entry = this.list.find(e => e.media.id === progressUpdate.id);
-        const total = entry.media.episodes || entry.media.chapters || 0;
-        if (progressUpdate.newProgress >= total)
+        const total = entry.media.episodes || entry.media.chapters || null;
+        if (total && progressUpdate.newProgress >= total)
           this.stateList = this.stateList.filter(e => e.media.id !== progressUpdate.id);
       }
     },
