@@ -7,11 +7,13 @@
     <QueryContainer ref="query" :query="getMediaList" :responsifier="parseMediaList" error-text="I tried my best but couldn't find your list">
       <template scope="{response}">
         <div>
-          <MediaGrid :list="response.airing" :title="{ url: 'https://anilist.co/airing', text: 'Airing' }" @updateProgress="updateTimeBehind($event.diff, response.behind)">
-            <span v-if="response.behind && response.behind.count > 0" style="color:rgb(var(--color-red));font-size:10px;">{{ response.behind.time.pretty }} behind ({{ response.behind.count }} episodes)</span>
+          <MediaGrid :list="response.airing.list" :title="{ url: 'https://anilist.co/airing', text: 'Airing' }" @updateProgress="updateTimeBehind($event.diff, response.airing.behind)">
+            <span v-if="response.airing.behind && response.airing.behind.count > 0" style="color:rgb(var(--color-red));font-size:10px;">{{ response.airing.behind.time.pretty }} behind ({{ response.airing.behind.count }} episodes)</span>
           </MediaGrid>
-          <MediaGrid :list="response.watching" :title="{ url: getUserUrl, urlFlavor: '/animelist', text: 'Anime in Progress' }"/>
-          <MediaGrid :list="response.reading" :title="{ url: getUserUrl, urlFlavor: '/mangalist', text: 'Manga in Progress' }"/>
+          <MediaGrid :list="response.watching.list" :title="{ url: getUserUrl, urlFlavor: '/animelist', text: 'Anime in Progress' }" @updateProgress="updateTimeBehind($event.diff, response.watching.behind)">
+            <span v-if="response.watching.behind && response.watching.behind.count > 0" style="color:rgb(var(--color-orange));font-size:10px;">{{ response.watching.behind.time.pretty }} left ({{ response.watching.behind.count }} episodes)</span>
+          </MediaGrid>
+          <MediaGrid :list="response.reading.list" :title="{ url: getUserUrl, urlFlavor: '/mangalist', text: 'Manga in Progress' }"/>
         </div>
       </template>
     </QueryContainer>
@@ -39,29 +41,36 @@
       },
       parseMediaList(response) {
         const res = {
-          airing: [],
-          watching: [],
-          reading: []
+          airing: {
+            list: []
+          },
+          watching: {
+            list: []
+          },
+          reading: {
+            list: []
+          }
         };
 
         const data = response.data;
         if (data.anime.mediaList.length > 0) {
           data.anime.mediaList.forEach(e => {
             if (e.media.nextAiringEpisode)
-              res.airing.push(e);
+              res.airing.list.push(e);
             else
-              res.watching.push(e);
+              res.watching.list.push(e);
           });
 
-          res.airing = res.airing.sort((o1, o2) => o1.media.nextAiringEpisode.timeUntilAiring - o2.media.nextAiringEpisode.timeUntilAiring);
-          res.watching = res.watching.sort((o1, o2) => o2.updatedAt - o1.updatedAt);
-          res.behind = this.calculateTimeBehind(res.airing);
+          res.airing.list = res.airing.list.sort((o1, o2) => o1.media.nextAiringEpisode.timeUntilAiring - o2.media.nextAiringEpisode.timeUntilAiring);
+          res.airing.behind = this.calculateTimeBehind(res.airing.list);
+          res.watching.list = res.watching.list.sort((o1, o2) => o2.updatedAt - o1.updatedAt);
+          res.watching.behind = this.calculateTimeBehind(res.watching.list);
         }
 
         if (data.manga.mediaList.length > 0) {
-          data.manga.mediaList.forEach(e => res.reading.push(e));
+          data.manga.mediaList.forEach(e => res.reading.list.push(e));
 
-          res.reading = res.reading.sort((o1, o2) => o2.updatedAt - o1.updatedAt);
+          res.reading.list = res.reading.list.sort((o1, o2) => o2.updatedAt - o1.updatedAt);
         }
 
         return res;
@@ -73,7 +82,7 @@
         let total = 0;
         let count = 0;
         list.forEach(e => {
-          const behind = e.media.nextAiringEpisode.episode - 1 - e.progress;
+          const behind = (e.media.nextAiringEpisode ? e.media.nextAiringEpisode.episode : e.media.episodes) - 1 - e.progress;
           if (behind > 0) {
             count += behind;
             total += e.media.duration * behind;
@@ -83,7 +92,7 @@
         return total <= 0 ? null : { count, time: { value: total * 60, pretty: formatTime(total * 60) } };
       },
       updateTimeBehind(diff, behind) {
-        behind.count -= diff.diff;
+        behind.count -= diff.progress;
         behind.time.value -= diff.timeDiff * 60;
         behind.time.pretty = formatTime(behind.time.value)
       }
