@@ -63,15 +63,11 @@
 
           res.airing.list = res.airing.list.sort((o1, o2) => o1.media.nextAiringEpisode.timeUntilAiring - o2.media.nextAiringEpisode.timeUntilAiring);
           res.airing.behind = this.calculateTimeBehind(res.airing.list);
-          res.watching.list = res.watching.list.sort((o1, o2) => o2.updatedAt - o1.updatedAt);
           res.watching.behind = this.calculateTimeBehind(res.watching.list);
         }
 
-        if (data.manga.mediaList.length > 0) {
+        if (data.manga.mediaList.length > 0)
           data.manga.mediaList.forEach(e => res.reading.list.push(e));
-
-          res.reading.list = res.reading.list.sort((o1, o2) => o2.updatedAt - o1.updatedAt);
-        }
 
         return res;
       },

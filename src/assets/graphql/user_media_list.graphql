@@ -1,6 +1,6 @@
 query ($user: Int) {
   anime: Page(perPage: 48) {
-    mediaList(userId: $user, status_in: [CURRENT, REPEATING], type: ANIME) {
+    mediaList(userId: $user, status_in: [CURRENT, REPEATING], type: ANIME, sort: UPDATED_TIME_DESC) {
       ...active
     }
   }
