@@ -27,7 +27,7 @@
     methods: {
       logout() {
         this.$browser.storage.local.clear();
-        this.$router.push("login");
+        this.$router.push("/login");
         this.$emit("update-theme");
         updateUser();
         this.$emit("add-toast", { message: "Logout successful" })
