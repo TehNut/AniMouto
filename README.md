@@ -35,3 +35,7 @@ Builds the extension into `dist` for testing in the browser. You can load this d
 #### `npm run build-zip`
 
 Builds a zip file from the files in `dist` and places it in `dist-zip`. This command should be paired with `build`.
+
+#### `npm run clean`
+
+Cleans the `dist` directory. This command should be run before `build` when intending to package.
