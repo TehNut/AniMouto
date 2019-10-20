@@ -23,7 +23,6 @@ query ($id: Int) {
           id
           siteUrl
           title {
-            romaji
             userPreferred
           }
           coverImage {
@@ -33,6 +32,28 @@ query ($id: Int) {
           format
           status
         }
+      }
+    }
+    recommendations(perPage: 6, sort: [ RATING_DESC ]) {
+      nodes {
+        mediaRecommendation {
+          id
+          siteUrl
+          title {
+            userPreferred
+          }
+          coverImage {
+            large
+            color
+          }
+          format
+          status
+        }
+        rating
+        userRating
+      }
+      pageInfo {
+        total
       }
     }
     characters(sort: [ROLE, ID], perPage: 12) {

@@ -1,5 +1,5 @@
 <template>
-  <QueryContainer ref="query" :query="getMedia" :responsifier="res => res.data.Media" error-text="Failed to get this media">
+  <QueryContainer ref="query" :query="getMedia" :responsifier="formatResponse" error-text="Failed to get this media">
     <template scope="{response}">
       <div style="display:flex;flex-flow:column">
         <div class="banner" :style="'background-image:url(' + (response.bannerImage ? response.bannerImage : '') + ')'"></div>
@@ -49,7 +49,33 @@
         <div v-if="response.relations && response.relations.edges.length > 0">
           <h1 class="section-title">Relations</h1>
           <div class="section">
-            <RelationalMediaGrid :relations="response.relations.edges"/>
+            <SimpleMediaGrid :media="response.relations.edges">
+              <template scope="{media}">
+                <div>
+                  <span class="highlight" style="font-weight:bold">{{ displayify(media.__relation.relationType) }}</span>
+                  <span class="status">{{ displayify(media.format) + " · " + displayify(media.status) }}</span>
+                </div>
+              </template>
+            </SimpleMediaGrid>
+          </div>
+        </div>
+
+        <div v-if="response.recommendations && response.recommendations.nodes.length > 0">
+          <h1 class="section-title">Recommendations</h1>
+          <div class="section">
+            <div style="display:flex;flex-flow:column">
+              <SimpleMediaGrid :media="response.recommendations.nodes" :expandable="true">
+                <template scope="{media}">
+                  <div>
+                    <span class="highlight" :style="`font-weight:bold;color:${media.__rating.rating > 0 ? 'green' : media.__rating.rating < 0 ? 'red' : 'inherit'}`">
+                      {{ media.__rating.rating > 0 ? "+" : "" }}{{ media.__rating.rating }} vote{{ media.__rating.rating > 1 || media.__rating.rating < -1 ? "s" : "" }}
+                      <span v-if="media.__rating.userRating !== 'NO_RATING'"></span>
+                    </span>
+                    <span class="status">{{ displayify(media.format) + " · " + displayify(media.status) }}</span>
+                  </div>
+                </template>
+              </SimpleMediaGrid>
+            </div>
           </div>
         </div>
 
@@ -76,17 +102,18 @@
 </template>
 
 <script>
-  import {queryAL} from "../../../assets/js/utils";
+  import {displayify, queryAL} from "../../../assets/js/utils";
   import mediaQuery from "../../../assets/graphql/media.graphql";
-  import RelationalMediaGrid from "./RelationalMediaGrid";
   import NamedRelation from "./NamedRelation";
   import StatusDistribution from "./StatusDistribution";
   import QueryContainer from "../base/QueryContainer";
   import MediaTags from "./MediaTags";
+  import SimpleMediaGrid from "../base/SimpleMediaGrid";
 
   export default {
     name: "MediaView",
-    components: {MediaTags, QueryContainer, StatusDistribution, NamedRelation, RelationalMediaGrid},
+    components: {
+      SimpleMediaGrid, MediaTags, QueryContainer, StatusDistribution, NamedRelation},
     data() {
       return {
         routeId: null,
@@ -104,6 +131,31 @@
 
           return queryAL(mediaQuery, { id: this.routeId || this.id }, v.access_token);
         });
+      },
+      formatResponse(response) {
+        response = response.data.Media;
+
+        // Reformat relation structure
+        if (response.relations && response.relations.edges.length > 0) {
+          response.relations.edges = response.relations.edges.map(e => {
+            e.node.__relation = {
+              relationType: e.relationType
+            };
+            return e.node;
+          });
+        }
+
+        // Reformat recommendation structure
+        if (response.recommendations && response.recommendations.nodes.length > 0) {
+          response.recommendations.nodes = response.recommendations.nodes.map(e => {
+            e.mediaRecommendation.__rating = {
+              rating: e.rating,
+              userRating: e.userRating
+            };
+            return e.mediaRecommendation;
+          });
+        }
+        return response;
       },
       formatStatus(response) {
         const status = {};
@@ -133,6 +185,9 @@
             response.isFavourite = !response.isFavourite
           })
         });
+      },
+      displayify(value) {
+        return displayify(value);
       }
     },
     activated() {
@@ -223,5 +278,12 @@
     grid-template-columns: repeat(auto-fill, 85px);
     grid-template-rows: repeat(auto-fill, 115px);
     justify-content: center;
+  }
+
+  .status {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: rgb(var(--color-text));
   }
 </style>
