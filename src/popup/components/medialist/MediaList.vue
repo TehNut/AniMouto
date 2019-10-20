@@ -78,7 +78,7 @@
         let total = 0;
         let count = 0;
         list.forEach(e => {
-          const behind = (e.media.nextAiringEpisode ? e.media.nextAiringEpisode.episode : e.media.episodes) - 1 - e.progress;
+          const behind = (e.media.nextAiringEpisode ? e.media.nextAiringEpisode.episode - 1 : e.media.episodes) - e.progress;
           if (behind > 0) {
             count += behind;
             total += e.media.duration * behind;
