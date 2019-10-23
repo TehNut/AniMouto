@@ -1,5 +1,9 @@
 <template>
   <div>
+    <transition name="fade">
+      <RatingModal v-if="ratingMedia" :media="ratingMedia.media" :listId="ratingMedia.id" @clearRating="ratingMedia = null"/>
+    </transition>
+
     <div class="buttons">
       <i class="material-icons icon" @click="$refs.query.runQuery()">refresh</i>
     </div>
@@ -7,13 +11,13 @@
     <QueryContainer ref="query" :query="getMediaList" :responsifier="parseMediaList" error-text="I tried my best but couldn't find your list">
       <template scope="{response}">
         <div>
-          <MediaGrid :list="response.airing.list" :title="{ url: 'https://anilist.co/airing', text: 'Airing' }" @updateProgress="updateTimeBehind($event.diff, response.airing.behind)">
+          <MediaGrid :list="response.airing.list" :title="{ url: 'https://anilist.co/airing', text: 'Airing' }" @updateProgress="updateProgress($event, response, 'airing')">
             <span v-if="response.airing.behind && response.airing.behind.count > 0" style="color:rgb(var(--color-red));font-size:10px;">{{ response.airing.behind.time.pretty }} behind ({{ response.airing.behind.count }} episodes)</span>
           </MediaGrid>
-          <MediaGrid :list="response.watching.list" :title="{ url: getUserUrl, urlFlavor: '/animelist', text: 'Anime in Progress' }" @updateProgress="updateTimeBehind($event.diff, response.watching.behind)">
+          <MediaGrid :list="response.watching.list" :title="{ url: getUserUrl, urlFlavor: '/animelist', text: 'Anime in Progress' }" @updateProgress="updateProgress($event, response, 'watching')">
             <span v-if="response.watching.behind && response.watching.behind.count > 0" style="color:rgb(var(--color-orange));font-size:10px;">{{ response.watching.behind.time.pretty }} left ({{ response.watching.behind.count }} episodes)</span>
           </MediaGrid>
-          <MediaGrid :list="response.reading.list" :title="{ url: getUserUrl, urlFlavor: '/mangalist', text: 'Manga in Progress' }"/>
+          <MediaGrid :list="response.reading.list" :title="{ url: getUserUrl, urlFlavor: '/mangalist', text: 'Manga in Progress' }" @updateProgress="updateProgress($event, response, 'reading')"/>
         </div>
       </template>
     </QueryContainer>
@@ -26,10 +30,16 @@
   import mediaList from "../../../assets/graphql/user_media_list.graphql";
   import MediaGrid from "./MediaGrid";
   import QueryContainer from "../base/QueryContainer";
+  import RatingModal from "./rating/RatingModal";
 
   export default {
     name: "MediaList",
-    components: {QueryContainer, MediaGrid},
+    components: {RatingModal, QueryContainer, MediaGrid},
+    data() {
+      return {
+        ratingMedia: null
+      }
+    },
     methods: {
       getMediaList() {
         return this.$browser.storage.local.get().then(value => {
@@ -69,6 +79,7 @@
         if (data.manga.mediaList.length > 0)
           data.manga.mediaList.forEach(e => res.reading.list.push(e));
 
+        this.ratingMedia = res.airing.list[3];
         return res;
       },
       async getUserUrl() {
@@ -86,6 +97,10 @@
         });
 
         return total <= 0 ? null : { count, time: { value: total * 60, pretty: formatTime(total * 60) } };
+      },
+      updateProgress(event, response, list) {
+        this.updateTimeBehind(event.diff, response[list].behind);
+        this.ratingMedia = response[list].find(e => e.media.id === event.id);
       },
       updateTimeBehind(diff, behind) {
         behind.count -= diff.progress;
