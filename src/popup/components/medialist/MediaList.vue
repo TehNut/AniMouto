@@ -79,7 +79,6 @@
         if (data.manga.mediaList.length > 0)
           data.manga.mediaList.forEach(e => res.reading.list.push(e));
 
-        this.ratingMedia = res.airing.list[3];
         return res;
       },
       async getUserUrl() {
