@@ -16,28 +16,7 @@
     name: "RatingStar",
     data() {
       return {
-        stars: [
-          {
-            hovered: false,
-            forced: false
-          },
-          {
-            hovered: false,
-            forced: false
-          },
-          {
-            hovered: false,
-            forced: false
-          },
-          {
-            hovered: false,
-            forced: false
-          },
-          {
-            hovered: false,
-            forced: false
-          }
-        ],
+        stars: [ /* Populated below */ ],
         selectedIndex: null
       }
     },
@@ -53,6 +32,10 @@
 
         this.$emit("updateScore", index + 1);
       }
+    },
+    created() {
+      for (let i = 0; i < 5; i++)
+        this.stars.push({ hovered: false, forced: false });
     }
   }
 </script>

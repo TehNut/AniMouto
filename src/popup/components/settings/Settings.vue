@@ -2,6 +2,7 @@
   <div>
     <AccountSection @update-theme="emit('update-theme')"/>
     <ThemeSection @update-theme="$emit('update-theme')"/>
+    <ListSection/>
     <NotificationSection/>
   </div>
 </template>
@@ -10,10 +11,11 @@
   import ThemeSection from "./section/ThemeSection";
   import AccountSection from "./section/AccountSection";
   import NotificationSection from "./section/NotificationSection";
+  import ListSection from "./section/ListSection";
 
   export default {
     name: "Settings",
-    components: {NotificationSection, AccountSection, ThemeSection},
+    components: {ListSection, NotificationSection, AccountSection, ThemeSection},
   }
 </script>
 
