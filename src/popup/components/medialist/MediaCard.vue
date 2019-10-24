@@ -18,7 +18,7 @@
       </transition>
 
       <transition name="fade">
-        <div v-if="entry && displayExtras" class="cover-overlay extras-overlay ripple">
+        <div v-if="entry && displayExtras" class="cover-overlay extras-overlay ripple" ref="rippler">
           <span class="overlay-text progress-text" @click.prevent="handleProgressClick">{{ entry.progress }} +</span>
           <div class="ellipsis overlay-text details-icon entry" @click.prevent="navigate"></div>
         </div>
@@ -75,7 +75,29 @@
       handleProgressClick() {
         const _self = this;
 
-        this.$browser.storage.local.get({ access_token: "" }).then(value => {
+        this.$browser.storage.local.get().then(v => {
+          if (v.blockOverProgress) {
+            const total = this.mediaInternal.chapters || this.mediaInternal.episodes || null;
+            if (total) {
+              const nextProgress = this.entry.progress + 1;
+              let flag = true;
+              if (nextProgress > total)
+                flag = false;
+
+              if (this.mediaInternal.nextAiringEpisode && nextProgress >= this.mediaInternal.nextAiringEpisode.episode)
+                flag = false;
+
+              if (!flag) {
+                this.$refs.rippler.classList.add("error-ripple");
+                this.$refs.cover.classList.add("error-shake");
+                setTimeout(() => {
+                  this.$refs.cover.classList.remove("error-shake");
+                }, 100);
+                return;
+              }
+            }
+          }
+
           if (value.access_token === "")
             return;
 
@@ -174,5 +196,29 @@
 
   .ellipsis:after {
     content: '\2807';
+  }
+
+  .error-ripple:after {
+    background-image: radial-gradient(circle, #ff0000 10%, transparent 10.01%);
+  }
+
+  .error-shake {
+    animation: shake .1s;
+    animation-iteration-count: 1;
+    z-index: 10;
+  }
+
+  @keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
   }
 </style>
