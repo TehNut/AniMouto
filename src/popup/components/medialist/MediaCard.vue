@@ -98,7 +98,7 @@
             }
           }
 
-          if (value.access_token === "")
+          if (v.access_token === "")
             return;
 
           const variables = { listId: this.entry.id, progress: this.entry.progress + 1 };
@@ -107,7 +107,7 @@
           if (this.isComplete(_self.entry))
             variables.completionDate = getToday();
 
-          queryAL(updateProgressQuery, variables, value.access_token)
+          queryAL(updateProgressQuery, variables, v.access_token)
             .then(res => {
               const diff = res.data.SaveMediaListEntry.progress - _self.entry.progress;
               _self.entry.progress = res.data.SaveMediaListEntry.progress;
