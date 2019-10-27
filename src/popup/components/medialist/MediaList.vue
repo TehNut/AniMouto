@@ -101,10 +101,13 @@
         this.updateTimeBehind(event.diff, response[list].behind);
         this.$browser.storage.local.get().then(v => {
           if (v.rateAfterComplete)
-            this.ratingMedia = response[list].find(e => e.media.id === event.id);
+            this.ratingMedia = response[list].list.find(e => e.media.id === event.id);
         });
       },
       updateTimeBehind(diff, behind) {
+        if (!behind)
+          return;
+
         behind.count -= diff.progress;
         behind.time.value -= diff.timeDiff * 60;
         behind.time.pretty = formatTime(behind.time.value)
