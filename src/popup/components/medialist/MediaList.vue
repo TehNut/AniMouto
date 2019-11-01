@@ -100,8 +100,12 @@
       updateProgress(event, response, list) {
         this.updateTimeBehind(event.diff, response[list].behind);
         this.$browser.storage.local.get().then(v => {
-          if (v.rateAfterComplete)
-            this.ratingMedia = response[list].list.find(e => e.media.id === event.id);
+          if (v.rateAfterComplete) {
+            const entry = response[list].list.find(e => e.media.id === event.id);
+            const total = entry.media.episodes || entry.media.chapters || null;
+            if (total && event.newProgress >= total)
+              this.ratingMedia = response[list].list.find(e => e.media.id === event.id);
+          }
         });
       },
       updateTimeBehind(diff, behind) {
