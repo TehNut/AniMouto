@@ -5,6 +5,10 @@
     </transition>
 
     <div class="buttons">
+      <div v-if="starred && starred.length > 0" class="switcher">
+        <span :class="'switcher-option no-select ' + (listType === 'DEFAULT' ? 'selected' : '')" style="cursor:pointer" @click="changeList('DEFAULT')">Default</span>
+        <span :class="'switcher-option no-select ' + (listType !== 'DEFAULT' ? 'selected' : '')" style="cursor:pointer" @click="changeList('STARRED')">Starred</span>
+      </div>
       <i class="material-icons icon" @click="$refs.query.runQuery()">refresh</i>
     </div>
 
@@ -37,7 +41,9 @@
     components: {RatingModal, QueryContainer, MediaGrid},
     data() {
       return {
-        ratingMedia: null
+        ratingMedia: null,
+        starred: [],
+        listType: "DEFAULT"
       }
     },
     methods: {
@@ -46,7 +52,13 @@
           if (value.access_token === "" || value.user_info.id === -1)
             return;
 
-          return queryAL(mediaList, { user: value.user_info.id }, value.access_token);
+          const options = { user: value.user_info.id };
+          if (this.starred.length > 0 && this.listType !== "DEFAULT") {
+            options.starred = this.starred;
+          } else {
+            options.status = [ "CURRENT", "REPEATING" ]
+          }
+          return queryAL(mediaList, options, value.access_token);
         });
       },
       parseMediaList(response) {
@@ -115,7 +127,17 @@
         behind.count -= diff.progress;
         behind.time.value -= diff.timeDiff * 60;
         behind.time.pretty = formatTime(behind.time.value)
+      },
+      changeList(list) {
+        this.listType = list;
+        this.$refs.query.runQuery();
       }
+    },
+    created() {
+      this.$browser.storage.local.get().then(v => {
+        this.starred = v.watching || [];
+        this.starred.push(107339);
+      });
     }
   }
 </script>
@@ -124,5 +146,30 @@
   .buttons {
     position: absolute;
     right: 20px;
+    display: flex;
+    align-items: center;
+  }
+
+  .switcher {
+    margin-right: 10px;
+    font-size: smaller;
+    background-color: rgb(var(--color-foreground));
+    display: flex;
+    justify-content: space-around;
+    border-radius: 3px;
+    width: 110px;
+    text-align: center;
+  }
+
+  .switcher-option {
+    width: 50%;
+    padding: 3px;
+    background-color: rgb(var(--color-foreground));
+    transition: .2s;
+    border-radius: 3px;
+  }
+
+  .selected {
+    background-color: rgb(var(--color-foreground-blue));
   }
 </style>

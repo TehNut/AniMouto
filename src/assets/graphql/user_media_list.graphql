@@ -1,11 +1,11 @@
-query ($user: Int) {
+query ($user: Int, $status: [MediaListStatus], $starred: [Int]) {
   anime: Page(perPage: 48) {
-    mediaList(userId: $user, status_in: [CURRENT, REPEATING], type: ANIME, sort: UPDATED_TIME_DESC) {
+    mediaList(userId: $user, status_in: $status, mediaId_in: $starred, type: ANIME, sort: UPDATED_TIME_DESC) {
       ...active
     }
   }
   manga: Page(perPage: 48) {
-    mediaList(userId: $user, status_in: [CURRENT, REPEATING], type: MANGA, sort: UPDATED_TIME_DESC) {
+    mediaList(userId: $user, status_in: $status, mediaId_in: $starred, type: MANGA, sort: UPDATED_TIME_DESC) {
       ...active
     }
   }
