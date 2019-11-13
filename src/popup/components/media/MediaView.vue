@@ -16,6 +16,7 @@
             </div>
             <div class="button-container">
               <div class="button ripple like-button" @click="favorite(response)"><i class="material-icons" :style="'font-size:initial;color:rgba(255, 255, 255, ' + (response.isFavourite ? '0.5' : '1.0') + ')'">favorite</i></div>
+              <div class="button ripple star-button" @click="toggleStar(response)"><i class="material-icons" :style="'font-size:initial;color:rgba(255, 255, 255, ' + (response.starred ? '0.5' : '1.0') + ')'">star</i></div>
             </div>
           </div>
         </div>
@@ -155,6 +156,13 @@
             return e.mediaRecommendation;
           });
         }
+
+        if (response.mediaListEntry) {
+          this.$browser.storage.local.get().then(v => {
+            response.starred = v.starred && v.starred.includes(response.id);
+          });
+        }
+
         return response;
       },
       formatStatus(response) {
@@ -184,6 +192,20 @@
           queryAL(`mutation($id:Int){ToggleFavourite(${isManga ? "manga" : "anime"}Id: $id){__typename}}`, { id: response.id }, v.access_token).then(res => {
             response.isFavourite = !response.isFavourite
           })
+        });
+      },
+      toggleStar(media) {
+        this.$browser.storage.local.get().then(v => {
+          if (!v.starred)
+            v.starred = [];
+
+          if (v.starred.includes(media.id))
+            v.starred = v.starred.filter(e => e !== media.id);
+          else
+            v.starred.push(media.id);
+
+          media.starred = !media.starred;
+          this.$browser.storage.local.set({ starred: v.starred });
         });
       },
       displayify(value) {
@@ -256,6 +278,12 @@
 
   .like-button {
     background-color: rgb(var(--color-peach));
+    margin-top: 0;
+    padding: 10px 10px;
+  }
+
+  .star-button {
+    background-color: rgb(var(--color-yellow));
     margin-top: 0;
     padding: 10px 10px;
   }
