@@ -45,7 +45,8 @@
           anime: [],
           manga: [],
           novels: []
-        }
+        },
+        starred: []
       }
     },
     mounted() {
@@ -90,6 +91,9 @@
                   case "TV":
                   case "TV_SHORT": _self.results.anime.push(e); break;
                 }
+
+                if (this.starred.includes(e.id))
+                  e.starred = true;
               })
             }).catch(e => {
               _self.searching = false;
@@ -98,6 +102,9 @@
           });
         }, 700)
       });
+    },
+    created() {
+      this.$browser.storage.local.get().then(v => this.starred = v.starred || [])
     },
     activated() {
       this.$refs.searchBar.focus();
