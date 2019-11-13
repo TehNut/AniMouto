@@ -18,10 +18,10 @@
           <MediaGrid :list="response.airing.list" :title="{ url: 'https://anilist.co/airing', text: 'Airing' }" @updateProgress="updateProgress($event, response, 'airing')">
             <span v-if="response.airing.behind && response.airing.behind.count > 0" style="color:rgb(var(--color-red));font-size:10px;">{{ response.airing.behind.time.pretty }} behind ({{ response.airing.behind.count }} episodes)</span>
           </MediaGrid>
-          <MediaGrid :list="response.watching.list" :title="{ url: getUserUrl, urlFlavor: '/animelist', text: 'Anime in Progress' }" @updateProgress="updateProgress($event, response, 'watching')">
+          <MediaGrid :list="response.watching.list" :title="{ url: getUserUrl, urlFlavor: '/animelist', text: getSectionTitle('Anime', 'in Progress') }" :ignoreComplete="listType === 'STARRED'" @updateProgress="updateProgress($event, response, 'watching')">
             <span v-if="response.watching.behind && response.watching.behind.count > 0" style="color:rgb(var(--color-orange));font-size:10px;">{{ response.watching.behind.time.pretty }} left ({{ response.watching.behind.count }} episodes)</span>
           </MediaGrid>
-          <MediaGrid :list="response.reading.list" :title="{ url: getUserUrl, urlFlavor: '/mangalist', text: 'Manga in Progress' }" @updateProgress="updateProgress($event, response, 'reading')"/>
+          <MediaGrid :list="response.reading.list" :title="{ url: getUserUrl, urlFlavor: '/mangalist', text: getSectionTitle('Manga', 'in Progress') }" :ignoreComplete="listType === 'STARRED'" @updateProgress="updateProgress($event, response, 'reading')"/>
         </div>
       </template>
     </QueryContainer>
@@ -77,7 +77,7 @@
         const data = response.data;
         if (data.anime.mediaList.length > 0) {
           data.anime.mediaList.forEach(e => {
-            if (e.media.nextAiringEpisode)
+            if (e.media.nextAiringEpisode && this.listType === "DEFAULT")
               res.airing.list.push(e);
             else
               res.watching.list.push(e);
@@ -131,12 +131,16 @@
       changeList(list) {
         this.listType = list;
         this.$refs.query.runQuery();
+      },
+      getSectionTitle(type, context) {
+        return type + (this.listType === "DEFAULT" ? " " + context : "");
       }
     },
-    created() {
+    activated() {
       this.$browser.storage.local.get().then(v => {
-        this.starred = v.watching || [];
-        this.starred.push(107339);
+        this.starred = v.starred || [];
+        if (this.starred.length === 0 && this.listType === "STARRED")
+          this.changeList("DEFAULT");
       });
     }
   }
