@@ -16,8 +16,7 @@
   ],
   "background": {
     "scripts": [
-      "backend/anilist_util.js",
-      "backend/alarms.js"
+      "background.js"
     ],
     "persistent": false
   },

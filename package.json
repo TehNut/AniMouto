@@ -42,7 +42,7 @@
     "vue-template-compiler": "^2.6.10",
     "web-ext-types": "^3.2.1",
     "webpack": "^4.41.2",
-    "webpack-chrome-extension-reloader": "^1.3.0",
+    "webpack-extension-reloader": "^1.1.3",
     "webpack-cli": "^3.3.10"
   }
 }

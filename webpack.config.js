@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const ejs = require('ejs');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ChromeExtensionReloader = require('webpack-chrome-extension-reloader');
+const ExtensionReloader = require('webpack-extension-reloader');
 const { VueLoaderPlugin } = require('vue-loader');
 const { version } = require('./package.json');
 
@@ -11,6 +11,9 @@ const config = {
   context: __dirname + '/src',
   entry: {
     'popup': './popup/popup.js',
+    'background': [
+      './backend/alarms.js',
+    ]
   },
   output: {
     path: __dirname + '/dist',
@@ -58,7 +61,6 @@ const config = {
     new CopyWebpackPlugin([
       { from: 'assets', to: 'assets', ignore: [] },
       { from: 'popup/popup.html', to: 'popup.html', transform: transformHtml },
-      { from: 'backend', to: 'backend', ignore: [] },
       {
         from: 'manifest.json',
         to: 'manifest.json',
@@ -89,7 +91,9 @@ if (config.mode === 'production') {
 
 if (process.env.HMR === 'true') {
   config.plugins = (config.plugins || []).concat([
-    new ChromeExtensionReloader(),
+    new ExtensionReloader({
+      manifest: __dirname + '/src/manifest.json'
+    })
   ]);
 }
 
