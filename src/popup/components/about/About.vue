@@ -22,14 +22,12 @@
 
     <h1 class="section-title"><a href="https://github.com/TehNut/AniMouto/releases" target="_blank">Changelog</a></h1>
     <QueryContainer :query="getChangelog" class="section changelog">
-      <template scope="{response}">
-        <div>
-          <div v-for="version in getValidChanges(response)">
-            <span v-html="version.text"></span>
-            <div v-if="!version.last" class="spacer" style="top:8px;"></div>
-          </div>
+      <div slot-scope="{response}">
+        <div v-for="version in getValidChanges(response)">
+          <span v-html="version.text"></span>
+          <div v-if="!version.last" class="spacer" style="top:8px;"></div>
         </div>
-      </template>
+      </div>
     </QueryContainer>
   </div>
 </template>

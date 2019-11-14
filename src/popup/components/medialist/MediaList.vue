@@ -9,17 +9,15 @@
     </div>
 
     <QueryContainer ref="query" :query="getMediaList" :responsifier="parseMediaList" error-text="I tried my best but couldn't find your list">
-      <template scope="{response}">
-        <div>
-          <MediaGrid :list="response.airing.list" :title="{ url: 'https://anilist.co/airing', text: 'Airing' }" @updateProgress="updateProgress($event, response, 'airing')">
-            <span v-if="response.airing.behind && response.airing.behind.count > 0" style="color:rgb(var(--color-red));font-size:10px;">{{ response.airing.behind.time.pretty }} behind ({{ response.airing.behind.count }} episodes)</span>
-          </MediaGrid>
-          <MediaGrid :list="response.watching.list" :title="{ url: getUserUrl, urlFlavor: '/animelist', text: 'Anime in Progress' }" @updateProgress="updateProgress($event, response, 'watching')">
-            <span v-if="response.watching.behind && response.watching.behind.count > 0" style="color:rgb(var(--color-orange));font-size:10px;">{{ response.watching.behind.time.pretty }} left ({{ response.watching.behind.count }} episodes)</span>
-          </MediaGrid>
-          <MediaGrid :list="response.reading.list" :title="{ url: getUserUrl, urlFlavor: '/mangalist', text: 'Manga in Progress' }" @updateProgress="updateProgress($event, response, 'reading')"/>
-        </div>
-      </template>
+      <div slot-scope="{response}">
+        <MediaGrid :list="response.airing.list" :title="{ url: 'https://anilist.co/airing', text: 'Airing' }" @updateProgress="updateProgress($event, response, 'airing')">
+          <span v-if="response.airing.behind && response.airing.behind.count > 0" style="color:rgb(var(--color-red));font-size:10px;">{{ response.airing.behind.time.pretty }} behind ({{ response.airing.behind.count }} episodes)</span>
+        </MediaGrid>
+        <MediaGrid :list="response.watching.list" :title="{ url: getUserUrl, urlFlavor: '/animelist', text: 'Anime in Progress' }" @updateProgress="updateProgress($event, response, 'watching')">
+          <span v-if="response.watching.behind && response.watching.behind.count > 0" style="color:rgb(var(--color-orange));font-size:10px;">{{ response.watching.behind.time.pretty }} left ({{ response.watching.behind.count }} episodes)</span>
+        </MediaGrid>
+        <MediaGrid :list="response.reading.list" :title="{ url: getUserUrl, urlFlavor: '/mangalist', text: 'Manga in Progress' }" @updateProgress="updateProgress($event, response, 'reading')"/>
+      </div>
     </QueryContainer>
 
   </div>

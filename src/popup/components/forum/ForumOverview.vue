@@ -5,13 +5,11 @@
     </div>
     <h1 class="section-title"><a href="https://anilist.co/forum/overview" target="_blank">Recent Forum Activity</a></h1>
     <QueryContainer ref="query" :query="getForum" :responsifier="res => res.data.Page.threads" error-text="Failed to get forum activity">
-      <template scope="{response}">
-        <div>
-          <span v-for="thread in response">
-            <Thread :thread="thread"/>
-          </span>
-        </div>
-      </template>
+      <div slot-scope="{response}">
+        <span v-for="thread in response">
+          <Thread :thread="thread"/>
+        </span>
+      </div>
     </QueryContainer>
   </div>
 </template>

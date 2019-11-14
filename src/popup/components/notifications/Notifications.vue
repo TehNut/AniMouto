@@ -6,15 +6,13 @@
 
     <h1 class="section-title"><a href="https://anilist.co/notifications" target="_blank">Recent Notifications</a></h1>
     <QueryContainer ref="query" :query="getNotifications" :responsifier="parseNotifications" error-text="Oopsy doopsy! Looks like your notifications got misplaced!">
-      <template scope="{response}">
-        <div>
-          <span v-for="notification in response.notifications">
-            <Notification :notification="notification" :unread="notification.unread">
-              <component :is="getNotificationType(notification)" :notification="notification"></component>
-            </Notification>
-          </span>
-        </div>
-      </template>
+      <div slot-scope="{response}">
+        <span v-for="notification in response.notifications">
+          <Notification :notification="notification" :unread="notification.unread">
+            <component :is="getNotificationType(notification)" :notification="notification"></component>
+          </Notification>
+        </span>
+      </div>
     </QueryContainer>
 
   </div>

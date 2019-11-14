@@ -1,7 +1,7 @@
 <template>
   <div style="display:flex;flex-flow:column">
     <div class="grid">
-      <MediaCard v-for="(entry, index) in media" :media="entry" :left="index % rowLength >= rowLength / 2" v-if="!expandable || (index < rowLength || expanded)">
+      <MediaCard v-for="(entry, index) in media" :media="entry" :left="index % rowLength >= rowLength / 2" v-if="!expandable || (index < rowLength || expanded)" :key="entry.media.id">
         <slot scope="media" :media="entry" />
       </MediaCard>
     </div>

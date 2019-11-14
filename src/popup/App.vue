@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <Messages @add-toast="addToast"/>
     <Sidebar :unreadNotifications="unreadNotifications" @add-toast="addToast"/>
     <div class="content">
       <keep-alive>
@@ -21,11 +20,11 @@
 
 <script>
 import Sidebar from "./components/Sidebar";
-import Messages from "./components/Messages";
 import Toast from "./components/base/Toast";
+import {updateUser} from "../assets/js/utils";
 
 export default {
-  components: {Toast, Messages, Sidebar},
+  components: {Toast, Sidebar},
   data () {
     return {
       unreadNotifications: 0,
@@ -63,9 +62,24 @@ export default {
 
     const _self = this;
     this.$browser.storage.local.get({ access_token: "", theme: "light", accent_color: "color-blue", last_page: "login", currentNotifications: 0 }).then(value => {
-      _self.$router.push("/" + (value.access_token === "" ? "login" : value.last_page));
+      if (!_self.$router.currentRoute.path.endsWith("login") && !_self.$router.currentRoute.path.endsWith(value.last_page))
+        _self.$router.push("/" + (value.access_token === "" ? "login" : value.last_page));
 
       _self.updateNotifications(value.currentNotifications);
+    });
+
+    this.$browser.runtime.onMessage.addListener((message, sender, response) => {
+      if (message.type === "update_user")
+        updateUser();
+
+      if (message.type === "update_notifications")
+        _self.$emit("update-notifications", message.notification_count);
+
+      if (message.type === "change_page")
+        _self.$router.push(message.page);
+
+      if (message.type === "display_toast")
+        this.addToast(message.toast);
     });
   }
 }

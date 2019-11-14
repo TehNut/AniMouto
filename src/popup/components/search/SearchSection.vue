@@ -2,7 +2,7 @@
   <div v-if="results.length > 0">
     <h1 class="section-title">{{ title }}</h1>
     <div class="section pad-me-daddy">
-      <SearchResults v-for="(result, index) in results" v-if="index <= getDisplayIncrement() * displayMultiplier" :result="result" />
+      <SearchResults v-for="(result, index) in results" v-if="index <= getDisplayIncrement() * displayMultiplier" :result="result" :key="result.id" />
       <div class="highlight-hover show-more" v-if="displayMultiplier * getDisplayIncrement() < results.length && getNextJump() > 0" @click="displayMultiplier++">
         Show {{ getNextJump() }} more
       </div>

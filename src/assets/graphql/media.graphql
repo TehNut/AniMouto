@@ -58,6 +58,7 @@ query ($id: Int) {
     }
     characters(sort: [ROLE, ID], perPage: 12) {
       edges {
+        id
         role
         node {
           name {
@@ -72,6 +73,7 @@ query ($id: Int) {
     }
     staff(perPage: 12) {
       edges {
+        id
         role
         node {
           siteUrl

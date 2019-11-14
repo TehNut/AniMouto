@@ -1,103 +1,97 @@
 <template>
   <QueryContainer ref="query" :query="getMedia" :responsifier="formatResponse" error-text="Failed to get this media">
-    <template scope="{response}">
-      <div style="display:flex;flex-flow:column">
-        <div class="banner" :style="'background-image:url(' + (response.bannerImage ? response.bannerImage : '') + ')'"></div>
+    <div slot-scope="{response}" style="display:flex;flex-flow:column">
+      <div class="banner" :style="'background-image:url(' + (response.bannerImage ? response.bannerImage : '') + ')'"></div>
 
-        <div class="upper-container" :style="response.bannerImage ? '' : 'padding-top:0'">
-          <div class="left-container">
-            <img class="cover" :src="response.coverImage.extraLarge" :style="'background-color:' + response.coverImage.color"/>
+      <div class="upper-container" :style="response.bannerImage ? '' : 'padding-top:0'">
+        <div class="left-container">
+          <img class="cover" :src="response.coverImage.extraLarge" :style="'background-color:' + response.coverImage.color"/>
+        </div>
+        <div class="right-container">
+          <div class="title-container">
+            <h1 class="title" style="font-size:large">
+              <a :href="response.siteUrl" target="_blank">{{ response.title.userPreferred || response.title.romaji }}</a>
+            </h1>
           </div>
-          <div class="right-container">
-            <div class="title-container">
-              <h1 class="title" style="font-size:large">
-                <a :href="response.siteUrl" target="_blank">{{ response.title.userPreferred || response.title.romaji }}</a>
-              </h1>
-            </div>
-            <div class="button-container">
-              <div class="button ripple like-button" @click="favorite(response)"><i class="material-icons" :style="'font-size:initial;color:rgba(255, 255, 255, ' + (response.isFavourite ? '0.5' : '1.0') + ')'">favorite</i></div>
-            </div>
-          </div>
-        </div>
-
-        <div v-if="response.description">
-          <h1 class="section-title">Description</h1>
-          <div class="section" style="padding:10px 20px;">
-            <span v-html="response.description"></span>
-          </div>
-        </div>
-
-        <div v-if="response.tags && response.tags.length > 0">
-          <h1 class="section-title">Tags</h1>
-          <MediaTags :tags="response.tags" :is-manga="response.format === 'MANGA' || response.format === 'NOVEL'"/>
-        </div>
-
-        <div v-if="response.externalLinks && response.externalLinks.length > 0">
-          <h1 class="section-title">External Links</h1>
-          <div class="section external-links">
-            <a v-for="link in response.externalLinks" :href="link.url" target="_blank">
-              <div class="button ripple link-button" :style="'background-color:' + getSiteColor(link.site)">{{ link.site }}</div>
-            </a>
-          </div>
-        </div>
-
-        <div v-if="response.stats.statusDistribution">
-          <h1 class="section-title"><a :href="getContextualLink(response, 'stats')" target="_blank">Status Distribution</a></h1>
-          <StatusDistribution :status="formatStatus(response)"/>
-        </div>
-
-        <div v-if="response.relations && response.relations.edges.length > 0">
-          <h1 class="section-title">Relations</h1>
-          <div class="section">
-            <SimpleMediaGrid :media="response.relations.edges">
-              <template scope="{media}">
-                <div>
-                  <span class="highlight" style="font-weight:bold">{{ displayify(media.__relation.relationType) }}</span>
-                  <span class="status">{{ displayify(media.format) + " · " + displayify(media.status) }}</span>
-                </div>
-              </template>
-            </SimpleMediaGrid>
-          </div>
-        </div>
-
-        <div v-if="response.recommendations && response.recommendations.nodes.length > 0">
-          <h1 class="section-title">Recommendations</h1>
-          <div class="section">
-            <div style="display:flex;flex-flow:column">
-              <SimpleMediaGrid :media="response.recommendations.nodes" :expandable="true">
-                <template scope="{media}">
-                  <div>
-                    <span class="highlight" :style="`font-weight:bold;color:${media.__rating.rating > 0 ? 'green' : media.__rating.rating < 0 ? 'red' : 'inherit'}`">
-                      {{ media.__rating.rating > 0 ? "+" : "" }}{{ media.__rating.rating }} vote{{ media.__rating.rating > 1 || media.__rating.rating < -1 ? "s" : "" }}
-                      <span v-if="media.__rating.userRating !== 'NO_RATING'"></span>
-                    </span>
-                    <span class="status">{{ displayify(media.format) + " · " + displayify(media.status) }}</span>
-                  </div>
-                </template>
-              </SimpleMediaGrid>
-            </div>
-          </div>
-        </div>
-
-        <div v-if="response.characters && response.characters.edges.length > 0">
-          <h1 class="section-title">
-            <a :href="getContextualLink(response, 'characters')" target="_blank">Characters</a>
-          </h1>
-          <div class="section character-grid">
-            <NamedRelation v-for="(character, index) in response.characters.edges" :entity="character.node" :role="character.role" :left="index % rowCount >= rowCount / 2"/>
-          </div>
-        </div>
-
-        <div v-if="response.staff && response.staff.edges.length > 0">
-          <h1 class="section-title">
-            <a :href="getContextualLink(response, 'staff')" target="_blank">Staff</a>
-          </h1>
-          <div class="section character-grid">
-            <NamedRelation v-for="(staff, index) in response.staff.edges" :entity="staff.node" :role="staff.role" :left="index % rowCount >= rowCount / 2"/>
+          <div class="button-container">
+            <div class="button ripple like-button" @click="favorite(response)"><i class="material-icons" :style="'font-size:initial;color:rgba(255, 255, 255, ' + (response.isFavourite ? '0.5' : '1.0') + ')'">favorite</i></div>
           </div>
         </div>
       </div>
-    </template>
+
+      <div v-if="response.description">
+        <h1 class="section-title">Description</h1>
+        <div class="section" style="padding:10px 20px;">
+          <span v-html="response.description"></span>
+        </div>
+      </div>
+
+      <div v-if="response.tags && response.tags.length > 0">
+        <h1 class="section-title">Tags</h1>
+        <MediaTags :tags="response.tags" :is-manga="response.format === 'MANGA' || response.format === 'NOVEL'"/>
+      </div>
+
+      <div v-if="response.externalLinks && response.externalLinks.length > 0">
+        <h1 class="section-title">External Links</h1>
+        <div class="section external-links">
+          <a v-for="link in response.externalLinks" :href="link.url" target="_blank">
+            <div class="button ripple link-button" :style="'background-color:' + getSiteColor(link.site)">{{ link.site }}</div>
+          </a>
+        </div>
+      </div>
+
+      <div v-if="response.stats.statusDistribution">
+        <h1 class="section-title"><a :href="getContextualLink(response, 'stats')" target="_blank">Status Distribution</a></h1>
+        <StatusDistribution :status="formatStatus(response)"/>
+      </div>
+
+      <div v-if="response.relations && response.relations.edges.length > 0">
+        <h1 class="section-title">Relations</h1>
+        <div class="section">
+          <SimpleMediaGrid :media="response.relations.edges">
+            <div slot-scope="{media}">
+              <span class="highlight" style="font-weight:bold">{{ displayify(media.__relation.relationType) }}</span>
+              <span class="status">{{ displayify(media.format) + " · " + displayify(media.status) }}</span>
+            </div>
+          </SimpleMediaGrid>
+        </div>
+      </div>
+
+      <div v-if="response.recommendations && response.recommendations.nodes.length > 0">
+        <h1 class="section-title">Recommendations</h1>
+        <div class="section">
+          <div style="display:flex;flex-flow:column">
+            <SimpleMediaGrid :media="response.recommendations.nodes" :expandable="true">
+              <div slot-scope="{media}">
+                <span class="highlight" :style="`font-weight:bold;color:${media.__rating.rating > 0 ? 'green' : media.__rating.rating < 0 ? 'red' : 'inherit'}`">
+                  {{ media.__rating.rating > 0 ? "+" : "" }}{{ media.__rating.rating }} vote{{ media.__rating.rating > 1 || media.__rating.rating < -1 ? "s" : "" }}
+                  <span v-if="media.__rating.userRating !== 'NO_RATING'"></span>
+                </span>
+                <span class="status">{{ displayify(media.format) + " · " + displayify(media.status) }}</span>
+              </div>
+            </SimpleMediaGrid>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="response.characters && response.characters.edges.length > 0">
+        <h1 class="section-title">
+          <a :href="getContextualLink(response, 'characters')" target="_blank">Characters</a>
+        </h1>
+        <div class="section character-grid">
+          <NamedRelation v-for="(character, index) in response.characters.edges" :entity="character.node" :role="character.role" :left="index % rowCount >= rowCount / 2" :key="character.id"/>
+        </div>
+      </div>
+
+      <div v-if="response.staff && response.staff.edges.length > 0">
+        <h1 class="section-title">
+          <a :href="getContextualLink(response, 'staff')" target="_blank">Staff</a>
+        </h1>
+        <div class="section character-grid">
+          <NamedRelation v-for="(staff, index) in response.staff.edges" :entity="staff.node" :role="staff.role" :left="index % rowCount >= rowCount / 2" :key="staff.id"/>
+        </div>
+      </div>
+    </div>
   </QueryContainer>
 </template>
 
