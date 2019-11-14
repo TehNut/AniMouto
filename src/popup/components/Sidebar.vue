@@ -56,10 +56,14 @@
     },
     methods: {
       changePage(page) {
+        if (this.$router.currentRoute.path.endsWith(page.id))
+          return;
+
         const _self = this;
         this.$browser.storage.local.get({ access_token: "" }).then(value => {
           if (value.access_token === "") {
-            _self.$router.push("/login");
+            if (!_self.$router.currentRoute.path.endsWith("login"))
+              _self.$router.push("/login");
             return;
           }
 
