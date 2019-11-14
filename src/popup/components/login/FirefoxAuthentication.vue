@@ -32,11 +32,12 @@
     },
     methods: {
       getCode() {
-        this.$browser.runtime.getBackgroundPage().then(page => page.beginAuthorizationFlow());
+        const url = "https://anilist.co/api/v2/oauth/authorize?client_id=1336&response_type=token";
+        this.$browser.identity.launchWebAuthFlow({ url, interactive: true });
       },
       handleLogin() {
-        const _self = this;
-        this.$browser.runtime.getBackgroundPage().then(page => page.validateToken(_self.token));
+        if (this.token.length > 0)
+          this.$parent.handleToken(this.token)
       }
     }
   }

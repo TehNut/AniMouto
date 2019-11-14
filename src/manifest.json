@@ -17,8 +17,7 @@
   "background": {
     "scripts": [
       "backend/anilist_util.js",
-      "backend/alarms.js",
-      "backend/oauth_handler.js"
+      "backend/alarms.js"
     ],
     "persistent": false
   },

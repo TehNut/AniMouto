@@ -13,6 +13,7 @@
 
 <script>
   import Spinner from "../base/Spinner";
+
   export default {
     name: "ChromeAuthentication",
     components: {Spinner},
@@ -29,11 +30,19 @@
 
         this.active = true;
         button.classList.add("disabled");
-        this.$browser.runtime.getBackgroundPage().then(page => page.beginAuthorizationFlow());
+
+        const url = "https://anilist.co/api/v2/oauth/authorize?client_id=1387&response_type=token";
+        this.$browser.identity.launchWebAuthFlow({ url, interactive: true }).then(res => {
+          if (this.$browser.identity.lastError) {
+            console.error(this.$browser.identity.lastError);
+            return null;
+          }
+
+          return res.split("#")[1].split("&")[0].split("=")[1];
+        }).then(token => { this.$parent.handleToken(token) });
       }
     },
     mounted() {
-      const _self = this;
       this.$browser.storage.local.get({ access_token: "" }).then(value => {
         if (value.access_token === "")
           return;
