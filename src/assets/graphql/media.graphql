@@ -10,6 +10,9 @@ query ($id: Int) {
       extraLarge
       color
     }
+    mediaListEntry {
+      id
+    }
     isFavourite
     bannerImage
     description(asHtml: true)

@@ -5,14 +5,14 @@
         <img class="entry-image no-select" :src="result.img.large">
         <span class="entry-title">{{ result.title.userPreferred }}</span>
         <span class="entry-icons">
-          <i :class="'material-icons entry-icon' + (!result.mediaListEntry || result.mediaListEntry.status === 'PLANNING' ? ' enabled' : '')"
+          <i :class="'material-icons entry-icon ' + (!result.mediaListEntry || result.mediaListEntry.status === 'PLANNING' ? 'enabled' : '')"
              v-if="result.status !== 'NOT_YET_RELEASED'"
              :title="!result.mediaListEntry || result.mediaListEntry.status === 'PLANNING' ? 'Add to current' : 'Already listed'"
              @click.prevent="handleCurrent(result)"
              ref="current"
           >library_add</i>
 
-          <i :class="'material-icons entry-icon' + (!result.mediaListEntry ? ' enabled' : '')"
+          <i :class="'material-icons entry-icon ' + (!result.mediaListEntry ? 'enabled' : '')"
              :title="!result.mediaListEntry ? 'Add to planning' : 'Already listed'"
              @click.prevent="handlePlanning(result)"
              ref="planning"

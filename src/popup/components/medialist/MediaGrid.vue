@@ -37,11 +37,12 @@
     },
     props: [
       "list",
-      "title"
+      "title",
+      "ignoreComplete"
     ],
     methods: {
       isComplete(entry) {
-        return (entry.media.episodes && entry.progress >= entry.media.episodes) || (entry.media.chapters && entry.progress >= entry.media.chapters);
+        return !this.ignoreComplete && ((entry.media.episodes && entry.progress >= entry.media.episodes) || (entry.media.chapters && entry.progress >= entry.media.chapters));
       },
       getEpisodesBehind(entry) {
         const behind = entry.media.nextAiringEpisode.episode - 1 - entry.progress;
