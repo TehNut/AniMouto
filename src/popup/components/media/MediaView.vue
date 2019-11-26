@@ -15,8 +15,8 @@
               </h1>
             </div>
             <div class="button-container">
-              <div class="button ripple like-button" @click="favorite(response)"><i class="material-icons" :style="'font-size:initial;color:rgba(255, 255, 255, ' + (response.isFavourite ? '0.5' : '1.0') + ')'">favorite</i></div>
-              <div class="button ripple star-button" @click="toggleStar(response)"><i class="material-icons" :style="'font-size:initial;color:rgba(255, 255, 255, ' + (response.starred ? '0.5' : '1.0') + ')'">star</i></div>
+              <div class="button ripple like-button" @click="favorite(response)"><i class="material-icons" :style="'font-size:initial;color:rgba(255, 255, 255, ' + (response.isFavourite ? '1.0' : '0.5') + ')'">favorite</i></div>
+              <div class="button ripple star-button" @click="toggleStar(response)"><i class="material-icons" :style="'font-size:initial;color:rgba(255, 255, 255, ' + (starred ? '1.0' : '0.5') + ')'">star</i></div>
             </div>
           </div>
         </div>
@@ -118,7 +118,8 @@
     data() {
       return {
         routeId: null,
-        rowCount: 4
+        rowCount: 4,
+        starred: false
       }
     },
     props: [
@@ -204,7 +205,7 @@
           else
             v.starred.push(media.id);
 
-          media.starred = !media.starred;
+          this.starred = !this.starred;
           this.$browser.storage.local.set({ starred: v.starred });
         });
       },
@@ -214,6 +215,7 @@
     },
     activated() {
       this.$refs.query.runQuery();
+      this.$browser.storage.local.get().then(v => this.starred = v.starred && v.starred.includes(this.id));
       setRowCount(this);
     },
     beforeRouteUpdate(to, from, next) {

@@ -5,20 +5,14 @@
         <img class="entry-image no-select" :src="result.img.large">
         <span class="entry-title">{{ result.title.userPreferred }}</span>
         <span class="entry-icons">
-          <i class="material-icons entry-icon enabled"
-             :style="'color:rgba(var(--color-yellow), ' + (result.starred ? 1.0 : 0.5) + ')'"
-             v-if="result.mediaListEntry"
-             :title="!result.starred ? 'Star' : 'Unstar'"
-             @click.prevent="toggleStar(result)"
-          >star</i>
-          <i :class="'material-icons entry-icon' + (!result.mediaListEntry || result.mediaListEntry.status === 'PLANNING' ? ' enabled' : '')"
+          <i :class="'material-icons entry-icon ' + (!result.mediaListEntry || result.mediaListEntry.status === 'PLANNING' ? 'enabled' : '')"
              v-if="result.status !== 'NOT_YET_RELEASED'"
              :title="!result.mediaListEntry || result.mediaListEntry.status === 'PLANNING' ? 'Add to current' : 'Already listed'"
              @click.prevent="handleCurrent(result)"
              ref="current"
           >library_add</i>
 
-          <i :class="'material-icons entry-icon' + (!result.mediaListEntry ? ' enabled' : '')"
+          <i :class="'material-icons entry-icon ' + (!result.mediaListEntry ? 'enabled' : '')"
              :title="!result.mediaListEntry ? 'Add to planning' : 'Already listed'"
              @click.prevent="handlePlanning(result)"
              ref="planning"
@@ -69,20 +63,6 @@
             setListed(_self.$refs.current);
             setListed(_self.$refs.planning);
           });
-        });
-      },
-      toggleStar(media) {
-        this.$browser.storage.local.get().then(v => {
-          if (!v.starred)
-            v.starred = [];
-
-          if (v.starred.includes(media.id))
-            v.starred = v.starred.filter(e => e !== media.id);
-          else
-            v.starred.push(media.id);
-
-          media.starred = !media.starred;
-          this.$browser.storage.local.set({ starred: v.starred });
         });
       }
     }
