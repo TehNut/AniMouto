@@ -115,6 +115,7 @@ export default {
     --color-yellow: 247, 191, 99;
     --color-green: 123, 213, 85;
     --color-purple: 146, 86, 243;
+    --color-pink: 252, 157, 214;
     /* Changeable option */
     --color-accent: var(--color-blue);
     --content-width: 525px;

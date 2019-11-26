@@ -65,7 +65,8 @@
           "orange",
           "yellow",
           "green",
-          "purple"
+          "purple",
+          "pink"
         ],
         widen: false
       }
