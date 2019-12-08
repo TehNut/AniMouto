@@ -39,7 +39,7 @@
           }
 
           return res.split("#")[1].split("&")[0].split("=")[1];
-        }).then(token => { this.$parent.handleToken(token) });
+        }).then(token => { this.$emit("token", token) });
       }
     },
     mounted() {

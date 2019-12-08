@@ -37,7 +37,7 @@
       },
       handleLogin() {
         if (this.token.length > 0)
-          this.$parent.handleToken(this.token)
+          this.$emit("token", this.token)
       }
     }
   }

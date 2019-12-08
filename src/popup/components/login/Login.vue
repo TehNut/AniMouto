@@ -1,7 +1,7 @@
 <template>
   <div>
-    <ChromeAuthentication v-if="typeof InstallTrigger === 'undefined'" />
-    <FirefoxAuthentication v-else />
+    <ChromeAuthentication v-if="isChrome" @token="handleToken"/>
+    <FirefoxAuthentication v-else @token="handleToken"/>
   </div>
 </template>
 
@@ -14,6 +14,11 @@
   export default {
     name: "Login",
     components: {FirefoxAuthentication, ChromeAuthentication},
+    data() {
+      return {
+        isChrome: typeof InstallTrigger === 'undefined'
+      }
+    },
     methods: {
       handleToken(token) {
         if (!token)
