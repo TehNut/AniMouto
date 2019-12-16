@@ -75,7 +75,7 @@
         const data = response.data;
         if (data.anime.mediaList.length > 0) {
           data.anime.mediaList.forEach(e => {
-            if (e.media.nextAiringEpisode && this.listType === "DEFAULT")
+            if ((e.media.nextAiringEpisode || e.media.status === "RELEASING") && this.listType === "DEFAULT")
               res.airing.list.push(e);
             else
               res.watching.list.push(e);

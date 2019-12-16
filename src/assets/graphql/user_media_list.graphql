@@ -26,6 +26,7 @@ fragment active on MediaList {
       large
       color
     }
+    status
     nextAiringEpisode {
       episode
       airingAt
