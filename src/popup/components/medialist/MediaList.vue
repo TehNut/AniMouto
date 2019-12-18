@@ -81,7 +81,7 @@
               res.watching.list.push(e);
           });
 
-          res.airing.list = res.airing.list.sort((o1, o2) => o1.media.nextAiringEpisode.timeUntilAiring - o2.media.nextAiringEpisode.timeUntilAiring);
+          res.airing.list = res.airing.list.sort((o1, o2) => o1.media.nextAiringEpisode ? o1.media.nextAiringEpisode.timeUntilAiring - o2.media.nextAiringEpisode.timeUntilAiring : 1);
           res.airing.behind = this.calculateTimeBehind(res.airing.list);
           res.watching.behind = this.calculateTimeBehind(res.watching.list);
         }
