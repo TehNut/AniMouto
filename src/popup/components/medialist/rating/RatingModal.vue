@@ -8,6 +8,7 @@
           <RatingSlider
             v-if="format === 'POINT_10' || format === 'POINT_100' || format === 'POINT_10_DECIMAL'"
             @updateScore="score = $event"
+            :format="format"
           />
           <RatingStar
             v-else-if="format === 'POINT_5'"
