@@ -28,11 +28,6 @@
   import Notification from "./Notification";
   import QueryContainer from "../base/QueryContainer";
 
-  const allNotifications = [
-    "ACTIVITY_LIKE", "ACTIVITY_MENTION", "ACTIVITY_MESSAGE", "ACTIVITY_REPLY", "ACTIVITY_REPLY_LIKE", "ACTIVITY_REPLY_SUBSCRIBED", "AIRING", "FOLLOWING", "RELATED_MEDIA_ADDITION", "THREAD_COMMENT_LIKE", "THREAD_COMMENT_MENTION", "THREAD_COMMENT_REPLY", "THREAD_LIKE", "THREAD_SUBSCRIBED"
-  ];
-  const noLikeNotifications = allNotifications.filter(e => !e.endsWith("_LIKE"));
-
   export default {
     name: "Notifications",
     components: {
@@ -44,10 +39,12 @@
           if (value.access_token === "")
             return Promise.reject("Invalid token");
 
-          return queryAL(notificationQuery, {amount: 25, reset: true, types: value.notifications && value.notifications.hideLikes ? noLikeNotifications : allNotifications}, value.access_token);
+          // Request 50 if we're hiding likes so we can have closer to 25 after filtering them out
+          return queryAL(notificationQuery, {amount: value.notifications && value.notifications.hideLikes ? 50 : 25, reset: true}, value.access_token);
         });
       },
       async parseNotifications(response) {
+        const config = await this.$browser.storage.local.get();
         const res = {
           notifications: response.data.Page.notifications,
           unreadCount: response.data.Viewer.unreadNotificationCount
@@ -55,6 +52,9 @@
 
         for (let i = 0; i < res.unreadCount && i < res.notifications.length; i++)
           res.notifications[i].unread = true;
+
+        if (config.notifications && config.notifications.hideLikes)
+          res.notifications = res.notifications.filter(e => !e.type.endsWith("_LIKE")).splice(0, 25);
 
         // Condense after setting the unread status so we can carry it over later
         const shouldCondense = await this.$browser.storage.local.get().then(value => {
