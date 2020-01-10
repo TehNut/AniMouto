@@ -79,7 +79,7 @@
           });
         }
 
-        this.$browser.runtime.getBackgroundPage().then(page => page.modifyAlarmTime("notification_updater", this.interval));
+        this.$browser.runtime.sendMessage({ type: "modify-alarm", alarm: { name: "notification_updater", interval: this.interval } });
       }
     }
   }

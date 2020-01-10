@@ -14,6 +14,11 @@ browser.alarms.onAlarm.addListener(alarm => {
   }
 });
 
+browser.runtime.onMessage.addListener(message => {
+  if (message.type === "modify-alarm")
+    modifyAlarmTime(message.alarm.name, message.alarm.interval);
+});
+
 if (browser.notifications) {
   browser.notifications.onClicked.addListener(notification => {
     if (notification.startsWith("https://anilist.co/"))
