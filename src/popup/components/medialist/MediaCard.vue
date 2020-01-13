@@ -138,6 +138,8 @@
 
   .cover-overlay {
     background-color: rgba(var(--color-overlay), .7);
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
     width: 100%;
     text-align: center;
     position: absolute;
