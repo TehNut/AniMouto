@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar theme-dark">
+  <div class="sidebar">
     <div class="avatar" ref="avatar">
       <a id="user-avatar-link" href="#" target="_blank">
         <img id="user-avatar" src="#">
@@ -87,9 +87,9 @@
     width: 52px;
     float: left;
     position: fixed;
-    background-color: rgb(var(--color-foreground));
+    background-color: rgb(var(--sidebar-background));
     border-right: rgb(var(--color-accent)) medium inset;
-    color: rgb(var(--color-text));
+    color: rgb(159, 173, 189);
   }
 
   .avatar img {
@@ -124,7 +124,7 @@
     margin-top: -22px;
     width: 20px;
     height: 20px;
-    border: 2px solid rgb(var(--color-foreground));
+    border: 2px solid rgb(var(--sidebar-background));
     border-radius: 50%;
     background-color: rgb(var(--color-red));
     font-size: 10px;

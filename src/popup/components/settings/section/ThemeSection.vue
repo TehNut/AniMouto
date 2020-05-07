@@ -51,8 +51,14 @@
             color: "rgb(159, 173, 189)"
           },
           {
+            name: "contrast-dark",
+            display: "High Contrast - Dark",
+            background: "rgb(11, 22, 34)",
+            color: "rgb(159,173,189)"
+          },
+          {
             name: "contrast",
-            display: "High Contrast",
+            display: "High Contrast - Light",
             background: "rgb(214, 224, 239)",
             color: "rgb(0, 0, 0)"
           }
