@@ -1,5 +1,4 @@
 const webpack = require('webpack');
-const ejs = require('ejs');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtensionReloader = require('webpack-extension-reloader');
@@ -26,7 +25,7 @@ const config = {
     rules: [
       {
         test: /\.vue$/,
-        loaders: 'vue-loader',
+        loader: 'vue-loader',
       },
       {
         test: /\.js$/,
@@ -42,6 +41,7 @@ const config = {
         loader: 'file-loader',
         options: {
           name: '[path][name].[ext]',
+          esModule: false
         },
       },
       {
@@ -60,7 +60,7 @@ const config = {
     }),
     new CopyWebpackPlugin([
       { from: 'assets', to: 'assets', ignore: [] },
-      { from: 'popup/popup.html', to: 'popup.html', transform: transformHtml },
+      { from: 'popup/popup.html', to: 'popup.html' },
       {
         from: 'manifest.json',
         to: 'manifest.json',
@@ -95,12 +95,6 @@ if (process.env.HMR === 'true') {
       manifest: __dirname + '/src/manifest.json'
     })
   ]);
-}
-
-function transformHtml(content) {
-  return ejs.render(content.toString(), {
-    ...process.env,
-  });
 }
 
 module.exports = config;
