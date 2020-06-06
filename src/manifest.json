@@ -8,8 +8,7 @@
   "permissions": [
     "storage",
     "alarms",
-    "identity",
-    "*://*.anilist.co/*"
+    "identity"
   ],
   "optional_permissions": [
     "notifications"
