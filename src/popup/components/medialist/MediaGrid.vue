@@ -9,7 +9,7 @@
         </span>
       </h1>
       <transition-group name="fade" tag="div" class="section media-grid">
-        <MediaCard v-for="(entry, index) in stateList" v-if="!isComplete(entry)" :entry="entry" :left="index % rowCount >= rowCount / 2" :key="entry.media.id" @updateProgress="handleProgressChange">
+        <MediaCard v-for="(entry, index) in stateList" v-if="!isComplete(entry.progress, entry)" :entry="entry" :left="index % rowCount >= rowCount / 2" :key="entry.media.id" @updateProgress="handleProgressChange">
           <span class="progress">
             Progress: {{ entry.progress }}<span v-if="getTotalCount(entry.media) > 0">/{{ getTotalCount(entry.media) }}</span>
           </span>
@@ -41,8 +41,8 @@
       "ignoreComplete"
     ],
     methods: {
-      isComplete(entry) {
-        return !this.ignoreComplete && ((entry.media.episodes && entry.progress >= entry.media.episodes) || (entry.media.chapters && entry.progress >= entry.media.chapters));
+      isComplete(progress, entry) {
+        return !this.ignoreComplete && ((entry.media.episodes && progress >= entry.media.episodes) || (entry.media.chapters && progress >= entry.media.chapters));
       },
       getEpisodesBehind(entry) {
         const behind = entry.media.nextAiringEpisode.episode - 1 - entry.progress;

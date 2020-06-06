@@ -18,6 +18,7 @@ fragment active on MediaList {
       userPreferred
     }
     id
+    type
     episodes
     chapters
     siteUrl

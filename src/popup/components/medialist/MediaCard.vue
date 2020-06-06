@@ -69,8 +69,8 @@
       timeUntilAiring() {
         return formatTime(this.mediaInternal.nextAiringEpisode.timeUntilAiring)
       },
-      isComplete(entry) {
-        return (!entry.media.nextAiringEpisode && entry.media.episodes && entry.progress >= entry.media.episodes) || (entry.media.chapters && entry.progress >= entry.media.chapters);
+      isComplete(progress, entry) {
+        return (!entry.media.nextAiringEpisode && entry.media.episodes && progress >= entry.media.episodes) || (entry.media.chapters && progress >= entry.media.chapters);
       },
       handleProgressClick() {
         const _self = this;
@@ -104,7 +104,7 @@
           const variables = { listId: this.entry.id, progress: this.entry.progress + 1 };
           if (variables.progress === 1)
             variables.startDate = getToday();
-          if (this.isComplete(_self.entry))
+          if (this.isComplete(variables.progress, _self.entry))
             variables.completionDate = getToday();
 
           queryAL(updateProgressQuery, variables, v.access_token)
