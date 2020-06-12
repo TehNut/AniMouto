@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a :href="result.url" target="_blank">
+    <router-link :to="{ name: 'media-view', params: { id: result.id } }">
       <div class="list-entry">
         <img class="entry-image no-select" :src="result.img.large">
         <span class="entry-title">{{ result.title.userPreferred }}</span>
@@ -18,13 +18,16 @@
              ref="planning"
           >library_books</i>
 
-          <span class="detail entry-icon enabled"
+          <a
              title="Detailed view"
-             @click.prevent="$router.push({ name: 'media-view', params: { id: result.id } })"
-          ></span>
+             target="_blank"
+             @click.prevent="openUrl(result.url)"
+          >
+            <i class="material-icons entry-icon enabled">open_in_new</i>
+          </a>
         </span>
       </div>
-    </a>
+    </router-link>
   </div>
 </template>
 
@@ -38,6 +41,9 @@
       "result"
     ],
     methods: {
+      openUrl(url) {
+        window.open(url, "_blank");
+      },
       handlePlanning(media) {
         if (!this.$refs.planning.classList.contains("enabled"))
           return;
