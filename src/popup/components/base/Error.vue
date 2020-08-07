@@ -4,7 +4,7 @@
       <span style="font-size:32px;">{{ getRandomEmoji() }}</span>
       <br/>
       <slot>
-        <span>Oopsy doopsy</span>
+        <span>{{ $t("generic_error") }}</span>
       </slot>
     </div>
   </div>

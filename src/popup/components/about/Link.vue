@@ -2,11 +2,9 @@
   <a :href="url" target="_blank">
     <div class="link" :style="'background-image: url(assets/img/link/' + image + ')'">
       <span class="hover">
-        <span class="highlight">{{ name }}</span>
-        <span v-if="description">
-          <br/>
-          {{ description }}
-        </span>
+        <span class="highlight">{{ $t(`app.about.${section}.${name}`) }}</span>
+        <br/>
+        {{ $t(`app.about.${section}.${name}_desc`) }}
       </span>
     </div>
   </a>
@@ -18,8 +16,8 @@
     props: [
       "image",
       "url",
+      "section",
       "name",
-      "description"
     ]
   }
 </script>

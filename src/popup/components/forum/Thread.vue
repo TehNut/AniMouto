@@ -4,11 +4,17 @@
       <a :href="thread.siteUrl" class="highlight-hover" target="_blank">{{ thread.title }}</a>
     </div>
     <br />
-    <a :href="thread.replyUser.siteUrl" class="thread-commenter" target="_blank">
-      <img :src="thread.replyUser.avatar.medium" class="avatar forum-avatar" />
-      <span class="highlight">{{ thread.replyUser.name }}</span>
-    </a>
-    <a :href="`${thread.siteUrl}/comment/${thread.latest}`" class="highlight-hover" target="_blank">replied {{ formatTime() }} ago</a>
+    <i18n path="forum.replied" tag="a" :href="thread.latest ? `${thread.siteUrl}/comment/${thread.latest}` : thread.siteUrl" class="highlight-hover" target="_blank">
+      <template #user>
+        <a :href="thread.replyUser.siteUrl" class="thread-commenter" target="_blank">
+          <img :src="thread.replyUser.avatar.medium" class="avatar forum-avatar" />
+          <span class="highlight">{{ thread.replyUser.name }}</span>
+        </a>
+      </template>
+      <template #time>
+        <span>{{ formatTime() }}</span>
+      </template>
+    </i18n>
     <span class="thread-info no-select">
       <i class="material-icons thread-icon">visibility</i><span class="highlight-hover">{{ thread.viewCount }}</span>
       <i class="material-icons thread-icon">message</i><span class="highlight-hover">{{ thread.replyCount}}</span>

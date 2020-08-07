@@ -1,21 +1,21 @@
 <template>
   <div>
-    <h2 class="title">Login with AniList to use AniMouto</h2>
+    <h2 class="title">{{ $t("app.login.title") }}</h2>
 
     <div class="search-container">
-      <input v-model="token" type="text" class="text-input" ref="codeField" placeholder="Authorization Code" autocomplete="off" />
+      <input v-model="token" type="text" class="text-input" ref="codeField" :placeholder="$t('app.login.auth_code')" autocomplete="off" />
     </div>
 
-    <div class="button no-select ripple" @click="getCode()" style="background:rgb(var(--color-orange))" ref="codeButton">Get Code</div>
-    <div class="button no-select ripple" @click="handleLogin()" ref="loginButton">Login</div>
-    <a href="https://anilist.co/signup" target="_blank"><div class="button no-select ripple">Sign Up</div></a>
+    <div class="button no-select ripple" @click="getCode()" style="background:rgb(var(--color-orange))" ref="codeButton">{{ $t("app.login.get_code") }}</div>
+    <div class="button no-select ripple" @click="handleLogin()" ref="loginButton">{{ $t("app.login.submit") }}</div>
+    <a href="https://anilist.co/signup" target="_blank"><div class="button no-select ripple">{{ $t("app.login.sign_up") }}</div></a>
     <transition name="fade">
       <Spinner v-if="active"/>
     </transition>
     <div id="chrome-loader" class="loader" style="display:none;position:absolute;top:60px;"></div>
-    <p style="color:rgb(var(--color-text))">To obtain an authorization code, click the "Get Code" button above. It should open a new window that will let you authenticate with AniList. Once authenticated, it will provide an authorization code for you to copy.</p>
-    <p style="color:rgb(var(--color-text))">Paste your authorization code into the text field to authenticate. Don't forget to close the extra window when you finish.</p>
-    <p style="color:rgb(var(--color-text))">Once authentication is complete, the page will change.</p>
+    <p style="color:rgb(var(--color-text))">{{ $t("app.login.ff_instruct_1") }}</p>
+    <p style="color:rgb(var(--color-text))">{{ $t("app.login.ff_instruct_2") }}</p>
+    <p style="color:rgb(var(--color-text))">{{ $t("app.login.ff_instruct_3") }}</p>
   </div>
 </template>
 

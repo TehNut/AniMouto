@@ -3,8 +3,8 @@
     <div class="buttons">
       <i class="material-icons icon" @click="$refs.query.runQuery()">refresh</i>
     </div>
-    <h1 class="section-title"><a href="https://anilist.co/forum/overview" target="_blank">Recent Forum Activity</a></h1>
-    <QueryContainer ref="query" :query="getForum" :responsifier="res => res.data.Page.threads" error-text="Failed to get forum activity">
+    <h1 class="section-title"><a href="https://anilist.co/forum/overview" target="_blank">{{ $t("forum.title") }}</a></h1>
+    <QueryContainer ref="query" :query="getForum" :responsifier="res => res.data.Page.threads" :error-text="$t('forum.query_fail')">
       <div slot-scope="{response}">
         <span v-for="thread in response">
           <Thread :thread="thread"/>

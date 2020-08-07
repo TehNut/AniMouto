@@ -1,26 +1,26 @@
 <template>
   <div>
-    <h1 class="section-title">AniMouto v{{ $browser.runtime.getManifest().version }}</h1>
-    <p class="subtext" style="padding-left:30px;">A little sister to enhance your AniList experience.</p>
+    <h1 class="section-title">{{ $t("app.about.name", { version: $browser.runtime.getManifest().version }) }}</h1>
+    <p class="subtext" style="padding-left:30px;">{{ $t("app.about.description") }}</p>
     <img class="animouto-icon" src="../../../assets/img/animouto.svg"/>
 
-    <h1 class="section-title">External Links</h1>
+    <h1 class="section-title">{{ $t("app.about.links.title") }}</h1>
     <div class="section link-flow">
-      <Link name="AniList" description="This extension's onii-chan" url="https://anilist.co" image="anilist.png"/>
-      <Link name="Homepage" description="Our homepage in case you want to share" url="https://animouto.moe/" image="animouto.png"/>
-      <Link name="GitHub" description="AniMouto is open source and MIT licensed" url="https://github.com/TehNut/AniMouto" image="github.png"/>
+      <Link name="anilist" section="links" url="https://anilist.co" image="anilist.png"/>
+      <Link name="homepage" section="links" url="https://animouto.moe/" image="animouto.png"/>
+      <Link name="github" section="links" url="https://github.com/TehNut/AniMouto" image="github.png"/>
     </div>
 
-    <h1 class="section-title">Technology</h1>
+    <h1 class="section-title">{{ $t("app.about.built_with.title") }}</h1>
     <div class="section link-flow">
-      <Link name="Node.js" description="Developement environment" url="https://nodejs.org/" image="node.png"/>
-      <Link name="Vue.js" description="Frontend framework" url="https://vuejs.org/" image="vue.png"/>
-      <Link name="Webpack" description="Compiler to allow loading as an extension" url="https://webpack.js.org/" image="webpack.png"/>
-      <Link name="GraphQL" description="The AniList API query language" url="https://graphql.org/" image="graphql.svg"/>
-      <Link name="Material Design" description="All the icons used" url="https://material.io/" image="material.svg"/>
+      <Link name="node" section="built_with" url="https://nodejs.org/" image="node.png"/>
+      <Link name="vue" section="built_with" url="https://vuejs.org/" image="vue.png"/>
+      <Link name="webpack" section="built_with" url="https://webpack.js.org/" image="webpack.png"/>
+      <Link name="graphql" section="built_with" url="https://graphql.org/" image="graphql.svg"/>
+      <Link name="material_design" section="built_with" url="https://material.io/" image="material.svg"/>
     </div>
 
-    <h1 class="section-title"><a href="https://github.com/TehNut/AniMouto/releases" target="_blank">Changelog</a></h1>
+    <h1 class="section-title"><a href="https://github.com/TehNut/AniMouto/releases" target="_blank">{{ $t("app.about.changelog") }}</a></h1>
     <QueryContainer :query="getChangelog" class="section changelog">
       <div slot-scope="{response}">
         <div v-for="version in getValidChanges(response)">

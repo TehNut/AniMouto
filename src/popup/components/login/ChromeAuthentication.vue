@@ -1,13 +1,13 @@
 <template>
   <div>
-    <h2 class="title">Login with AniList to use AniMouto</h2>
-    <div class="button no-select ripple" @click="handleLogin()" ref="loginButton">Login</div>
-    <a href="https://anilist.co/signup" target="_blank"><div class="button no-select ripple">Sign Up</div></a>
+    <h2 class="title">{{ $t("app.login.title") }}</h2>
+    <div class="button no-select ripple" @click="handleLogin()" ref="loginButton">{{ $t("app.login.submit") }}</div>
+    <a href="https://anilist.co/signup" target="_blank"><div class="button no-select ripple">{{ $t("app.login.sign_up") }}</div></a>
     <transition name="fade">
       <Spinner v-if="active"/>
     </transition>
     <div id="chrome-loader" class="loader" style="display:none;position:absolute;top:60px;"></div>
-    <p style="color:rgb(var(--color-text))">Once authentication is complete, the page will change.</p>
+    <p style="color:rgb(var(--color-text))">{{ $t("app.login.please_wait") }}</p>
   </div>
 </template>
 
