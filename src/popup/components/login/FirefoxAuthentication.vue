@@ -1,6 +1,7 @@
 <template>
   <div>
     <h2 class="title">Login with AniList to use AniMouto</h2>
+    <h2 class="title" style="color:rgb(var(--color-red))" v-if="reason">{{ reason }}</h2>
 
     <div class="search-container">
       <input v-model="token" type="text" class="text-input" ref="codeField" placeholder="Authorization Code" autocomplete="off" />

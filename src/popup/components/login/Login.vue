@@ -1,7 +1,7 @@
 <template>
   <div>
-    <ChromeAuthentication v-if="isChrome" @token="handleToken"/>
-    <FirefoxAuthentication v-else @token="handleToken"/>
+    <ChromeAuthentication v-if="isChrome" @token="handleToken" :reason="reason"/>
+    <FirefoxAuthentication v-else @token="handleToken" :reason="reason"/>
   </div>
 </template>
 
@@ -18,6 +18,9 @@
       return {
         isChrome: typeof InstallTrigger === 'undefined'
       }
+    },
+    params: {
+      reason: String
     },
     methods: {
       handleToken(token) {

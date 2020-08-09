@@ -1,6 +1,8 @@
 <template>
   <div>
     <h2 class="title">Login with AniList to use AniMouto</h2>
+    <h2 class="title" style="color:rgb(var(--color-red))" v-if="reason">{{ reason }}</h2>
+
     <div class="button no-select ripple" @click="handleLogin()" ref="loginButton">Login</div>
     <a href="https://anilist.co/signup" target="_blank"><div class="button no-select ripple">Sign Up</div></a>
     <transition name="fade">
@@ -21,6 +23,9 @@
       return {
         active: false
       }
+    },
+    params: {
+      reason: String
     },
     methods: {
       handleLogin() {

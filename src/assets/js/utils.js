@@ -19,15 +19,22 @@ export function queryAL(query, variables, token) {
     method: "POST",
     headers: headers,
     body: JSON.stringify({ query, variables })
-  }).then(res => {
-    if (res.status === 403)
-      throw new Error("Token expired");
+  }).then(res => res.json()).then(res => {
+    if (res.errors) {
+      let invalidToken = res.errors.find(e => e.message === "Invalid token");
+      if (invalidToken)
+        throw new Error("Invalid token");
 
-    return res.json();
-  }).catch(() => {
+      invalidToken = res.errors.find(e => e.status === 401);
+      if (invalidToken)
+        throw new Error("Expired token");
+    }
+
+    return res;
+  }).catch(e => {
     // I love bandaids
     chrome.storage.local.set({ access_token: "" });
-    document.querySelector(".container").__vue__.$router.push("/login");
+    document.querySelector(".container").__vue__.$router.push({ path: "/login", params: { reason: e.message } });
   });
 }
 
