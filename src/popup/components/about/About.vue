@@ -21,7 +21,7 @@
     </div>
 
     <h1 class="section-title"><a href="https://github.com/TehNut/AniMouto/releases" target="_blank">Changelog</a></h1>
-    <QueryContainer :query="getChangelog" class="section changelog">
+    <QueryContainer :query="getChangelog" class="section changelog" error-text="Failed to load changelog">
       <div slot-scope="{response}">
         <div v-for="version in getValidChanges(response)">
           <span v-html="version.text"></span>
@@ -58,7 +58,12 @@
     components: {QueryContainer, Link},
     methods: {
       getChangelog() {
-        return fetch("https://api.github.com/repos/TehNut/AniMouto/releases").then(res => res.json());
+        return fetch("https://api.github.com/repos/TehNut/AniMouto/releases").then(res => {
+          if (res.status === 403)
+            throw new Error("Rate limit exceeded");
+
+          return res.json()
+        });
       },
       getValidChanges(response) {
         const changes = [];
