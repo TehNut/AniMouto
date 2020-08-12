@@ -1,16 +1,21 @@
 <template>
   <div>
-    <a :href="notification.user.url" target="_blank">
-      <img class="avatar notification-icon no-select" :src="notification.user.img.large" ref="avatar">
-      <span v-if="notification.users && notification.users.length > 1" class="bonus-people">+{{ notification.users.length - 1 }}</span>
+    <a :href="notif.user.url" target="_blank">
+      <img class="avatar notification-icon no-select" :src="notif.user.img.large" ref="avatar">
+      <span v-if="notif.users && notif.users.length > 1" class="bonus-people">+{{ notif.users.length - 1 }}</span>
     </a>
-    <a :href="notification.thread.url + (notification.commentId ? '/comment/' + notification.commentId : '')" class="body-container" target="_blank">
+    <a
+      :href="notif.thread.url !== '#' ? notif.thread.url + (notif.commentId ? '/comment/' + notif.commentId : '') : ''"
+      class="body-container"
+      :target="notif.thread.url === '#' ? '' : '_blank'"
+      @click="notif.thread.url === '#' ? $event.preventDefault() : ''"
+    >
       <div class="notification-body">
-        <span v-if="!notification.users">
-          <a :href="notification.user.url" class="highlight" target="_blank">{{ notification.user.name }}</a>
+        <span v-if="!notif.users">
+          <a :href="notif.user.url" class="highlight" target="_blank">{{ notif.user.name }}</a>
         </span>
-        <span v-else v-html="$parent.listify(notification.users)"></span>
-        {{ notification.context }} <span class="highlight">{{ notification.thread.title }}</span>
+        <span v-else v-html="$parent.listify(notif.users)"></span>
+        {{ notif.context }} <span class="highlight">{{ notif.thread.title }}</span>
       </div>
     </a>
   </div>
@@ -19,16 +24,18 @@
 <script>
   export default {
     name: "ThreadNotification",
+    data() {
+      return {
+        notif: null,
+      }
+    },
     props: [
       "notification"
     ],
-    mounted() {
-      if (!this.notification.users)
-        return;
-
-      setInterval(() => {
-
-      }, 2000);
+    created() {
+      this.notif = this.notification;
+      if (!this.notif.thread)
+        this.notif.thread = { title: "Deleted Thread", url: "#" }
     }
   }
 </script>
