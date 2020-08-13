@@ -23,18 +23,24 @@ export function queryAL(query, variables, token) {
     if (res.errors) {
       let invalidToken = res.errors.find(e => e.message === "Invalid token");
       if (invalidToken)
-        throw new Error("Invalid token");
+        throw new TokenError("Invalid token");
 
       invalidToken = res.errors.find(e => e.status === 401);
       if (invalidToken)
-        throw new Error("Expired token");
+        throw new TokenError("Expired token");
     }
 
     return res;
   }).catch(e => {
+    if (typeof e !== "object" || e.name !== "TokenError")
+      return; // Not an error we need to worry about right now
+
     // I love bandaids
+    console.log("Token has expired, pushing to login page.");
     chrome.storage.local.set({ access_token: "" });
-    document.querySelector(".container").__vue__.$router.push({ path: "/login", params: { reason: e.message } });
+    const container = document.querySelector(".container");
+    if (container)
+      container.__vue__.$router.push({ path: "/login", params: { reason: e.message } });
   });
 }
 
@@ -96,4 +102,12 @@ export function formatTimeShort(secs) {
     return (ret.length === 0 ? "" : " ") + time.minutes + "m";
 
   return ret === "" ? "<1m" : ret;
+}
+
+class TokenError extends Error {
+  constructor(message) {
+    super(message);
+
+    this.name = "TokenError";
+  }
 }
