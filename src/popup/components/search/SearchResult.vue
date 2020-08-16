@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-link :to="{ name: 'media-view', params: { id: result.id } }">
+    <a @click.prevent="$router.push({ name: 'media-view', params: { id: result.id } })" style="cursor:pointer;">
       <div class="list-entry">
         <img class="entry-image no-select" :src="result.img.large">
         <span class="entry-title">{{ result.title.userPreferred }}</span>
@@ -27,7 +27,7 @@
           </a>
         </span>
       </div>
-    </router-link>
+    </a>
   </div>
 </template>
 
