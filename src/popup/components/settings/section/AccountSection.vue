@@ -6,6 +6,7 @@
       <div class="button no-select ripple" @click="logout">Logout</div>
       <div class="button no-select ripple" @click="updateUser">Refresh User</div>
       <p style="margin:0">Remember to revoke the access token from your <a href="https://anilist.co/settings/apps" target="_blank">Apps page</a> after logging out.</p>
+      <div v-if="debugArray.length > 0" class="button no-select ripple" @click="printDebug">Copy Logout Debug</div>
     </div>
   </div>
 </template>
@@ -21,7 +22,8 @@
         user: {
           name: "",
           url: ""
-        }
+        },
+        debugArray: []
       }
     },
     methods: {
@@ -31,6 +33,9 @@
         this.$emit("update-theme");
         updateUser();
         this.$emit("add-toast", { message: "Logout successful" })
+      },
+      printDebug() {
+        window.navigator.clipboard.writeText(JSON.stringify(this.debugArray, null, 2));
       },
       updateUser() {
         const _self = this;
@@ -51,9 +56,10 @@
     },
     created() {
       const _self = this;
-      this.$browser.storage.local.get({ user_info: { name: "", site_url: "https://anilist.co" } }).then(value => {
+      this.$browser.storage.local.get({ user_info: { name: "", site_url: "https://anilist.co" }, logoutDebugArray: [] }).then(value => {
         _self.user.name = value.user_info.name;
         _self.user.url = value.user_info.site_url;
+        _self.debugArray = value.logoutDebugArray;
       });
     }
   }
