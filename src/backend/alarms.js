@@ -70,6 +70,9 @@ function modifyAlarmTime(name, time) {
 
 function handleDesktopNotifications(amount, token, hideLikes) {
   queryAL(notificationQuery, { amount: amount, reset: false }, token).then(res => {
+    if (!res.data)
+      return;
+
     res.data.Page.notifications.forEach(notification => {
       if (hideLikes && notification.type.endsWith("_LIKE"))
         return;
@@ -80,20 +83,20 @@ function handleDesktopNotifications(amount, token, hideLikes) {
         case "ACTIVITY_REPLY":
         case "ACTIVITY_REPLY_LIKE":
         case "ACTIVITY_REPLY_SUBSCRIBED": {
-          createNotification(notification.activity ? notification.activity.url : notification.user.url, notification.user.img.large, "New Activity", notification.user.name + notification.context);
+          createNotification(notification.activity ? notification.activity.url : notification.user.url, "New Activity", notification.user.name + notification.context);
           break;
         }
         case "ACTIVITY_MESSAGE": {
-          createNotification(`https://anilist.co/activity/${notification.activityId}`, notification.user.img.large, "New Message", notification.user.name + notification.context);
+          createNotification(`https://anilist.co/activity/${notification.activityId}`, "New Message", notification.user.name + notification.context);
           break;
         }
         case "AIRING":
         case "RELATED_MEDIA_ADDITION": {
-          createNotification(notification.media.url, notification.media.img.large, "New Episode", notification.contexts[0] + notification.episode + notification.contexts[1] + notification.media.title.userPreferred + notification.contexts[2]);
+          createNotification(notification.media.url, "New Episode", notification.contexts[0] + notification.episode + notification.contexts[1] + notification.media.title.userPreferred + notification.contexts[2]);
           break;
         }
         case "FOLLOWING": {
-          createNotification(notification.activity ? notification.activity.url : notification.user.url, notification.user.img.large, "New Follower", notification.user.name + notification.context);
+          createNotification(notification.activity ? notification.activity.url : notification.user.url, "New Follower", notification.user.name + notification.context);
           break;
         }
         case "THREAD_COMMENT_LIKE":
@@ -101,24 +104,19 @@ function handleDesktopNotifications(amount, token, hideLikes) {
         case "THREAD_COMMENT_REPLY":
         case "THREAD_LIKE":
         case "THREAD_SUBSCRIBED": {
-          createNotification(notification.thread.url + "/comment/" + notification.commentId, notification.user.img.large, "New Forum Activity", notification.user.name + notification.context + notification.thread.title);
+          createNotification(notification.thread.url + "/comment/" + notification.commentId, "New Forum Activity", notification.user.name + notification.context + notification.thread.title);
           break;
         }
         default: {
-          browser.notifications.create("unknown", {
-            type: "basic",
-            iconUrl: "https://anilist.co/img/logo_al.png",
-            title: "Unknown notification",
-            message: "This is an unknown notification type. Please report this so it can have support added."
-          });
+          createNotification("unknown", "Unknown notification", "This is an unknown notification type. Please report this so it can have support added.");
         }
       }
     });
 
-    function createNotification(id, icon, title, message) {
+    function createNotification(id, title, message) {
       browser.notifications.create(id, {
         type: "basic",
-        iconUrl: icon,
+        iconUrl: "assets/img/animouto_128x.png",
         title: title,
         message: message
       });
