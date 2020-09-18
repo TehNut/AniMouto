@@ -23,11 +23,11 @@ export function queryAL(query, variables, token) {
     if (res.errors) {
       let invalidToken = res.errors.find(e => e.message === "Invalid token");
       if (invalidToken)
-        throw new TokenError("Invalid token", invalidToken);
+        throw new TokenError("Invalid token", res.errors);
 
       invalidToken = res.errors.find(e => e.status === 401);
       if (invalidToken)
-        throw new TokenError("Expired token", invalidToken);
+        throw new TokenError("Expired token", res.errors);
     }
 
     return res;
