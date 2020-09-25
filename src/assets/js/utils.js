@@ -35,18 +35,17 @@ export function queryAL(query, variables, token) {
     if (typeof e !== "object" || e.name !== "TokenError")
       return; // Not an error we need to worry about right now
 
-    // I love bandaids
-    console.log("Token has expired, pushing to login page.");
-    chrome.storage.local.set({ access_token: "" });
-    // TODO remove when we figure out why in the hell people get logged out randomly :angery:
-    chrome.storage.local.get(v => {
-      const debugArray = v.logoutDebugArray || [];
-      debugArray.push({ time: Date.now(), error: e.debug});
-      chrome.storage.local.set({ logoutDebugArray: debugArray });
+    chrome.storage.local.get({ logoutOnInvalidToken: true }, v => {
+      if (!v.logoutOnInvalidToken)
+        return;
+
+      // I love bandaids
+      console.log("Token has expired, pushing to login page.");
+      chrome.storage.local.set({ access_token: "" });
+      const container = document.querySelector(".container");
+      if (container)
+        container.__vue__.$router.push({ path: "/login", params: { reason: e.message } });
     });
-    const container = document.querySelector(".container");
-    if (container)
-      container.__vue__.$router.push({ path: "/login", params: { reason: e.message } });
   });
 }
 
