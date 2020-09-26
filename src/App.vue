@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
+  <div id="app" :class="`theme-${theme}`">
     <div class="container">
-      <div class="sidebar theme-dark">
+      <div class="theme-dark sidebar">
         <div class="avatar">
           <a :href="user.siteUrl" target="_blank">
             <img :src="user.avatar.large">
@@ -49,6 +49,9 @@ export default class App extends Vue {
   @root.Getter("lastPage")
   lastPage!: string;
 
+  @root.Getter("theme")
+  theme!: string;
+
   @user.Getter("user")
   user!: AniListUser;
 
@@ -80,8 +83,6 @@ body {
   font-size: 12px;
   line-height: 1.15;
   margin: 0;
-  background-color: rgb(var(--color-background));
-  color: rgb(var(--color-text));
 }
 
 ::-webkit-scrollbar {
@@ -105,6 +106,8 @@ a:hover {
 }
 
 .container {
+  background-color: rgb(var(--color-background));
+  color: rgb(var(--color-text));
   width: var(--content-width);
   height: 600px;
   display: grid;

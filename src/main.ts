@@ -8,11 +8,9 @@ import store from "@/store";
 Vue.config.productionTip = false;
 
 async function createVueApp() {
-  await store.dispatch("root/loadLastPage");
+  await store.dispatch("root/load");
   await store.dispatch("settings/load");
-  await store.dispatch("user/loadToken");
-  await store.dispatch("user/loadUser");
-
+  await store.dispatch("user/load");
   new Vue({
     router,
     store,

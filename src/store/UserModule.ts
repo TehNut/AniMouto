@@ -10,14 +10,17 @@ export default class UserModule extends VuexModule {
   _token: string | null = null;
   _user: AniListUser = new AniListUser();
 
-  @MutationAction({ mutate: [ "_token" ] })
-  async loadToken() {
+  @MutationAction({ mutate: [ "_token", "_user" ] })
+  async load() {
     const storage = await browser.storage.local.get();
-    return { _token: storage.token || null };
+    return { 
+      _token: storage.token || null,
+      _user: new AniListUser()
+    };
   }
 
   @MutationAction({ mutate: [ "_user" ] })
-  async loadUser() {
+  async updateUser() {
     // TODO submit query with apollo
     return { _user: new AniListUser() }
   }

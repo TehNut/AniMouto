@@ -6,11 +6,15 @@ import { Module, VuexModule, MutationAction, Mutation } from "vuex-module-decora
 })
 export default class RootModule extends VuexModule {
   _lastPage: string = "login";
+  _theme: string = "light"
 
-  @MutationAction({ mutate: [ "_lastPage" ] })
-  async loadLastPage() {
+  @MutationAction({ mutate: [ "_lastPage", "_theme" ] })
+  async load() {
     const storage = await browser.storage.local.get();
-    return { _lastPage: storage.lastPage || "login" };
+    return { 
+      _lastPage: storage.lastPage || "login", 
+      _theme: storage.theme || "light" 
+    };
   }
 
   @MutationAction({ mutate: [ "_lastPage" ] })
@@ -21,5 +25,9 @@ export default class RootModule extends VuexModule {
 
   get lastPage() {
     return this._lastPage;
+  }
+
+  get theme() {
+    return this._theme;
   }
 }
