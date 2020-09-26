@@ -1,47 +1,28 @@
 {
-  "name": "animouto",
-  "version": "2.0.23",
-  "description": "A little sister to enhance your AniList experience.",
-  "author": "Nicholas Ignoffo <nick@tehnut.info> (https://tehnut.info)",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/TehNut/AniMouto"
-  },
+  "name": "animouto-3.0",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --hide-modules",
-    "build:dev": "cross-env NODE_ENV=development webpack --hide-modules",
-    "build-zip": "node scripts/build-zip.js",
-    "watch": "npm run build -- --watch",
-    "watch:dev": "cross-env HMR=true npm run build:dev -- --watch",
-    "clean": "node scripts/clean-dist.js"
+    "serve": "vue-cli-service serve",
+    "build": "NODE_ENV=production vue-cli-service build",
+    "dev": "NODE_ENV=production vue-cli-service build --watch",
+    "build-zip": "echo TODO"
   },
   "dependencies": {
-    "marked": "1.1.1",
-    "regenerator-runtime": "0.13.7",
-    "vue": "2.6.11",
-    "vue-router": "3.4.1",
-    "webextension-polyfill": "0.6.0"
+    "core-js": "^3.6.5",
+    "vue": "^2.6.11",
+    "vue-class-component": "^7.2.3",
+    "vue-property-decorator": "^8.4.2",
+    "vue-router": "^3.2.0",
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
-    "@babel/core": "7.11.1",
-    "@babel/plugin-proposal-optional-chaining": "7.11.0",
-    "@babel/preset-env": "7.11.0",
-    "archiver": "4.0.1",
-    "babel-loader": "8.1.0",
-    "copy-webpack-plugin": "5.1.1",
-    "core-js": "2.6.11",
-    "cross-env": "7.0.2",
-    "css-loader": "3.5.3",
-    "file-loader": "6.0.0",
-    "lodash": "4.17.19",
-    "mini-css-extract-plugin": "0.9.0",
-    "raw-loader": "4.0.1",
-    "vue-loader": "15.9.3",
-    "vue-template-compiler": "2.6.11",
-    "web-ext-types": "3.2.1",
-    "webpack": "4.44.1",
-    "webpack-extension-reloader": "1.1.4",
-    "webpack-cli": "3.3.12"
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-typescript": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "typescript": "~3.9.3",
+    "vue-template-compiler": "^2.6.11"
   }
 }
