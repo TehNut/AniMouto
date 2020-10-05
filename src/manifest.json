@@ -36,5 +36,11 @@
   "web_accessible_resources": [
     "/oauth2/*"
   ],
-  "manifest_version": 2
+  "manifest_version": 2,
+  "key": "animouto",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "animouto@animouto.moe"
+    }
+  }
 }

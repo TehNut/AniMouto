@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :class="`theme-${theme}`">
+  <div id="app" :class="`theme-${settings.theme}`" :class="{ wide: settings.wide }">
     <div class="container">
       <div class="theme-dark sidebar">
         <div class="avatar">
@@ -11,7 +11,9 @@
         <div class="navigation">
           <navigation-icon page="list" icon="list"/>
           <navigation-icon page="search" icon="search"/>
-          <navigation-icon page="notifications" icon="bell"/>
+          <navigation-icon page="notifications" icon="bell">
+            <div v-if="notificationCount > 0" class="notification-alert">{{ notificationCount }}</div>
+          </navigation-icon>
           <navigation-icon page="forum" icon="comments"/>
           <navigation-icon page="settings" icon="cog"/>
           <navigation-icon page="about" icon="info-circle"/>
@@ -36,8 +38,10 @@ import { Vue, Component } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import { AniListUser } from '@/models/User';
 import NavigationIcon from "@/components/NavigationIcon.vue"
+import Settings from './models/Settings';
 
 const root = namespace("root");
+const settings = namespace("settings");
 const user = namespace("user");
 
 @Component({
@@ -49,8 +53,8 @@ export default class App extends Vue {
   @root.Getter("lastPage")
   lastPage!: string;
 
-  @root.Getter("theme")
-  theme!: string;
+  @settings.Getter("settings")
+  settings!: Settings;
 
   @user.Getter("user")
   user!: AniListUser;
@@ -58,7 +62,10 @@ export default class App extends Vue {
   @user.Getter("loggedIn")
   loggedIn!: boolean;
 
-  created() {
+  // FIXME non-static number
+  notificationCount: number = 0;
+
+  async created() {
     let page = this.lastPage;
     if (!this.loggedIn)
       page = "login";
@@ -114,11 +121,16 @@ a:hover {
   grid-template-columns: 52px auto;
 }
 
+.wide {
+  --content-width: 716px;
+}
+
 .sidebar {
   background-color: rgb(var(--sidebar-background));
   display: flex;
   flex-flow: column;
   border-right: rgb(var(--color-accent)) medium inset;
+  user-select: none;
 }
 
 .sidebar .avatar img {
@@ -130,9 +142,31 @@ a:hover {
   object-fit: cover;
 }
 
+.content {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 20px 10px 10px;
+}
+
 .navigation {
   display: flex;
   flex-flow: column;
+}
+
+.notification-alert {
+  position: absolute;
+  right: 2px;
+  margin-top: -22px;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgb(var(--sidebar-background));
+  border-radius: 50%;
+  background-color: rgb(var(--color-red));
+  font-size: 10px;
+  line-height: 20px;
+  text-align: center;
+  color: rgb(var(--color-text-bright));
+  pointer-events: none;
 }
 
 .anilist-logo {

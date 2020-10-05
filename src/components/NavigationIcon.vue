@@ -1,10 +1,13 @@
 <template>
-  <fa-icon @click="changePage()" :icon="icon" :class="{ icon: true }" />
+  <div class="navigator-container">
+    <fa-icon @click="changePage()" :icon="icon" :class="{ icon: true }" />
+    <slot/>
+  </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import { Getter } from 'vuex-class';
+import { Action, Getter } from 'vuex-class';
 
 @Component
 export default class NavigationIcon extends Vue {
@@ -17,17 +20,25 @@ export default class NavigationIcon extends Vue {
   @Getter("user/loggedIn")
   loggedIn!: boolean;
 
+  @Action("root/changePage")
+  changePageAction!: Function;
+
   changePage() {
+    console.log(this.loggedIn);
     if (!this.loggedIn)
       return;
 
     this.$router.push(this.page).catch(e => {});
-    this.$store.dispatch("root/changePage", this.page)
+    this.changePageAction(this.page);
   }
 }
 </script>
 
 <style>
+.navigator-container {
+  position: relative;
+}
+
 .icon {
   cursor: pointer;
   padding: 3px 13px 3px 13px;
@@ -40,5 +51,9 @@ export default class NavigationIcon extends Vue {
 
 .icon:hover {
   color: rgb(var(--color-accent));
+}
+
+.overlay {
+  position: absolute;
 }
 </style>

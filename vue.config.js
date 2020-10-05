@@ -4,7 +4,7 @@ const packageJson = require("./package.json");
 // Background & content scripts to build.
 const scripts = {
   background: {
-    background: "./src/background-scripts/Notifications.ts",
+    background: "./src/background-scripts/Background.ts"
   },
   content: {
 
