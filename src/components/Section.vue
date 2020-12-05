@@ -5,9 +5,11 @@
         {{ title }}
       </slot>
     </h1>
-    <div class="section">
-      <slot></slot>
-    </div>
+    <slot name="content">
+      <div class="section">
+        <slot/>
+      </div>
+    </slot>
   </div>
 </template>
 

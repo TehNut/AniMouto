@@ -21,7 +21,7 @@ export default class Button extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
 .button {
   cursor: pointer;
   padding: 10px 15px;

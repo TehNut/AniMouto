@@ -1,5 +1,5 @@
 import { browser } from "webextension-polyfill-ts";
-import decode from "jwt-decode";
+import decode, { JwtPayload } from "jwt-decode";
 import gql from "graphql-tag";
 import { Module, VuexModule, MutationAction } from "vuex-module-decorators";
 import { AniListUser } from '@/models/User';
@@ -17,11 +17,18 @@ export default class UserModule extends VuexModule {
   async load() {
     const storage = await browser.storage.local.get();
     let user;
+    let cached: boolean = false;
     if (storage.token) {
-      user = (await getUser(storage.token)).data.Viewer;
+      if (storage.cachedUser) {
+        user = storage.cachedUser;
+      } else {
+        user = (await getUser(storage.token)).data.Viewer;
+        await browser.storage.local.set({ cachedUser: user });
+      }
     } else {
       user = new AniListUser();
     }
+
     return { 
       _token: storage.token || null,
       _user: user
@@ -30,7 +37,8 @@ export default class UserModule extends VuexModule {
 
   @MutationAction({ mutate: [ "_user" ] })
   async updateUser() {
-    return { _user: this._token ? await getUser(this._token) : new AniListUser() }
+    // @ts-ignore
+    return { _user: this.state?._token ? await getUser(this.state?._token) : new AniListUser() }
   }
 
   get token(): string | null {
@@ -45,8 +53,8 @@ export default class UserModule extends VuexModule {
     if (!this._token)
       return false;
 
-    const { exp } = decode(this._token);
-    return exp - Math.floor(Date.now() / 1000) >= 0;
+    const { exp } = decode<JwtPayload>(this._token);
+    return exp ? exp - Math.floor(Date.now() / 1000) >= 0 : false;
   }
 
   @MutationAction({ mutate: [ "_token", "_user" ] })
@@ -97,6 +105,6 @@ async function getUser(token: string): Promise<any> {
         }
       `)
     })
-  })
+  });
   return res.json();
 }
