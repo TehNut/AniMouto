@@ -116,7 +116,7 @@ export default class SearchResult extends Vue {
 
 .cover {
   width: 12%;
-  max-height: 70px;
+  height: 70px;
   object-fit: cover;
 }
 
