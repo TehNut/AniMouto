@@ -9,14 +9,14 @@
     <div class="buttons">
       <Tooltip
         class="button"
-        content="View on AniList"
+        :content="$t('search.view_site')"
         direction="left"
       >
         <img src="img/anilist.svg" class="anilist-logo" @click="openUrl(media.siteUrl)">
       </Tooltip>
       <Tooltip
         class="button"
-        content="Add to planning"
+        :content="$t('search.add_planning')"
         direction="left"
         v-if="canAddPlanning()"
       >
@@ -24,7 +24,7 @@
       </Tooltip>
       <Tooltip
         class="button"
-        content="Add to current"
+        :content="$t('search.add_current')"
         direction="left"
         v-if="canAddCurrent()"
       >
@@ -32,7 +32,7 @@
       </Tooltip>
       <Tooltip
         class="button"
-        content="Add to repeating"
+        :content="$t('search.add_repeat')"
         direction="left"
         v-if="canRewatch()"
       >

@@ -4,7 +4,7 @@
       <div class="input-container">
         <input 
           type="text" 
-          placeholder="Search AniList..." 
+          :placeholder="$t('search.input_placeholder')" 
           autocomplete="off"
           spellcheck="false"
           ref="searchBar"
@@ -13,16 +13,16 @@
       </div>
       <div class="filters">
         <div class="switcher">
-          <span class="switcher-option no-select" :class="{ selected: searchType === 'ANY' }" style="cursor:pointer" @click="searchType = 'ANY'">All</span>
-          <span class="switcher-option no-select" :class="{ selected: searchType === 'ANIME' }" style="cursor:pointer" @click="searchType = 'ANIME'">Anime</span>
-          <span class="switcher-option no-select" :class="{ selected: searchType === 'MANGA' }" style="cursor:pointer" @click="searchType = 'MANGA'">Manga</span>
-          <span class="switcher-option no-select" :class="{ selected: searchType === 'NOVEL' }" style="cursor:pointer" @click="searchType = 'NOVEL'">Novel</span>
+          <span class="switcher-option no-select" :class="{ selected: searchType === 'ANY' }" style="cursor:pointer" @click="searchType = 'ANY'">{{ $t("search.filter_all") }}</span>
+          <span class="switcher-option no-select" :class="{ selected: searchType === 'ANIME' }" style="cursor:pointer" @click="searchType = 'ANIME'">{{ $t("search.filter_anime") }}</span>
+          <span class="switcher-option no-select" :class="{ selected: searchType === 'MANGA' }" style="cursor:pointer" @click="searchType = 'MANGA'">{{ $t("search.filter_manga") }}</span>
+          <span class="switcher-option no-select" :class="{ selected: searchType === 'NOVEL' }" style="cursor:pointer" @click="searchType = 'NOVEL'">{{ $t("search.filter_novel") }}</span>
         </div>
-        <Checkbox v-model="adult">Hentai</Checkbox>
+        <Checkbox v-model="adult">{{ $t("search.filter_hentai") }}</Checkbox>
       </div>
     </div>
     <div v-if="!$apollo.queries.results.loading">
-      <Section title="Anime" v-if="animeResults.length > 0" class="result-section">
+      <Section :title="$t('search.filter_anime')" v-if="animeResults.length > 0" class="result-section">
         <template #content>
           <SearchResult
             v-for="media in animeResults"
@@ -31,7 +31,7 @@
           />
         </template>
       </Section>
-      <Section title="Manga" v-if="mangaResults.length > 0" class="result-section">
+      <Section :title="$t('search.filter_manga')" v-if="mangaResults.length > 0" class="result-section">
         <template #content>
           <SearchResult
             v-for="media in mangaResults"
@@ -40,7 +40,7 @@
           />
         </template>
       </Section>
-      <Section title="Novels" v-if="novelResults.length > 0" class="result-section">
+      <Section :title="$t('search.filter_novel')" v-if="novelResults.length > 0" class="result-section">
         <template #content>
           <SearchResult
             v-for="media in novelResults"

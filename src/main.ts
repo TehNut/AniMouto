@@ -1,10 +1,10 @@
 import Vue from "vue";
 import VueApollo from "vue-apollo";
-import VueI18n from "vue-i18n";
 import ApolloClient from "apollo-boost";
 import { browser } from "webextension-polyfill-ts";
 
 import "@/Icons"
+import i18n from "./i18n";
 import App from "@/App.vue";
 import router from "@/router";
 import store from "@/store";
@@ -13,7 +13,6 @@ Vue.config.productionTip = false;
 Vue.prototype.$browser = browser;
 
 Vue.use(VueApollo);
-Vue.use(VueI18n);
 
 async function createVueApp() {
   // Pre-load our state management
@@ -37,6 +36,7 @@ async function createVueApp() {
     router,
     store,
     apolloProvider,
+    i18n,
     render: h => h(App)
   }).$mount("#app");
 }
