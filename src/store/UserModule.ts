@@ -38,7 +38,7 @@ export default class UserModule extends VuexModule {
   @MutationAction({ mutate: [ "_user" ] })
   async updateUser() {
     // @ts-ignore
-    return { _user: this.state?._token ? await getUser(this.state?._token) : new AniListUser() }
+    return { _user: this.state?._token ? (await getUser(this.state?._token)).data.Viewer : new AniListUser() }
   }
 
   get token(): string | null {
@@ -80,6 +80,16 @@ export default class UserModule extends VuexModule {
     } catch (err) {
       throw err;
     }
+  }
+
+  @MutationAction({ mutate: [ "_token", "_user" ] })
+  async logout() {
+    await browser.storage.local.remove([ "token", "cachedUser" ]);
+
+    return {
+      _token: null,
+      _user: new AniListUser()
+    };
   }
 }
 

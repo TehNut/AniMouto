@@ -1,5 +1,15 @@
 <template>
-  <div id="app" :class="`theme-${settings.theme}`" :class="{ wide: settings.wide }">
+  <div 
+    id="app" 
+    :class="{ 
+      wide,
+      'theme-light': theme === 'light', 
+      'theme-dark': theme === 'dark', 
+      'theme-contrast-dark': theme === 'contrast-dark', 
+      'theme-contrast': theme === 'contrast', 
+    }"
+    :style="{ '--color-accent': `var(--color-${accent})` }"
+  >
     <div class="container">
       <div class="theme-dark sidebar">
         <div class="avatar">
@@ -38,7 +48,7 @@ import { Vue, Component } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import { AniListUser } from '@/models/User';
 import NavigationIcon from "@/components/NavigationIcon.vue"
-import Settings from './models/Settings';
+import { Settings } from './models/Settings';
 
 const root = namespace("root");
 const settings = namespace("settings");
@@ -53,8 +63,14 @@ export default class App extends Vue {
   @root.Getter("lastPage")
   lastPage!: string;
 
-  @settings.Getter("settings")
-  settings!: Settings;
+  @settings.Getter("theme")
+  theme!: string;
+
+  @settings.Getter("accent")
+  accent!: string;
+
+  @settings.Getter("wide")
+  wide!: boolean;
 
   @user.Getter("user")
   user!: AniListUser;
@@ -78,6 +94,7 @@ export default class App extends Vue {
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 @import url("assets/themes.css");
+@import url("assets/utility.css");
 
 :root {
   --content-width: 525px;
@@ -96,9 +113,11 @@ body {
   width: 10px;
   height: 10px;
 }
+
 ::-webkit-scrollbar-track {
   background: none;
 }
+
 ::-webkit-scrollbar-thumb {
   background: rgb(var(--color-accent));
 }
@@ -108,6 +127,7 @@ a {
   color: rgba(var(--color-accent, 0.7));
   transition: .3s;
 }
+
 a:hover {
   color: rgb(var(--color-accent));
 }

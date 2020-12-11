@@ -4,6 +4,7 @@ import VueRouter, { RouteConfig } from "vue-router";
 import Login from "@/views/Login.vue";
 import MediaList from "@/views/MediaList.vue";
 import Search from "@/views/Search.vue";
+import Settings from "@/views/Settings.vue";
 
 Vue.use(VueRouter);
 
@@ -22,6 +23,11 @@ routes.push({
 routes.push({
   path: "/search",
   component: Search
+});
+
+routes.push({
+  path: "/settings",
+  component: Settings
 });
 
 const router = new VueRouter({

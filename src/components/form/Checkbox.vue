@@ -1,7 +1,7 @@
 <template>
   <div>
     <label>
-      <input type="checkbox" v-model="checked">
+      <input type="checkbox" v-model="checked" @change="$emit('change', checked)">
       <span class="checkmark"></span>
       <slot/>
     </label>

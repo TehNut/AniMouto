@@ -10,7 +10,6 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
-import gql from "graphql-tag";
 import Button from "@/components/Button.vue";
 import { browser } from "webextension-polyfill-ts";
 import { AniListUser } from '@/models/User';

@@ -101,6 +101,11 @@ export default class Tooltip extends Vue {
 
 /* Directions */
 
+[data-tooltip]:after,
+.tooltip-top:after {
+  width: 160px;
+}
+
 /* Top (default) */
 [data-tooltip]:before,
 [data-tooltip]:after,
