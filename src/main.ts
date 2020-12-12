@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueApollo from "vue-apollo";
-import ApolloClient from "apollo-boost";
+import ApolloClient, { InMemoryCache, IntrospectionFragmentMatcher } from "apollo-boost";
 import { browser } from "webextension-polyfill-ts";
 
 import "@/Icons"
@@ -25,8 +25,15 @@ async function createVueApp() {
   const headers = {} as any;
   if (token)
     headers.Authorization = `Bearer ${token}`;
+  // Get our fragment types
+  const fragmentTypes = await fetch(browser.runtime.getURL("possibleTypes.json")).then(res => res.json());
   const apolloProvider = new VueApollo({
     defaultClient: new ApolloClient({
+      cache: new InMemoryCache({
+        fragmentMatcher: new IntrospectionFragmentMatcher({
+          introspectionQueryResultData: fragmentTypes 
+        })
+      }),
       uri: "https://graphql.anilist.co",
       headers
     }),
