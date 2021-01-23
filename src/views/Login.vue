@@ -3,7 +3,7 @@
     <div>
       <h1>Login</h1>
     </div>
-    <Button text="login" @click="login()">
+    <Button text="login" @click="handleLogin()">
   </div>
 </template>
 
@@ -23,24 +23,24 @@ const root = namespace("root");
   }
 })
 export default class Login extends Vue {
-  @user.Action("login")
-  loginAction!: Function;
+  @user.Action
+  login!: (app: Vue) => Promise<void>;
 
-  @user.Getter("loggedIn")
+  @user.Getter
   loggedIn!: boolean;
 
-  @root.Action("changePage")
-  changePageAction!: Function;
+  @root.Action
+  changePage!: (page: string) => Promise<void>;
 
-  async login() {
-    await this.loginAction(this);
-    await this.changePageAction("list");
+  async handleLogin() {
+    await this.login(this);
+    await this.changePage("list");
     this.$router.push("list").catch(e => {});
   }
 
   async created() {
     if (this.loggedIn) {
-      await this.changePageAction("list");
+      await this.changePage("list");
       this.$router.push("list").catch(e => {});
     }
   }

@@ -60,25 +60,25 @@ const user = namespace("user");
   }
 })
 export default class App extends Vue {
-  @root.Getter("lastPage")
+  @root.Getter
   lastPage!: string;
 
-  @settings.Getter("theme")
+  @settings.Getter
   theme!: string;
 
-  @settings.Getter("accent")
+  @settings.Getter
   accent!: string;
 
-  @settings.Getter("wide")
+  @settings.Getter
   wide!: boolean;
 
-  @user.Getter("user")
+  @user.Getter
   user!: AniListUser;
 
-  @user.Getter("loggedIn")
+  @user.Getter
   loggedIn!: boolean;
 
-  @root.Getter("unreadNotificationCount")
+  @root.Getter
   unreadNotificationCount: number = 0;
 
   async created() {
