@@ -24,15 +24,16 @@ export default class SettingsModule extends VuexModule {
     return { 
       _theme: settings?.theme || defaults.theme,
       _accent: settings?.accent || defaults.accent,
-      _wide: settings?.wide || defaults.wide,
-      _enablePolling: settings?.enablePolling || defaults.enablePolling,
+      _wide: settings?.wide === undefined ? false : settings.wide,
+      _enablePolling: settings?.enablePolling === undefined ? false : settings.enablePolling,
       _pollingInterval: settings?.pollingInterval || defaults.pollingInterval,
-      _desktopNotifications: settings?.desktopNotifications || defaults.desktopNotifications
+      _desktopNotifications: settings?.desktopNotifications === undefined ? false : settings.desktopNotifications
     };
   }
 
   @Action
   async save() {
+    console.log(this._enablePolling)
     browser.storage.local.set({ settings: {
       theme: this._theme,
       accent: this._accent,

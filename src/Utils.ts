@@ -34,6 +34,9 @@ export function readableTime(parsed: ParsedTime, opts?: ReadableOpts): string {
   if (parsed.seconds && opts?.includeSeconds)
     str += parsed.seconds + "s";
 
+  if (!opts?.includeSeconds && parsed.minutes < 1)
+    str += "<1m";
+
   return str.replace(/([a-z])/g, "$1 ");
 }
 

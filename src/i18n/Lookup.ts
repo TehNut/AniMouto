@@ -1,4 +1,3 @@
-import LanguageEnglish from './LanguageEnglish';
 import en from "./LanguageEnglish";
 
 export default function getLanguage(language: SupportedLanguages) {

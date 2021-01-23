@@ -1,7 +1,7 @@
 <template>
   <div>
     <label>
-      <input type="checkbox" v-model="checked" @change="$emit('change', checked)">
+      <input type="checkbox" :value="value" v-model="checked" @change="$emit('change', checked)">
       <span class="checkmark"></span>
       <slot/>
     </label>
@@ -9,12 +9,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, VModel } from "vue-property-decorator";
+import { Vue, Component, VModel, Prop } from "vue-property-decorator";
 
 @Component
 export default class Checkbox extends Vue {
   @VModel()
   checked!: boolean;
+
+  @Prop()
+  value?: boolean;
 }
 </script>
 

@@ -44,6 +44,11 @@ export default class RootModule extends VuexModule {
     return { _language: language };
   }
 
+  @Mutation
+  setNotificationCount(notificationCount: number) {
+    this._unreadNotificationCount = notificationCount;
+  }
+
   get lastPage() {
     return this._lastPage;
   }

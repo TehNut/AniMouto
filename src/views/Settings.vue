@@ -35,34 +35,30 @@
           :style="{ backgroundColor: `rgb(var(--color-${accent})` }"
           class="accent-button"
           @click="changeAndSave(() => changeAccent(accent))"
-        ></div>
+        />
       </div>
-      <Checkbox v-model="wideInner" @change="e => changeAndSave(() => setWide(!e))">
+      <Checkbox :value="wide" @change="e => changeAndSave(() => setWide(!e))">
         {{ $t('settings.theme.wide') }}
       </Checkbox>
     </Section>
     <Section :title="$t('settings.notifications.title')">
       <div class="flex-settings col spacer">
-        <Checkbox v-model="pollingEnabledInner" @change="e => changeAndSaveNotification(() => setPollingEnabled(!e))">
+        <Checkbox :value="enablePolling" @change="e => changeAndSaveNotification(() => setPollingEnabled(!e))">
           {{ $t("settings.notifications.enable_polling") }}
         </Checkbox>
       </div>
       <div class="flex-settings col spacer">
-        <span class="text-title text-h2">{{ $t('settings.notifications.polling_interval') }}</span>
-        <div class="input-wrapper">
-          <input 
-            type="number" 
-            :placeholder="$t('settings.notifications.polling_interval')" 
-            autocomplete="off"
-            spellcheck="false"
-            min="1"
-            v-model.number="pollingIntervalInner"
-            @change="e => changeAndSaveNotification(() => setPollingInterval(parseInt(e.target.value)))"        
-          />
-        </div>
+        <TextInput
+          :label="$t('settings.notifications.polling_interval')"
+          :min="1"
+          :value="pollingInterval"
+          @change="e => changeAndSaveNotification(() => setPollingInterval(e))"
+        />
+        <br/>
+        <span>{{ $t("settings.notifications.polling_interval_desc") }}</span
       </div>
       <div class="flex-settings col spacer">
-        <Checkbox v-model="desktopInner" @change="e => handleDesktopToggle(!e)">
+        <Checkbox :value="desktopNotifications" @change="e => handleDesktopToggle(!e)">
           {{ $t("settings.notifications.desktop_notifications") }}
         </Checkbox>
       </div>
@@ -77,6 +73,7 @@ import decode, { JwtPayload } from "jwt-decode";
 import Section from "@/components/Section.vue";
 import Tooltip from "@/components/Tooltip.vue";
 import Checkbox from "@/components/form/Checkbox.vue";
+import TextInput from "@/components/form/TextInput.vue";
 import Button from "@/components/Button.vue";
 import { namespace } from "vuex-class";
 import { Settings as SettingsObj } from "@/models/Settings";
@@ -97,7 +94,8 @@ type Theme = {
     Checkbox,
     Section,
     Tooltip,
-    Button
+    Button,
+    TextInput
   }
 })
 export default class Settings extends Vue {
@@ -191,10 +189,6 @@ export default class Settings extends Vue {
     "purple",
     "pink"
   ];
-  wideInner: boolean = false;
-  pollingEnabledInner: boolean = true;
-  pollingIntervalInner: number = 1;
-  desktopInner: boolean = false;
 
   changeAndSave(runner: () => void) {
     runner();
@@ -221,12 +215,6 @@ export default class Settings extends Vue {
 
   created() {
     this.decoded = decode(this.token);
-  }
-
-  mounted() {
-    this.wideInner = this.wide;
-    this.pollingIntervalInner = this.pollingInterval;
-    this.desktopInner = this.desktopNotifications;
   }
 }
 </script>
@@ -275,9 +263,5 @@ export default class Settings extends Vue {
 .accent-button:hover {
   border-radius: 50%;
   border: 2px solid rgb(var(--color-text-light));
-}
-
-.input-wrapper {
-  background-color: rgb(var(--color-foreground-blue));
 }
 </style>

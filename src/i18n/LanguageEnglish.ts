@@ -1,4 +1,5 @@
 export default {
+  language_name: "English",
   search: {
     input_placeholder: "Search AniList...",
     filter_all: "All",
@@ -32,6 +33,7 @@ export default {
       title: "Notifications",
       enable_polling: "Enable Notification Polling",
       polling_interval: "Polling Interval",
+      polling_interval_desc: "The number of minutes in between notification checks.",
       desktop_notifications: "Desktop Notifications"
     }
   },
