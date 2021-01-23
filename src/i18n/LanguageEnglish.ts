@@ -27,6 +27,39 @@ export default {
       theme_preview: "A",
       accent_color: "Accent Color",
       wide: "Wide"
+    },
+    notifications: {
+      title: "Notifications",
+      enable_polling: "Enable Notification Polling",
+      polling_interval: "Polling Interval",
+      desktop_notifications: "Desktop Notifications"
     }
+  },
+  notifications: {
+    title: "Notifications",
+    time_since: "{time} ago",
+    // Notification contexts
+    activity_like: "{user} liked your activity.",
+    activity_message: "{user} sent you a message.",
+    activity_reply: "{user} replied to your activity.",
+    activity_reply_like: "{user} liked your activity reply.",
+    activity_reply_subscribed: "{user} replied to an activity you're subscribed to.",
+    following: "{user} started following you.",
+    airing: "Episode {episode} of {media} aired.",
+    related_media_addition: "{media} was recently added to the site.",
+    thread_like: "{user} liked your forum thread, {thread}.",
+    thread_subscribed: "{user} commented in your subscribed forum thread  {thread}.", 
+    thread_comment_like: "{user} liked your comment, in the forum thread {thread}.",
+    thread_comment_reply: "{user} replied to your comment, in the forum thread {thread}.",
+    thread_comment_mention: "{user} mentioned you, in the forum thread {thread}.",
+    unknown_type: "This is an unknown notification type! Please report this so it can be properly supported.",
+    // Titles
+    new_activity: "New Activity",
+    new_message: "New Message",
+    new_episode: "New Episode",
+    new_relation: "New Related Media",
+    new_follower: "New Follower",
+    new_forum: "New Forum Activity",
+    unknown: "Unknown notification",
   }
 }

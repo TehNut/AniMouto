@@ -41,11 +41,38 @@
         {{ $t('settings.theme.wide') }}
       </Checkbox>
     </Section>
+    <Section :title="$t('settings.notifications.title')">
+      <div class="flex-settings col spacer">
+        <Checkbox v-model="pollingEnabledInner" @change="e => changeAndSaveNotification(() => setPollingEnabled(!e))">
+          {{ $t("settings.notifications.enable_polling") }}
+        </Checkbox>
+      </div>
+      <div class="flex-settings col spacer">
+        <span class="text-title text-h2">{{ $t('settings.notifications.polling_interval') }}</span>
+        <div class="input-wrapper">
+          <input 
+            type="number" 
+            :placeholder="$t('settings.notifications.polling_interval')" 
+            autocomplete="off"
+            spellcheck="false"
+            min="1"
+            v-model.number="pollingIntervalInner"
+            @change="e => changeAndSaveNotification(() => setPollingInterval(parseInt(e.target.value)))"        
+          />
+        </div>
+      </div>
+      <div class="flex-settings col spacer">
+        <Checkbox v-model="desktopInner" @change="e => handleDesktopToggle(!e)">
+          {{ $t("settings.notifications.desktop_notifications") }}
+        </Checkbox>
+      </div>
+    </Section>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+import { browser } from "webextension-polyfill-ts";
 import decode, { JwtPayload } from "jwt-decode";
 import Section from "@/components/Section.vue";
 import Tooltip from "@/components/Tooltip.vue";
@@ -95,6 +122,15 @@ export default class Settings extends Vue {
   @settings.Getter
   wide!: boolean;
 
+  @settings.Getter
+  enablePolling!: boolean;
+
+  @settings.Getter
+  pollingInterval!: number;
+
+  @settings.Getter
+  desktopNotifications!: boolean;
+
   @settings.Mutation
   changeTheme!: (theme: string) => void;
 
@@ -103,6 +139,15 @@ export default class Settings extends Vue {
 
   @settings.Mutation
   setWide!: (wide: boolean) => void;
+
+  @settings.Mutation
+  setPollingEnabled!: (enabled: boolean) => void;
+
+  @settings.Mutation
+  setPollingInterval!: (interval: number) => void;
+
+  @settings.Mutation
+  setDesktopNotifications!: (enabled: boolean) => void;
 
   @settings.Action
   save!: () => void;
@@ -147,10 +192,18 @@ export default class Settings extends Vue {
     "pink"
   ];
   wideInner: boolean = false;
+  pollingEnabledInner: boolean = true;
+  pollingIntervalInner: number = 1;
+  desktopInner: boolean = false;
 
   changeAndSave(runner: () => void) {
     runner();
     this.save();
+  }
+
+  async changeAndSaveNotification(runner: () => void) {
+    this.changeAndSave(runner);
+    await browser.runtime.sendMessage("RESET_ALARMS")
   }
 
   async logout() {
@@ -159,12 +212,21 @@ export default class Settings extends Vue {
     this.$router.push("login").catch(e => {});
   }
 
+  async handleDesktopToggle(enabled: boolean) {
+    if (enabled && !(await browser.permissions.contains({ permissions: [ "notifications"] })))
+      enabled = await browser.permissions.request({ permissions: [ "notifications" ] });
+
+    this.changeAndSaveNotification(() => this.setDesktopNotifications(enabled));
+  }
+
   created() {
     this.decoded = decode(this.token);
   }
 
   mounted() {
     this.wideInner = this.wide;
+    this.pollingIntervalInner = this.pollingInterval;
+    this.desktopInner = this.desktopNotifications;
   }
 }
 </script>
@@ -197,6 +259,10 @@ export default class Settings extends Vue {
   padding: 10px 0;
 }
 
+.option {
+  padding: 10px 0;
+}
+
 .accent-button {
   border-radius: 5px;
   border: 2px solid rgb(var(--color-background));
@@ -209,5 +275,9 @@ export default class Settings extends Vue {
 .accent-button:hover {
   border-radius: 50%;
   border: 2px solid rgb(var(--color-text-light));
+}
+
+.input-wrapper {
+  background-color: rgb(var(--color-foreground-blue));
 }
 </style>

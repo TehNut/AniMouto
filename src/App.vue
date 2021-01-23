@@ -22,7 +22,7 @@
           <navigation-icon page="list" icon="list"/>
           <navigation-icon page="search" icon="search"/>
           <navigation-icon page="notifications" icon="bell">
-            <div v-if="notificationCount > 0" class="notification-alert">{{ notificationCount }}</div>
+            <div v-if="unreadNotificationCount > 0" class="notification-alert">{{ unreadNotificationCount }}</div>
           </navigation-icon>
           <navigation-icon page="forum" icon="comments"/>
           <navigation-icon page="settings" icon="cog"/>
@@ -78,8 +78,8 @@ export default class App extends Vue {
   @user.Getter("loggedIn")
   loggedIn!: boolean;
 
-  // FIXME non-static number
-  notificationCount: number = 0;
+  @root.Getter("unreadNotificationCount")
+  unreadNotificationCount: number = 0;
 
   async created() {
     let page = this.lastPage;

@@ -5,6 +5,7 @@ import Login from "@/views/Login.vue";
 import MediaList from "@/views/MediaList.vue";
 import Search from "@/views/Search.vue";
 import Settings from "@/views/Settings.vue";
+import Notifications from "@/views/Notifications.vue";
 
 Vue.use(VueRouter);
 
@@ -23,6 +24,11 @@ routes.push({
 routes.push({
   path: "/search",
   component: Search
+});
+
+routes.push({
+  path: "/notifications",
+  component: Notifications
 });
 
 routes.push({
