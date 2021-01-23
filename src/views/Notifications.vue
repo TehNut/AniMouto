@@ -280,7 +280,6 @@ const root = namespace("root");
       update: data => data.Page.notifications,
       result({ data: { Viewer: { unreadNotificationCount }, Page: { notifications } } }) {
         this.notifications = notifications;
-        unreadNotificationCount = 2;  
         this.unreadCount = unreadNotificationCount;
         this.setNotificationCount(unreadNotificationCount);
       }
