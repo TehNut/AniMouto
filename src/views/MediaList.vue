@@ -1,28 +1,61 @@
 <template>
-  <div>
-    <div v-if="$apollo.queries.anime.loading">
+  <div :style="{ '--grid-gap': wide ? '16px' : '20px' }">
+    <div v-if="$apollo.queries.anime.loading || $apollo.queries.manga.loading">
       <Loader>
     </div>
-    <div v-else-if="$apollo.queries.anime.error">
+    <div v-else-if="$apollo.queries.anime.error || $apollo.queries.manga.error">
       <Error>
-        {{ $apollo.queries.anime.error }}
+        {{ $apollo.queries.anime.error || $apollo.queries.manga.error }}
       </Error>
     </div>
     <div v-else>
-      <Section>
+      <Section v-if="airing.length > 0">
         <template #title>
-          <a href="https://anilist.co/airing" target="_blank">Airing</a>
+          <a href="https://anilist.co/airing" target="_blank">{{ $t("list.section_airing") }}</a>
           <!-- TODO time behind -->
         </template>
 
         <div class="media-grid">
-          <img 
-            v-for="anime in anime"
-            :key="anime.media.id"
-            :src="anime.media.coverImage.large" 
-            :alt="anime.media.title.userPreferred"
-            width="100"
-          >
+          <MediaCard
+            v-for="entry in airing"
+            :key="entry.media.id"
+            :listEntry="entry"
+            :media="entry.media"
+            :mutationTarget="$apollo.queries.anime"
+          />
+        </div>
+      </Section>
+
+      <Section v-if="watching.length > 0" class="list-section">
+        <template #title>
+          <a :href="`https://anilist.co/user/${user.id}/animelist`" target="_blank">{{ $t("list.section_anime") }}</a>
+          <!-- TODO time behind -->
+        </template>
+
+        <div class="media-grid">
+          <MediaCard
+            v-for="entry in watching"
+            :key="entry.media.id"
+            :listEntry="entry"
+            :media="entry.media"
+            :mutationTarget="$apollo.queries.anime"
+          />
+        </div>
+      </Section>
+
+      <Section v-if="manga.length > 0" class="list-section">
+        <template #title>
+          <a :href="`https://anilist.co/user/${user.id}/mangalist`" target="_blank">{{ $t("list.section_manga") }}</a>
+        </template>
+
+        <div class="media-grid">
+          <MediaCard
+            v-for="entry in manga"
+            :key="entry.media.id"
+            :listEntry="entry"
+            :media="entry.media"
+            :mutationTarget="$apollo.queries.manga"
+          />
         </div>
       </Section>
     </div>
@@ -37,12 +70,46 @@ import gql from "graphql-tag";
 import Section from "@/components/Section.vue";
 import Loader from "@/components/Loader.vue";
 import Error from "@/components/Error.vue";
+import MediaCard from "@/components/MediaCard.vue";
+import { ListEntry } from '@/models/ListEntry';
 
 const user = namespace("user");
+const settings = namespace("settings");
+
+const listFragment = gql`
+  fragment active on MediaList {
+    id
+    media {
+      title {
+        userPreferred
+      }
+      id
+      type
+      episodes
+      chapters
+      siteUrl
+      duration
+      coverImage {
+        large
+        color
+      }
+      status
+      nextAiringEpisode {
+        episode
+        airingAt
+        timeUntilAiring
+      }
+    }
+    status
+    progress
+    updatedAt
+  }
+`
 
 @Component({
   components: {
     Section,
+    MediaCard,
     Loader,
     Error
   },
@@ -55,6 +122,23 @@ const user = namespace("user");
               ...active
             }
           }
+        }
+
+        ${listFragment}
+      `,
+      variables() {
+        return {
+          user: this.user.id,
+          status: this.status,
+        }
+      },
+      result(res) {
+        this.anime = res.data.anime.mediaList
+      }
+    },
+    manga: {
+      query: gql`
+        query ($user: Int, $status: [MediaListStatus], $starred: [Int]) {
           manga: Page(perPage: 48) {
             mediaList(userId: $user, status_in: $status, mediaId_in: $starred, type: MANGA, sort: UPDATED_TIME_DESC) {
               ...active
@@ -62,59 +146,60 @@ const user = namespace("user");
           }
         }
 
-        fragment active on MediaList {
-          id
-          media {
-            title {
-              userPreferred
-            }
-            id
-            type
-            episodes
-            chapters
-            siteUrl
-            duration
-            coverImage {
-              large
-              color
-            }
-            status
-            nextAiringEpisode {
-              episode
-              airingAt
-              timeUntilAiring
-            }
-          }
-          progress
-          updatedAt
-        }
+        ${listFragment}
       `,
       variables() {
         return {
           user: this.user.id,
-          status: [
-            "CURRENT",
-            "REPEATING"
-          ],
+          status: this.status,
         }
       },
-      result(result, key) {
-        this.anime = result.data.anime.mediaList;
-        this.manga = result.data.manga.mediaList;
+      result(res) {
+        this.manga = res.data.manga.mediaList
       }
     }
   }
 })
 export default class MediaList extends Vue {
-  @user.Getter("user")
+  @user.Getter
   user!: AniListUser;
 
-  anime!: any[];
+  @settings.Getter
+  wide!: boolean;
 
-  manga!: any[];
+  anime!: ListEntry[];
+
+  manga!: ListEntry[];
+
+  status = [ "CURRENT", "REPEATING" ];
+
+  get airing(): ListEntry[] {
+    return this.anime.filter(e => e.media.status === "AIRING" || e.media.nextAiringEpisode)
+      .sort((e1, e2) => e1.media.nextAiringEpisode.timeUntilAiring - e2.media.nextAiringEpisode.timeUntilAiring);
+  }
+
+  get watching(): ListEntry[] {
+    return this.anime.filter(e => e.media.status !== "AIRING" && !e.media.nextAiringEpisode);
+  }
+
+  created() {
+    // Every minute, decrement timeUntilAiring by 1 minute
+    setInterval(() => {
+      this.airing.forEach(e => e.media.nextAiringEpisode.timeUntilAiring -= 60);
+    }, 1000 * 60); 
+  }
 }
 </script>
 
 <style>
+.list-section {
+  padding-top: 10px;
+}
 
+.media-grid {
+  display: grid;
+  grid-gap: var(--grid-gap);
+  grid-template-columns: repeat(auto-fill, 85px);
+  grid-template-rows: repeat(auto-fill, 115px);
+}
 </style>

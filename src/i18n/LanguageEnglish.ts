@@ -1,5 +1,13 @@
 export default {
   language_name: "English",
+  list: {
+    section_airing: "Airing",
+    section_anime: "Anime in Progress",
+    section_manga: "Manga in Progress",
+    current_episode: "Ep {episode}",
+    behind_count: "{count} episode behind | {count} episodes behind",
+    progress: "Progress: {progress} | Progress: {progress}/{count}",
+  },
   search: {
     input_placeholder: "Search AniList...",
     filter_all: "All",
