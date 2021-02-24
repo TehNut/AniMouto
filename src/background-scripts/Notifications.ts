@@ -8,11 +8,11 @@ browser.runtime.onStartup.addListener(setupAlarms);
 browser.runtime.onInstalled.addListener(setupAlarms);
 
 // Listen for settings changes and reset alarms with new values
-browser.runtime.onMessage.addListener(async message => {
+browser.runtime.onMessage.addListener(message => {
   if (message !== MessageType.RESET_ALARMS)
     return;
 
-  await setupAlarms();
+  setupAlarms();
 });
 
 // Listen for alarms to be fired
