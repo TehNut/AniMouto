@@ -27,7 +27,6 @@ export default class NavigationIcon extends Vue {
   changePage!: Function;
 
   doChangePage() {
-    console.log(this.loggedIn);
     if (!this.loggedIn)
       return;
 
