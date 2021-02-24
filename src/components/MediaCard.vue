@@ -9,7 +9,8 @@
     }"
   >
     <div 
-      class="media-card" 
+      class="media-card"
+      :class="{ left: !canFitPopout() }"
       :style="{ backgroundImage: `url(${media.coverImage.large})` }"
       @mouseenter="hovered = true"
       @mouseleave="hovered = false"
@@ -137,6 +138,9 @@ export default class MediaCard extends Vue {
   }
 
   canFitPopout(): boolean {
+    if (!this.$el)
+      return true;
+
     const popoutWidth = this.wide ? 303 : 210;
     const bounding = this.$el.getBoundingClientRect();
     const parentBounding = this.$parent.$el.getBoundingClientRect();
@@ -154,6 +158,22 @@ export default class MediaCard extends Vue {
   width: 85px;
   height: 115px;
   border-radius: 4px;
+}
+
+.media-card:hover:not(.left) {
+  border-radius: 4px 0 0 4px;
+}
+
+.media-card:hover:not(.left) .behind {
+  border-radius: 0 0 0 4px;
+}
+
+.media-card:hover .behind {
+  border-radius: 0 0 4px 0;
+}
+
+.media-card:hover.left {
+  border-radius: 0 4px 4px 0;
 }
 
 .overlay-text {
@@ -208,12 +228,16 @@ export default class MediaCard extends Vue {
   height: 115px;
   left: 85px;
   z-index: 1;
-  border-radius: 0 4px 4px 0;
   pointer-events: none;
+}
+
+.media-popover:not(.left) {
+  border-radius: 0 4px 4px 0;
 }
 
 .media-popover.left {
   left: calc(var(--popover-width) * -1);
+  border-radius: 4px 0 0 4px;
 }
 
 .media-popover-container {
