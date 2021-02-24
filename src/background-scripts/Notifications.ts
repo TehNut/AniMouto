@@ -62,6 +62,9 @@ async function setupAlarms() {
 
 async function checkForNotifications() {
   const { token, unreadNotificationCount: currentCount }: { token: string, unreadNotificationCount: number } = await browser.storage.local.get() as { token: string, unreadNotificationCount: number };
+  if (!token)
+    return;
+  
   const response: { Viewer: { unreadNotificationCount: number } } = await queryAniList(token, "{ Viewer { unreadNotificationCount } }").then(res => res.data);
 
   await browser.browserAction.setBadgeText({ text: response.Viewer.unreadNotificationCount ? response.Viewer.unreadNotificationCount.toString() : "" });
