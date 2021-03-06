@@ -11,8 +11,10 @@
     <div v-else>
       <Section v-if="airing.length > 0">
         <template #title>
-          <a href="https://anilist.co/airing" target="_blank">{{ $t("list.section_airing") }}</a>
-          <!-- TODO time behind -->
+          <div class="title-wrapper">
+            <a href="https://anilist.co/airing" target="_blank">{{ $t("list.section_airing") }}</a>
+            <span class="behind-text">{{ airingBehind }}</span> 
+          </div>
         </template>
 
         <div class="media-grid">
@@ -28,8 +30,10 @@
 
       <Section v-if="watching.length > 0" class="list-section">
         <template #title>
-          <a :href="`https://anilist.co/user/${user.id}/animelist`" target="_blank">{{ $t("list.section_anime") }}</a>
-          <!-- TODO time behind -->
+          <div class="title-wrapper">
+            <a :href="`https://anilist.co/user/${user.id}/animelist`" target="_blank">{{ $t("list.section_anime") }}</a>
+            <span class="behind-text behind-warning">{{ watchingBehind }}</span> 
+          </div>
         </template>
 
         <div class="media-grid">
@@ -72,6 +76,7 @@ import Loader from "@/components/Loader.vue";
 import Error from "@/components/Error.vue";
 import MediaCard from "@/components/MediaCard.vue";
 import { ListEntry } from '@/models/ListEntry';
+import { readableTime, parseSeconds } from "@/Utils";
 
 const user = namespace("user");
 const settings = namespace("settings");
@@ -182,6 +187,46 @@ export default class MediaList extends Vue {
     return this.anime.filter(e => e.media.status !== "AIRING" && !e.media.nextAiringEpisode);
   }
 
+  get airingBehind(): string {
+    const seriesBehind = this.airing
+      .filter(m => (m.media.nextAiringEpisode.episode - 1) - m.progress > 0);
+
+    if (seriesBehind.length <= 0)
+      return "";
+
+    const episodesBehind = seriesBehind
+      .map(m => ((m.media.nextAiringEpisode.episode - 1) - m.progress))
+      .reduce((prev, curr) => prev + curr);
+
+    const minutesBehind = seriesBehind
+      .map(m => ((m.media.nextAiringEpisode.episode - 1) - m.progress) * m.media.duration)
+      .reduce((prev, curr) => prev + curr);
+
+    const timeBehind = readableTime(parseSeconds(minutesBehind * 60));
+
+    return this.$t("list.time_behind", { episodes: episodesBehind, time: timeBehind }) as string;
+  }
+
+  get watchingBehind(): string {
+    const seriesBehind = this.watching
+      .filter(m => m.media.episodes - m.progress > 0);
+
+    if (seriesBehind.length <= 0)
+      return "";
+
+    const episodesBehind = seriesBehind
+      .map(m => (m.media.episodes - m.progress))
+      .reduce((prev, curr) => prev + curr);
+
+    const minutesBehind = seriesBehind
+      .map(m => (m.media.episodes - m.progress) * m.media.duration)
+      .reduce((prev, curr) => prev + curr);
+
+    const timeBehind = readableTime(parseSeconds(minutesBehind * 60));
+
+    return this.$t("list.time_remaining", { episodes: episodesBehind, time: timeBehind }) as string;
+  }
+
   created() {
     // Every minute, decrement timeUntilAiring by 1 minute
     setInterval(() => {
@@ -201,5 +246,21 @@ export default class MediaList extends Vue {
   grid-gap: var(--grid-gap);
   grid-template-columns: repeat(auto-fill, 85px);
   grid-template-rows: repeat(auto-fill, 115px);
+}
+
+.title-wrapper {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+}
+
+.behind-text {
+  color: rgb(var(--color-red));
+  font-size: .7rem;
+  align-self: flex-end;
+}
+
+.behind-text.behind-warning {
+  color: rgb(var(--color-orange));
 }
 </style>

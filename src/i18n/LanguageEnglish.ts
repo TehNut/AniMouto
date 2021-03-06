@@ -6,6 +6,8 @@ export default {
     section_manga: "Manga in Progress",
     current_episode: "Ep {episode}",
     behind_count: "{count} episode behind | {count} episodes behind",
+    time_behind: "{time} behind ({episodes} episodes)",
+    time_remaining: "{time} left ({episodes} episodes)",
     progress: "Progress: {progress} | Progress: {progress}/{count}",
   },
   search: {
