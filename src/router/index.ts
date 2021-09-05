@@ -13,34 +13,40 @@ Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [];
 
 routes.push({
+  name: "login",
   path: "/login",
   component: Login
 });
 
 routes.push({
+  name: "list",
   path: "/list",
   component: MediaList
 });
 
 routes.push({
+  name: "search",
   path: "/search",
   component: Search
 });
 
 routes.push({
+  name: "notifications",
   path: "/notifications",
   component: Notifications
 });
 
 routes.push({
+  name: "settings",
   path: "/settings",
   component: Settings
 });
 
 routes.push({
+  name: "about",
   path: "/about",
   component: About
-})
+});
 
 const router = new VueRouter({
   routes

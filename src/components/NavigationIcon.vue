@@ -30,7 +30,7 @@ export default class NavigationIcon extends Vue {
     if (!this.loggedIn)
       return;
 
-    this.$router.push(this.page).catch(e => {});
+    this.$router.push({ name: this.page }).catch(e => {});
     this.changePage(this.page);
   }
 }
