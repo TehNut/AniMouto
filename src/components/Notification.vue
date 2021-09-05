@@ -46,7 +46,7 @@
     <!-- Unknown -->
     <div v-else class="notification-body">
       <a class="cover" href="https://github.com/TehNut/AniMouto" target="_blank">
-        <fa-icon icon="exclamation-circle">
+        <fa-icon icon="exclamation-circle" />
       </a>
       <span class="context">{{ $t("notifications.unknown_type") }}</span>
     </div>

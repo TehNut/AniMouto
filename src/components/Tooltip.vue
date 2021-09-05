@@ -5,7 +5,7 @@
     'tooltip-left': direction === 'left',
     'tooltip-right': direction === 'right',
   }" :data-tooltip="content">
-    <slot>
+    <slot />
   </div>
 </template>
 

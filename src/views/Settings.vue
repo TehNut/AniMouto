@@ -55,7 +55,7 @@
           @change="e => changeAndSaveNotification(() => setPollingInterval(e))"
         />
         <br/>
-        <span>{{ $t("settings.notifications.polling_interval_desc") }}</span
+        <span>{{ $t("settings.notifications.polling_interval_desc") }}</span>
       </div>
       <div class="flex-settings col spacer">
         <Checkbox :value="desktopNotifications" @change="e => handleDesktopToggle(!e)">

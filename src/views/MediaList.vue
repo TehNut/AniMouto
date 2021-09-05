@@ -1,7 +1,7 @@
 <template>
   <div :style="{ '--grid-gap': wide ? '16px' : '20px' }">
     <div v-if="$apollo.queries.anime.loading || $apollo.queries.manga.loading">
-      <Loader>
+      <Loader />
     </div>
     <div v-else-if="$apollo.queries.anime.error || $apollo.queries.manga.error">
       <Error>

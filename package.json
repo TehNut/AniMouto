@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build:chromium": "NODE_ENV=production vue-cli-service build --mode chromium && node ./scripts/get_possible_types.js",
+    "build:chromium": "NODE_ENV=development vue-cli-service build --mode chromium && node ./scripts/get_possible_types.js",
     "build:firefox": "NODE_ENV=production vue-cli-service build --mode firefox && node ./scripts/get_possible_types.js",
     "dev": "NODE_ENV=production vue-cli-service build --watch",
     "build-zip": "echo TODO"

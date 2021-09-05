@@ -3,7 +3,7 @@
     <div>
       <h1>Login</h1>
     </div>
-    <Button text="login" @click="handleLogin()">
+    <Button text="login" @click="handleLogin()" />
   </div>
 </template>
 
