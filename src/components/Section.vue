@@ -28,7 +28,7 @@ export default class Section extends Vue {
   background: rgb(var(--color-foreground));
   border-radius: 4px;
   padding: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .section-title {
