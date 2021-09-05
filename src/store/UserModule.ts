@@ -70,8 +70,6 @@ export default class UserModule extends VuexModule {
         }
       });
 
-      await browser.storage.local.set({ token });
-
       const user = await getUser(token);
       return { 
         _token: token,
