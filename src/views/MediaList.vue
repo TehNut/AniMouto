@@ -23,7 +23,7 @@
             :key="entry.media.id"
             :listEntry="entry"
             :media="entry.media"
-            :mutationTarget="$apollo.queries.anime"
+            :mutationTarget="$apollo.queries.anime.options"
           />
         </div>
       </Section>
@@ -42,7 +42,7 @@
             :key="entry.media.id"
             :listEntry="entry"
             :media="entry.media"
-            :mutationTarget="$apollo.queries.anime"
+            :mutationTarget="$apollo.queries.anime.options"
           />
         </div>
       </Section>
@@ -58,7 +58,7 @@
             :key="entry.media.id"
             :listEntry="entry"
             :media="entry.media"
-            :mutationTarget="$apollo.queries.manga"
+            :mutationTarget="$apollo.queries.manga.options"
           />
         </div>
       </Section>

@@ -28,7 +28,9 @@
           <div class="increment" @click.prevent="incrementProgress()">
             <div>{{ listEntry.progress }} +</div>
           </div>
-          <div class="show-info"><fa-icon icon="ellipsis-v" /></div> 
+          <router-link :to="{ name: 'media', params: { id: media.id } }" class="show-info">
+            <fa-icon icon="ellipsis-v" />
+          </router-link> 
         </div>
       </transition>
 
@@ -70,7 +72,7 @@ export default class MediaCard extends Vue {
   listEntry?: ListEntry;
 
   @Prop()
-  mutationTarget?: DocumentNode;
+  mutationTarget?: { query: DocumentNode, variables: any };
 
   hovered: boolean = false;
 
@@ -85,6 +87,8 @@ export default class MediaCard extends Vue {
       mutation: gql`
         mutation ($listId: Int, $mediaId: Int, $progress: Int, $status: MediaListStatus) {
           SaveMediaListEntry(id: $listId, mediaId: $mediaId, progress: $progress, status: $status) {
+            __typename
+            id
             progress
             status
           }
@@ -95,19 +99,6 @@ export default class MediaCard extends Vue {
         mediaId: this.media.id,
         progress: this.listEntry.progress + 1,
         status: (this.media.episodes || this.media.chapters) && this.listEntry.progress > (this.media.episodes || this.media.chapters || Infinity) ? "COMPLETED" : this.listEntry.status
-      },
-      update(store, response) {
-        if (_self.mutationTarget) {
-          const data: any = store.readQuery({ query: _self.mutationTarget });
-          // data[_self.media.type.toLowerCase()].mediaList.map((e: ListEntry) => {
-          //   if (e.id === _self.listEntry?.id) {
-          //     e.progress = response.data!.SaveMediaListEntry.progress
-          //     // @ts-ignore
-          //     e.status = MediaListStatus[response.data!.SaveMediaListEntry.status]
-          //   }
-          // });
-          // store.writeQuery({ query: _self.mutationTarget, data })
-        }
       },
       optimisticResponse: {
         __typename: "Mutation",
@@ -201,6 +192,7 @@ export default class MediaCard extends Vue {
 }
 
 .show-info {
+  color: inherit;
   position: absolute;
   right: 0;
   width: 20px;
