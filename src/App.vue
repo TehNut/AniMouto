@@ -24,7 +24,7 @@
           <navigation-icon page="notifications" icon="bell">
             <div v-if="unreadNotificationCount > 0" class="notification-alert">{{ unreadNotificationCount }}</div>
           </navigation-icon>
-          <navigation-icon page="forum" icon="comments"/>
+          <!-- <navigation-icon page="forum" icon="comments"/> -->
           <navigation-icon page="settings" icon="cog"/>
           <navigation-icon page="about" icon="info-circle"/>
         </div>

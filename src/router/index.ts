@@ -6,6 +6,7 @@ import MediaList from "@/views/MediaList.vue";
 import Search from "@/views/Search.vue";
 import Settings from "@/views/Settings.vue";
 import Notifications from "@/views/Notifications.vue";
+import About from "@/views/About.vue";
 
 Vue.use(VueRouter);
 
@@ -35,6 +36,11 @@ routes.push({
   path: "/settings",
   component: Settings
 });
+
+routes.push({
+  path: "/about",
+  component: About
+})
 
 const router = new VueRouter({
   routes
