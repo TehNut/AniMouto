@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faEllipsisV, faList, faSearch, faBell, faComments, faCog, faInfoCircle, faNotesMedical, faPlus, faRedo, faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisV, faList, faSearch, faBell, faComments, faCog, faInfoCircle, faNotesMedical, faPlus, faRedo, faExclamationCircle, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(
@@ -14,7 +14,8 @@ library.add(
   faNotesMedical,
   faPlus,
   faRedo,
-  faExclamationCircle
+  faExclamationCircle,
+  faTrash
 );
 
 Vue.component("fa-icon", FontAwesomeIcon);

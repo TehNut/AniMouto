@@ -28,6 +28,27 @@
         <a place="media" :href="notification.media.url" target="_blank">{{ notification.media.title.userPreferred }}</a>
       </i18n>
     </div>
+    <!-- Media merged -->
+    <div v-else-if="innerType === 'MEDIA_MERGE'" class="notification-body">
+      <a class="cover" :href="notification.media.url" target="_blank">
+        <img
+          :src="notification.media.img.large" 
+          :alt="notification.media.title.userPreferred"
+        >
+      </a>
+      <i18n :path="`notifications.${type.toLowerCase()}`" class="context" tag="span" :places="{ merged: notification.deletedMediaTitle }">
+        <a place="media" :href="notification.media.url" target="_blank">{{ notification.media.title.userPreferred }}</a>
+      </i18n>
+    </div>
+    <!-- Media deleted -->
+    <div v-else-if="innerType === 'MEDIA_DELETED'" class="notification-body">
+      <span class="cover">
+        <fa-icon icon="trash" />
+      </span>
+      <span class="context">
+        {{ $t(`notifications.${type.toLowerCase()}`, { deleted: notification.deletedMediaTitles.join(", ") }) }}
+      </span>
+    </div>
     <!-- Thread-based -->
     <div v-else-if="innerType === 'THREAD'" class="notification-body">
       <a class="cover" :href="notification.user.url" target="_blank">
@@ -59,38 +80,34 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 import { Notification, NotificationType } from "@/models/Notifcation";
 import { parseSeconds, readableTime } from "@/Utils";
 
-const activityNotifications: NotificationType[] = [ 
-  NotificationType.ACTIVITY_LIKE, 
-  NotificationType.ACTIVITY_MENTION,
-  NotificationType.ACTIVITY_MESSAGE,
-  NotificationType.ACTIVITY_REPLY,
-  NotificationType.ACTIVITY_REPLY_LIKE,
-  NotificationType.ACTIVITY_REPLY_SUBSCRIBED,
-  NotificationType.FOLLOWING
-];
-const mediaNotifications: NotificationType[] = [
-  NotificationType.AIRING,
-  NotificationType.RELATED_MEDIA_ADDITION,
-];
-const threadNotifications: NotificationType[] = [
-  NotificationType.THREAD_COMMENT_LIKE,
-  NotificationType.THREAD_COMMENT_MENTION,
-  NotificationType.THREAD_COMMENT_REPLY,
-  NotificationType.THREAD_LIKE,
-  NotificationType.THREAD_SUBSCRIBED,
-];
-
-type InnerType = "ACTIVITY" | "MEDIA" | "THREAD" | "UNKNOWN";
-
+type InnerType = "ACTIVITY" | "MEDIA" | "THREAD" | "MEDIA_MERGE" | "MEDIA_DELETION" | "UNKNOWN";
 function getInnerType(type: NotificationType): InnerType {
-  if (activityNotifications.includes(type))
-    return "ACTIVITY";
-  else if (mediaNotifications.includes(type))
-    return "MEDIA";
-  else if (threadNotifications.includes(type))
-    return "THREAD";
-  else
-    return "UNKNOWN";
+  switch (type) {
+    case NotificationType.ACTIVITY_LIKE: 
+    case NotificationType.ACTIVITY_MENTION:
+    case NotificationType.ACTIVITY_MESSAGE:
+    case NotificationType.ACTIVITY_REPLY:
+    case NotificationType.ACTIVITY_REPLY_LIKE:
+    case NotificationType.ACTIVITY_REPLY_SUBSCRIBED:
+    case NotificationType.FOLLOWING:
+      return "ACTIVITY";
+    case NotificationType.AIRING:
+    case NotificationType.RELATED_MEDIA_ADDITION:
+    case NotificationType.MEDIA_DATA_CHANGE:
+      return "MEDIA";
+    case NotificationType.MEDIA_MERGE:
+      return "MEDIA_MERGE";
+    case NotificationType.MEDIA_DELETION:
+      return "MEDIA_DELETION"
+    case NotificationType.THREAD_COMMENT_LIKE:
+    case NotificationType.THREAD_COMMENT_MENTION:
+    case NotificationType.THREAD_COMMENT_REPLY:
+    case NotificationType.THREAD_LIKE:
+    case NotificationType.THREAD_SUBSCRIBED:
+      return "THREAD";
+    default:
+      return "UNKNOWN";
+  }
 }
 
 @Component

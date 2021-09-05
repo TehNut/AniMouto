@@ -41,7 +41,7 @@ const root = namespace("root");
   apollo: {
     notifications: {
       query: gql`
-        query($amount: Int, $reset: Boolean) {
+        query ($amount: Int, $reset: Boolean) {
           Viewer {
             unreadNotificationCount
           }
@@ -227,6 +227,32 @@ const root = namespace("root");
                 user {
                   ...user
                 }
+                context
+                createdAt
+                type
+              }
+              ... on MediaDataChangeNotification {
+                id
+                media {
+                  ...media
+                }
+                context
+                createdAt
+                type
+              }
+              ... on MediaDeletionNotification {
+                id
+                deletedMediaTitle
+                context
+                createdAt
+                type
+              }
+              ... on MediaMergeNotification {
+                id
+                media {
+                  ...media
+                }
+                deletedMediaTitles
                 context
                 createdAt
                 type
