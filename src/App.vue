@@ -166,6 +166,7 @@ a:hover {
   overflow-y: scroll;
   overflow-x: hidden;
   padding: 20px 10px 10px;
+  position: relative;
 }
 
 .navigation {

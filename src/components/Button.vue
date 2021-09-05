@@ -1,11 +1,13 @@
 <template>
-  <div @click="$emit('click')" class="button ripple" :style="getColorOverride()">
-    {{ text }}
+  <div @click="onClick()" class="button ripple" :style="getColorOverride()">
+    <slot>
+      {{ text }}
+    </slot>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component, Prop, PropSync } from "vue-property-decorator";
 
 @Component
 export default class Button extends Vue {
@@ -15,8 +17,21 @@ export default class Button extends Vue {
   @Prop()
   color?: string;
 
+  @Prop({ default: false })
+  disabled?: boolean;
+
   getColorOverride() {
+    if (this.disabled)
+      return { backgroundColor: "rgba(var(--color-text), 0.6)", color: "rgb(var(--color-text))" }
+
     return this.color ? { backgroundColor: this.color } : null;
+  }
+
+  onClick() {
+    if (this.disabled)
+      return;
+    
+    this.$emit("click");
   }
 }
 </script>

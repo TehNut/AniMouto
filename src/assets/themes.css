@@ -10,6 +10,7 @@
   --color-text-light: 122, 133, 143;
   --color-text-lighter: 146, 153, 161;
   /* No theming */
+  --color-shadow: 6, 13, 34;
   --color-overlay: 31, 38, 49;
   --color-text-bright: 237, 241, 245;
   --color-blue: 61, 180, 242;

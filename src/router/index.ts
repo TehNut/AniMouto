@@ -7,6 +7,7 @@ import Search from "@/views/Search.vue";
 import Settings from "@/views/Settings.vue";
 import Notifications from "@/views/Notifications.vue";
 import About from "@/views/About.vue";
+import Media from "@/views/Media.vue";
 
 Vue.use(VueRouter);
 
@@ -46,6 +47,12 @@ routes.push({
   name: "about",
   path: "/about",
   component: About
+});
+
+routes.push({
+  name: "media",
+  path: "/media/:id",
+  component: Media
 });
 
 const router = new VueRouter({

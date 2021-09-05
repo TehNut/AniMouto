@@ -6,7 +6,7 @@
       </slot>
     </h1>
     <slot name="content">
-      <div class="section">
+      <div class="section" :style="maxContentHeight > 0 ? { maxHeight: `${maxContentHeight}px`, overflowY: 'scroll' } : ''">
         <slot/>
       </div>
     </slot>
@@ -20,6 +20,9 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 export default class Section extends Vue {
   @Prop()
   title!: string;
+
+  @Prop({ default: -1 })
+  maxContentHeight!: number;
 }
 </script>
 
