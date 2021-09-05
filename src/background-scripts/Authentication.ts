@@ -1,8 +1,7 @@
 import browser from "webextension-polyfill";
-import { MessageType } from "@/background-scripts/Background";
 
 browser.runtime.onMessage.addListener(message => {
-  if (message !== MessageType.START_AUTH)
+  if (message !== "START_AUTH")
     return;
 
   return browser.identity.launchWebAuthFlow({

@@ -1,6 +1,6 @@
 import browser from "webextension-polyfill";
 import { Notification, NotificationType } from "@/models/Notifcation";
-import { MessageType, queryAniList } from './Background';
+import { queryAniList } from './Background';
 import languageLookup, { SupportedLanguages, formatHandlebars } from "@/i18n/Lookup";
 
 // Initialize alarms on startup/installation
@@ -9,7 +9,7 @@ browser.runtime.onInstalled.addListener(setupAlarms);
 
 // Listen for settings changes and reset alarms with new values
 browser.runtime.onMessage.addListener(message => {
-  if (message !== MessageType.RESET_ALARMS)
+  if (message !== "RESET_ALARMS")
     return;
 
   setupAlarms();
@@ -23,13 +23,15 @@ browser.alarms.onAlarm.addListener(async alarm => {
   await checkForNotifications();
 });
 
-browser.notifications.onClicked.addListener(id => {
-  if (id.startsWith("https://anilist.co/"))
-    window.open(id);
-    
-  if (id === "unknown")
-    window.open("https://github.com/TehNut/AniMouto");
-});
+if (browser.notifications) {
+  browser.notifications.onClicked.addListener(id => {
+    if (id.startsWith("https://anilist.co/"))
+      window.open(id);
+      
+    if (id === "unknown")
+      window.open("https://github.com/TehNut/AniMouto");
+  });
+}
 
 type NotificationSettings = {
   notificationPolling: boolean;
