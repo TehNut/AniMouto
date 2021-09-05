@@ -79,7 +79,7 @@ export default class App extends Vue {
   loggedIn!: boolean;
 
   @root.Getter
-  unreadNotificationCount: number = 0;
+  unreadNotificationCount!: number;
 
   async created() {
     let page = this.lastPage;
