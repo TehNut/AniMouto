@@ -4,7 +4,7 @@ const fetch = require("node-fetch");
 
 (async  () => {
   const possibleTypes = await getPossibleTypes();
-  writeFileSync(join(__dirname, "../dist", "possibleTypes.json"), JSON.stringify(possibleTypes), "utf8");
+  writeFileSync(join(__dirname, "../dist", process.env.BROWSER_TARGET, "possibleTypes.json"), JSON.stringify(possibleTypes), "utf8");
 })();
 
 async function getPossibleTypes() {

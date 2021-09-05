@@ -27,6 +27,8 @@ module.exports = {
   // in index.html.
   filenameHashing: false,
 
+  outputDir: `dist/${process.env.VUE_APP_BROWSER}`,
+
   // Add webpack jobs.
   chainWebpack: (config) => {
     // Disable code splitting.
@@ -44,6 +46,19 @@ module.exports = {
 
             // Fill manifest values with package value.
             m.version = packageJson.version;
+
+            const matcher = /__(firefox|chromium)__(\w+)/;
+            Object.entries(m)
+              .filter(([ key ]) => {
+                const result = matcher.exec(key);
+                return result;
+              })
+              .forEach(([ key, value ]) => {
+                const result = matcher.exec(key);
+                delete m[key]
+                if (result[1] === process.env.VUE_APP_BROWSER)
+                  m[result[2]] = value;
+              });
 
             return JSON.stringify(m, null, 2);
           },

@@ -4,10 +4,12 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build-dev:chromium": "NODE_ENV=development vue-cli-service build --mode chromium && node ./scripts/get_possible_types.js",
-    "build-dev:firefox": "NODE_ENV=development vue-cli-service build --mode firefox && node ./scripts/get_possible_types.js",
-    "build:chromium": "NODE_ENV=production vue-cli-service build --mode chromium && node ./scripts/get_possible_types.js",
-    "build:firefox": "NODE_ENV=production vue-cli-service build --mode firefox && node ./scripts/get_possible_types.js",
+    "build-dev": "npm run build-dev:chromium && npm run build-dev:firefox",
+    "build-dev:chromium": "NODE_ENV=development vue-cli-service build --mode chromium && BROWSER_TARGET=chromium node ./scripts/get_possible_types.js",
+    "build-dev:firefox": "NODE_ENV=development vue-cli-service build --mode firefox && BROWSER_TARGET=firefox node ./scripts/get_possible_types.js",
+    "build": "npm run build:chromium && npm run build:firefox",
+    "build:chromium": "NODE_ENV=production vue-cli-service build --mode chromium && BROWSER_TARGET=chromium node ./scripts/get_possible_types.js",
+    "build:firefox": "NODE_ENV=production vue-cli-service build --mode firefox && BROWSER_TARGET=firefox node ./scripts/get_possible_types.js",
     "dev": "NODE_ENV=production vue-cli-service build --watch",
     "build-zip": "echo TODO"
   },

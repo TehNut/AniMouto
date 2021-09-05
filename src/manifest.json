@@ -3,7 +3,7 @@
   "short_name": "AniMouto",
   "author": "Nicholas \"TehNut\" Ignoffo",
   "description": "A little sister to enhance your AniList experience.",
-  "offline_enabled": false,
+  "__chromium__offline_enabled": false,
   "permissions": [
     "storage",
     "alarms",
@@ -38,8 +38,8 @@
     "/oauth2/*"
   ],
   "manifest_version": 2,
-  "key": "animouto",
-  "browser_specific_settings": {
+  "__chromium__key": "animouto",
+  "__firefox__browser_specific_settings": {
     "gecko": {
       "id": "animouto@animouto.moe"
     }
