@@ -1,4 +1,4 @@
-import { browser } from "webextension-polyfill-ts";
+import browser from "webextension-polyfill";
 import { Module, VuexModule, MutationAction, Mutation } from "vuex-module-decorators";
 import Vue from "vue";
 import { SupportedLanguages } from '@/i18n/Lookup';

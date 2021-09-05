@@ -1,4 +1,4 @@
-import { browser } from "webextension-polyfill-ts";
+import browser from "webextension-polyfill";
 import { Notification, NotificationType } from "@/models/Notifcation";
 import { MessageType, queryAniList } from './Background';
 import languageLookup, { SupportedLanguages, formatHandlebars } from "@/i18n/Lookup";

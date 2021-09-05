@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueApollo from "vue-apollo";
 import ApolloClient, { InMemoryCache, IntrospectionFragmentMatcher } from "apollo-boost";
-import { browser } from "webextension-polyfill-ts";
+import browser from "webextension-polyfill";
 
 import "@/Icons"
 import i18n from "./i18n";

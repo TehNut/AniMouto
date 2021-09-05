@@ -1,5 +1,5 @@
 import { Settings, defaults } from '@/models/Settings';
-import { browser } from "webextension-polyfill-ts";
+import browser from "webextension-polyfill";
 import { Module, VuexModule, MutationAction, Action, Mutation } from "vuex-module-decorators";
 
 @Module({

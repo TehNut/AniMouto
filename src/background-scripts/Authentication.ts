@@ -1,4 +1,4 @@
-import { browser } from "webextension-polyfill-ts";
+import browser from "webextension-polyfill";
 import { MessageType } from "@/background-scripts/Background";
 
 browser.runtime.onMessage.addListener(message => {

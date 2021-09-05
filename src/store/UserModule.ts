@@ -1,4 +1,4 @@
-import { browser } from "webextension-polyfill-ts";
+import browser from "webextension-polyfill";
 import decode, { JwtPayload } from "jwt-decode";
 import gql from "graphql-tag";
 import { Module, VuexModule, MutationAction } from "vuex-module-decorators";

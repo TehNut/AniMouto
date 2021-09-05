@@ -68,7 +68,7 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import { browser } from "webextension-polyfill-ts";
+import browser from "webextension-polyfill";
 import decode, { JwtPayload } from "jwt-decode";
 import Section from "@/components/Section.vue";
 import Tooltip from "@/components/Tooltip.vue";

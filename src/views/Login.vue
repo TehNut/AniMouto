@@ -11,7 +11,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
 import Button from "@/components/Button.vue";
-import { browser } from "webextension-polyfill-ts";
+import browser from "webextension-polyfill";
 import { AniListUser } from '@/models/User';
 
 const user = namespace("user");
