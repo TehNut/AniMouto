@@ -86,7 +86,7 @@ export default class App extends Vue {
     if (!this.loggedIn)
       page = "login";
 
-    this.$router.push(page).catch(e => {});
+    this.$router.push({ name: page }).catch(e => {});
   }
 };
 </script>
