@@ -28,9 +28,9 @@
           <div class="increment" @click.prevent="incrementProgress()">
             <div>{{ listEntry.progress }} +</div>
           </div>
-          <router-link :to="{ name: 'media', params: { id: media.id } }" class="show-info">
+          <span class="show-info" @click.prevent="navigateToMedia()">
             <fa-icon icon="ellipsis-v" />
-          </router-link> 
+          </span> 
         </div>
       </transition>
 
@@ -137,6 +137,11 @@ export default class MediaCard extends Vue {
     const parentBounding = this.$parent.$el.getBoundingClientRect();
     return parentBounding.right > bounding.right + popoutWidth
   }
+
+  navigateToMedia() {
+    this.hovered = false;
+    this.$router.push({ name: 'media', params: { id: this.media.id.toString() } })
+  }
 }
 </script>
 
@@ -194,6 +199,7 @@ export default class MediaCard extends Vue {
 .show-info {
   color: inherit;
   position: absolute;
+  cursor: pointer;
   right: 0;
   width: 20px;
   transition: .2s;
