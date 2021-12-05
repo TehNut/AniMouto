@@ -76,6 +76,7 @@ export default {
     time_since: "{time} ago",
     // Notification contexts
     activity_like: "{user} liked your activity.",
+    activity_mention: "{user} mentioned you in their activity.",
     activity_message: "{user} sent you a message.",
     activity_reply: "{user} replied to your activity.",
     activity_reply_like: "{user} liked your activity reply.",
