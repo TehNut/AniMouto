@@ -55,7 +55,7 @@ import { namespace } from "vuex-class";
 import gql from "graphql-tag";
 import { DocumentNode } from 'graphql';
 import { Media } from "@/models/Media";
-import { ListEntry, MediaListStatus } from "@/models/ListEntry";
+import { ListEntry } from "@/models/ListEntry";
 import { parseSeconds, readableTime } from "@/Utils";
 
 const settings = namespace("settings");
@@ -79,8 +79,6 @@ export default class MediaCard extends Vue {
   incrementProgress() {
     if (!this.listEntry)
       return;
-
-    console.log(this.mutationTarget)
 
     const _self = this;
     this.$apollo.mutate({

@@ -1,3 +1,10 @@
+export function readableEnum(value: string) {
+  return value.toLowerCase()
+    .split("_")
+    .map(v => v.charAt(0).toUpperCase() + v.substring(1))
+    .join(" ");
+}
+
 export function parseSeconds(seconds: number, includeWeeks?: boolean): ParsedTime {
   let weeks = 0;
   if (includeWeeks) {

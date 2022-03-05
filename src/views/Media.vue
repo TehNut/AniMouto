@@ -76,14 +76,14 @@
             <a :href="getContextualLink('characters')" target="_blank">{{ $t("media.characters") }}</a>
           </template>
           <div class="relation-grid">
-            <a
+            <PersonCard 
               v-for="character in characters"
               :key="character.id"
-              :href="character.node.siteUrl"
-              target="_blank"
-            >
-              <img :src="character.node.image.large" :alt="character.node.name.userPreferred">
-            </a>
+              :url="character.node.siteUrl" 
+              :image="character.node.image.large" 
+              :name="character.node.name.userPreferred" 
+              :role="getCharacterRole(character)"
+            />
           </div>
         </Section>
         <Section v-if="staff.length > 0">
@@ -91,14 +91,14 @@
             <a :href="getContextualLink('staff')" target="_blank">{{ $t("media.staff") }}</a>
           </template>
           <div class="relation-grid">
-            <a
+            <PersonCard 
               v-for="staffer in staff"
               :key="staffer.id"
-              :href="staffer.node.siteUrl"
-              target="_blank"
-            >
-              <img :src="staffer.node.image.large" :alt="staffer.node.name.userPreferred">
-            </a>
+              :url="staffer.node.siteUrl" 
+              :image="staffer.node.image.large" 
+              :name="staffer.node.name.userPreferred" 
+              :role="staffer.role"
+            />
           </div>
         </Section>
       </div>
@@ -115,6 +115,8 @@ import Loader from "@/components/Loader.vue";
 import Error from "@/components/Error.vue";
 import Button from "@/components/Button.vue";
 import Tooltip from "@/components/Tooltip.vue";
+import PersonCard from "@/components/PersonCard.vue";
+import { readableEnum } from "@/Utils";
 
 const settings = namespace("settings");
 
@@ -124,7 +126,8 @@ const settings = namespace("settings");
     Loader,
     Error,
     Button,
-    Tooltip
+    Tooltip,
+    PersonCard
   },
   apollo: {
     media: {
@@ -147,9 +150,9 @@ const settings = namespace("settings");
             description(asHtml: true)
             isFavorite: isFavourite
             format
-            status
+            status(version: 2)
             type
-            staff(perPage: 12, sort: RELEVANCE) {
+            staff(perPage: 12, sort: [RELEVANCE, ID]) {
               edges {
                 id
                 role
@@ -168,7 +171,7 @@ const settings = namespace("settings");
                 total
               }
             }
-            characters(perPage: 12, sort: RELEVANCE) {
+            characters(perPage: 12, sort: [ROLE, RELEVANCE, ID]) {
               edges {
                 id
                 role
@@ -294,6 +297,10 @@ export default class Media extends Vue {
 
     return this.media.staff.edges
       .slice(0, Math.min(this.media.staff.edges.length, this.wide ? 12 : 8));
+  }
+
+  getCharacterRole(character: any) {
+    return readableEnum(character.role)
   }
 }
 </script>
