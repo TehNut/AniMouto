@@ -26,16 +26,14 @@ cd AniMouto
 npm install
 ```
 
+The dependencies should now all be installed. Next, run the `watch:*` script. This will watch for file changes and rebuild the extension for each supported browser environment. You can either install the built directories as temporary extensions, or run the relevant `serve` command to launch temporary browser environments with the extension pre-installed.
+
 ### Packaging
 
-#### `npm run build`
+#### `npm run build:*`
 
-Builds the extension into `dist` for testing in the browser. You can load this directory as a temporary extension.
+Builds the project for all supported browser environments and places them into `/dist/`.
 
-#### `npm run build-zip`
+#### `npm run package`
 
-Builds a zip file from the files in `dist` and places it in `dist-zip`. This command should be paired with `build`.
-
-#### `npm run clean`
-
-Cleans the `dist` directory. This command should be run before `build` when intending to package.
+This is currently not yet implemented.
