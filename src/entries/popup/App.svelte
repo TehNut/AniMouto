@@ -21,7 +21,7 @@
 </script>
 
 <div 
-  class="{$extensionConfig.theme.wide ? "w-[716px]" : "w-[525px]"} h-[600px] flex theme-{$extensionConfig.theme.primary} text-base" style="--color-accent:var(--color-{$extensionConfig.theme.accent})">
+  class="root {$extensionConfig.theme.wide ? "w-[716px]" : "w-[525px]"} h-[600px] flex theme-{$extensionConfig.theme.primary} text-base" style="--color-accent:var(--color-{$extensionConfig.theme.accent})">
   <nav class="w-14 h-full flex-none flex flex-col items-center justify-between bg-variable border-r-4 border-r-accent" style="--color-variable:var(--sidebar-background)">
     <a href={$user.siteUrl} target="_blank" class="flex-none mt-2">
       <img src={$user.avatar.large} alt="User avatar" class="rounded-full aspect-square w-12">

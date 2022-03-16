@@ -58,12 +58,12 @@
 {:else if $media.error}
   <Error text={$media.error.message} />
 {:else}
-  <div class="absolute w-full h-[20%] inset-0 bg-cover bg-center" style="background-image:url({$media.data.Media.bannerImage})">
+  <div class="absolute w-full h-[20vh] inset-0 bg-cover bg-center" style="background-image:url({$media.data.Media.bannerImage})">
     <div class="h-full w-full bg-gradient-to-b from-shadow/40 to-shadow/60" />
   </div>
   <div 
     class="w-full mt-16 flex flex-col space-y-4 relative z-10" 
-    style="--color-variable:{hexToRgb($media.data.Media.coverImage.color) || "--color-accent"};--scroller-thumb:{hexToRgb($media.data.Media.coverImage.color) || "--color-accent"}"
+    style="--color-variable:{hexToRgb($media.data.Media.coverImage.color) || "--color-accent"};--scroller-thumb:{hexToRgb($media.data.Media.coverImage.color) || "var(--color-accent)"}"
   >
     <div class="flex space-x-4">
       <div class="flex-none w-32 aspect-[3/4] bg-cover bg-center" style="background-image:url({$media.data.Media.coverImage.extraLarge})" />

@@ -29,7 +29,10 @@
   --color-purple: 146 86 243;
   --color-pink: 252 157 214;
   --sidebar-background: 31 35 45;
-  --scroller-thumb: var(--color-accent, var(--color-blue))
+}
+
+.root {
+  --scroller-thumb: var(--color-accent, var(--color-blue));
 }
 
 .theme-light {
