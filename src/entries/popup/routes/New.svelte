@@ -1,6 +1,8 @@
 <script lang="ts">
-  import { OperationStore, operationStore, query } from "@urql/svelte";
+  import type { OperationStore } from "@urql/svelte";
+  import { operationStore, query } from "@urql/svelte";
   import Lazy from "svelte-lazy";
+  import { link } from "svelte-spa-router";
   import type { RecentMedia } from "$lib/graphql";
   import { RecentMediaQuery } from "$lib/graphql";
   import { extensionConfig } from "$lib/store";
@@ -8,7 +10,7 @@
   import Loader from "$lib/components/Loader.svelte";
   import Error from "$lib/components/Error.svelte";
   import { hexToRgb, textify } from "$lib/util";
-import Tooltip from "$lib/components/Tooltip.svelte";
+  import Tooltip from "$lib/components/Tooltip.svelte";
 
   const recentAnime = operationStore<{ Page: RecentMedia }>(RecentMediaQuery, {
     type: "ANIME",
@@ -56,7 +58,7 @@ import Tooltip from "$lib/components/Tooltip.svelte";
                   {textify(media.format)} &#183; {textify(media.status)}
                 </span>
               </div>
-              <a class="flex flex-col group" style="--color-variable:{hexToRgb(media.coverImage.color) || "var(--color-accent)"}" href="#/media/{media.id}">
+              <a class="flex flex-col group" style="--color-variable:{hexToRgb(media.coverImage.color) || "var(--color-accent)"}" href="#/media/{media.id}" use:link>
                 <div class="bg-cover bg-center aspect-[3/4] rounded-md hover:shadow-md transition-all" style="background-image:url({media.coverImage.extraLarge})">
     
                 </div>
@@ -85,7 +87,7 @@ import Tooltip from "$lib/components/Tooltip.svelte";
                 {textify(media.format)} &#183; {textify(media.status)}
               </span>
             </div>
-            <a class="flex flex-col group" style="--color-variable:{hexToRgb(media.coverImage.color) || "var(--color-accent)"}" href="#/media/{media.id}">
+            <a class="flex flex-col group" style="--color-variable:{hexToRgb(media.coverImage.color) || "var(--color-accent)"}" href="#/media/{media.id}" use:link>
               <div class="bg-cover bg-center aspect-[3/4] rounded-md hover:shadow-md transition-all" style="background-image:url({media.coverImage.extraLarge})">
   
               </div>
@@ -114,7 +116,7 @@ import Tooltip from "$lib/components/Tooltip.svelte";
                 {textify(media.format)} &#183; {textify(media.status)}
               </span>
             </div>
-            <a class="flex flex-col group" style="--color-variable:{hexToRgb(media.coverImage.color) || "var(--color-accent)"}" href="#/media/{media.id}">
+            <a class="flex flex-col group" style="--color-variable:{hexToRgb(media.coverImage.color) || "var(--color-accent)"}" href="#/media/{media.id}" use:link>
               <div class="bg-cover bg-center aspect-[3/4] rounded-md hover:shadow-md transition-all" style="background-image:url({media.coverImage.extraLarge})">
   
               </div>

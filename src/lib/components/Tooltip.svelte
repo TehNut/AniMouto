@@ -1,11 +1,11 @@
 <script lang="ts">
+  import { tick } from "svelte";
   import { writable } from "svelte/store";
   import type { FlyParams } from "svelte/transition";
   import { fly } from "svelte/transition";
   import type { Placement, Side } from "@floating-ui/dom";
   import { shift, flip, offset as offsetMiddleware } from "@floating-ui/dom";
   import { createFloatingActions, arrow } from "$lib/floating";
-import { tick } from "svelte";
 
   let containerClasses: string = "";
   export { containerClasses as class };
@@ -18,7 +18,7 @@ import { tick } from "svelte";
     duration: 200,
     x: staticSide === "left" ? -5 : staticSide === "right" ? 5 : 0,
     y: staticSide === "top" ? -5 : staticSide === "bottom" ? 5 : 0,
-  };
+  } as FlyParams;
 
   const arrowRef = writable<HTMLElement>(null);
   const [ floatingRef, floatingContent ] = createFloatingActions({

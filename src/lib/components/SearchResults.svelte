@@ -1,12 +1,13 @@
 <script type="ts">
+  import { link } from "svelte-spa-router";
   import Icon from "svelte-fa";
   import { faNotesMedical, faPlus, faRedo } from "@fortawesome/free-solid-svg-icons";
   import { loggedIn } from "$lib/store";
   import type { SearchResult } from "$lib/graphql";
   import { hexToRgb } from "$lib/util";
   import Tooltip from "./Tooltip.svelte";
+  import Section from "./Section.svelte";
   import anilistLogo from "$assets/anilist.svg";
-import Section from "./Section.svelte";
 
   export let title: string;
   export let results: SearchResult["media"];
@@ -41,7 +42,7 @@ import Section from "./Section.svelte";
       {#each results as media}
         <div class="w-full h-16 flex items-center space-x-2 bg-foreground rounded-md overflow-hidden">
           <div class="w-12 h-full flex-none aspect-[3/4] bg-cover" style="background-image:url({media.coverImage.medium})" />
-          <a href="#/media/{media.id}" class="flex-1 hover:text-variable transition-colors" style="--color-variable:{hexToRgb(media.coverImage.color)}">
+          <a href="#/media/{media.id}" class="flex-1 hover:text-variable transition-colors" style="--color-variable:{hexToRgb(media.coverImage.color)}" use:link>
             <h2 class="line-clamp-2 font-medium text-sm">{media.title.userPreferred}</h2>
           </a>
           {#if $loggedIn}

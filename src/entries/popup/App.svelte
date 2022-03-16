@@ -45,6 +45,6 @@
     </a>
   </nav>
   <div class="flex-1 p-2 relative h-full bg-background text-text-400 overflow-y-auto overflow-x-hidden">
-    <Router {routes} on:routeLoaded={onRouteChange} />
+    <Router {routes} restoreScrollState on:routeLoaded={onRouteChange} />
   </div>
 </div>

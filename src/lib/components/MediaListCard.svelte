@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { link } from "svelte-spa-router";
   import type { MediaListResult } from "$lib/graphql";
   import { hexToRgb } from "$lib/util";
   import Tooltip from "$lib/components/Tooltip.svelte";
@@ -25,7 +26,7 @@
     {/if}
     <span class="justify-self-end">Progress: {listEntry.progress}{listEntry.media.episodes || listEntry.media.chapters ? "/" + listEntry.media.episodes || listEntry.media.chapters : ""}</span>
   </div>
-  <a href="#/media/{listEntry.media.id}">
+  <a href="#/media/{listEntry.media.id}" use:link>
     <div 
       class="relative group bg-variable bg-cover bg-center aspect-[3/4] rounded-md overflow-hidden" 
       style="--color-variable:{hexToRgb(listEntry.media.coverImage.color) || "var(--color-accent)"};background-image:url({listEntry.media.coverImage.extraLarge})"
