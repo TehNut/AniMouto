@@ -2,7 +2,6 @@ import { identity, storage } from "webextension-polyfill";
 
 export async function beginAuthentication(): Promise<string> {
   try {
-    console.log(import.meta.env.VITE_ANILIST_APP_ID)
     const response = await identity.launchWebAuthFlow({
       url: `https://anilist.co/api/v2/oauth/authorize?client_id=${import.meta.env.VITE_ANILIST_APP_ID}&response_type=token`,
       interactive: true
