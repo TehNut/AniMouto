@@ -2,7 +2,7 @@
   import { link } from "svelte-spa-router";
   import { mutation } from "@urql/svelte";
   import { IncrementProgressMutation, type MediaListResult } from "$lib/graphql";
-  import { hexToRgb } from "$lib/util";
+  import { hexToRgb, readableTime, parseSeconds } from "$lib/util";
   import Tooltip from "$lib/components/Tooltip.svelte";
 
   export let listEntry: MediaListResult["mediaList"][0];
@@ -38,7 +38,7 @@
       style="--color-variable:{hexToRgb(listEntry.media.coverImage.color) || "var(--color-accent)"};background-image:url({listEntry.media.coverImage.extraLarge})"
     >
       <div class="absolute w-full bottom-0 px-2 bg-overlay/70 text-white font-semibold text-center text-xs opacity-0 group-hover:opacity-100 transition-all">
-        <button on:click|stopPropagation|preventDefault={incrementProgress} class="px-2 py-2 hover:font-bold hover:text-accent transition-all">
+        <button on:click|stopPropagation|preventDefault={incrementProgress} class="px-2 py-2 hover:font-bold hover:text-variable transition-all">
           {listEntry.progress} +
         </button>
       </div>
@@ -46,7 +46,7 @@
         <div class="absolute w-full bottom-0 p-2 bg-overlay/70 text-white font-medium text-center text-xs group-hover:opacity-0 pointer-events-none transition-all">
           Ep {listEntry.media.nextAiringEpisode.episode}
           <br />
-          {listEntry.media.nextAiringEpisode.timeUntilAiring}
+          {readableTime(parseSeconds(listEntry.media.nextAiringEpisode.timeUntilAiring), { includeSeconds: false, includeWeeks: true })}
         </div>
       {/if}
       {#if listEntry.media.nextAiringEpisode?.episode - 1 > listEntry.progress}
