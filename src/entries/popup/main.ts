@@ -1,21 +1,13 @@
 import { get } from "svelte/store";
-import { storage, identity } from "webextension-polyfill";
+import { storage } from "webextension-polyfill";
 import App from "./App.svelte";
-// import Test from "./Test.svelte";
 import type { ExtensionConfiguration, User } from "$lib/model";
 import { extensionConfig, lastPage, token, user } from "$lib/store";
 
 async function bootstrap() {
-  // await storage.local.clear()
   await loadConfig();
   await loadLastPage();
   await loadToken();
-
-  console.log(identity.getRedirectURL())
-
-  storage.onChanged.addListener((changes, area) => {
-    console.log(area, changes);
-  });
 
   new App({
     target: document.getElementById("app"),
