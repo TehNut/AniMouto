@@ -1,13 +1,13 @@
-import { token } from "$lib/store";
 import { createClient, dedupExchange, fetchExchange, debugExchange, gql } from "@urql/svelte";
 import { cacheExchange } from "@urql/exchange-graphcache";
 import { get } from "svelte/store";
+import { token } from "$lib/store";
 
 export const client = createClient({
   url: "https://graphql.anilist.co",
   exchanges: [
     dedupExchange, 
-    debugExchange,
+    // debugExchange,
     cacheExchange({
       keys: {
         Page: () => null,
@@ -45,7 +45,7 @@ export const client = createClient({
             });
           }
         }
-      }
+      },
       // storage: // TODO Store cache in background https://formidable.com/open-source/urql/docs/graphcache/offline/#custom-storages
     }), 
     fetchExchange
@@ -70,3 +70,4 @@ export * from "./query/GetRecentMedia";
 export * from "./query/MediaList";
 export * from "./mutation/ToggleFavorite";
 export * from "./mutation/ChangeStatus";
+export * from "./mutation/IncrementProgress";
