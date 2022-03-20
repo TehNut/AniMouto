@@ -1,9 +1,7 @@
 <script lang="ts">
-  import { operationStore, query } from "@urql/svelte";
+  import { operationStore, query, mutation } from "@urql/svelte";
   import { faHeart, faNotesMedical, faPlus, faRedo, faTrash } from "@fortawesome/free-solid-svg-icons";
-  import active from "svelte-spa-router/active";
-  import type { MediaResult } from "$lib/graphql";
-  import { MediaQuery } from "$lib/graphql";
+  import { MediaQuery, ToggleFavoriteMutation, ChangeStatusMutation, type MediaResult } from "$lib/graphql";
   import GeneralView from "./General.svelte";
   import DetailsView from "./Details.svelte";
   import StatsView from "./Stats.svelte";
@@ -20,36 +18,31 @@
   const media = operationStore<{ Media: MediaResult }>(MediaQuery, {
     id: params.id
   });
+  query(media);
+  const toggleFavoriteMutation = mutation({
+    query: ToggleFavoriteMutation,
+  });
+  const changeStatusMutation = mutation({
+    query: ChangeStatusMutation,
+  });
+
+  $: canAddPlanning = $media.data?.Media?.mediaListEntry === null;
+  $: canRepeat = $media.data?.Media?.mediaListEntry?.status === "COMPLETED";
+  $: canAddCurrent = $media.data?.Media && $media.data.Media.status !== "NOT_YET_RELEASED" && ![ "CURRENT", "COMPLETED", "REPEATING" ].includes($media.data.Media.mediaListEntry?.status);
 
   let subView: typeof GeneralView | typeof DetailsView | typeof StatsView | typeof SocialView = GeneralView;
 
-  query(media);
-
-  function canAddPlanning(media: MediaResult): boolean {
-    return media.mediaListEntry === null;
+  function toggleFavorite() {
+    toggleFavoriteMutation({ [$media.data.Media.type.toLowerCase()]: $media.data.Media.id });
   }
 
-  function canAddCurrent(media: MediaResult): boolean {
-    if (media.status === "NOT_YET_RELEASED")
-      return false;
-      
-    if (!media.mediaListEntry)
-      return true;
-    
-    const status = media.mediaListEntry.status;
-    return ![ "CURRENT", "COMPLETED", "REPEATING" ].includes(status);
-  }
-
-  function canRewatch(media: MediaResult): boolean {
-    return media.mediaListEntry?.status === "COMPLETED";
-  }
-
-  async function toggleFavorite() {
-
-  }
-
-  async function setStatus(status?: MediaResult["mediaListEntry"]["status"]) {
-    
+  function setStatus(status?: MediaResult["mediaListEntry"]["status"]) {
+    changeStatusMutation({ 
+      media: $media.data.Media.id,
+      list: $media.data.Media.mediaListEntry?.id,
+      status,
+      delete: !status
+    });
   }
 </script>
 
@@ -86,16 +79,16 @@
               <Button on:click={() => toggleFavorite()} icon={faHeart} class="w-full py-2 !bg-red {$media.data.Media.isFavorite ? "text-white/30" : "text-white/80"}" />
             </Tooltip>
             <Tooltip placement="right" content="Add to planning">
-              <Button on:click={() => setStatus("PLANNING")} icon={faNotesMedical} class="w-full py-2" disabled={!canAddPlanning($media.data.Media)} />
+              <Button on:click={() => setStatus("PLANNING")} icon={faNotesMedical} class="w-full py-2" disabled={!canAddPlanning} />
             </Tooltip>
             <Tooltip placement="left" content="Add to current">
-              <Button on:click={() => setStatus("CURRENT")} icon={faPlus} class="w-full py-2" disabled={!canAddCurrent($media.data.Media)} />
+              <Button on:click={() => setStatus("CURRENT")} icon={faPlus} class="w-full py-2" disabled={!canAddCurrent} />
             </Tooltip>
             <Tooltip placement="left" content="Add to repeating">
-              <Button on:click={() => setStatus("REPEATING")} icon={faRedo} class="w-full py-2" disabled={!canRewatch($media.data.Media)} />
+              <Button on:click={() => setStatus("REPEATING")} icon={faRedo} class="w-full py-2" disabled={!canRepeat} />
             </Tooltip>
             <Tooltip placement="left" content="Remove from list">
-              <Button type="ERROR" on:click={() => setStatus(null)} icon={faTrash} class="w-full py-2" disabled={canAddPlanning($media.data.Media)} />
+              <Button type="ERROR" on:click={() => setStatus(null)} icon={faTrash} class="w-full py-2" disabled={canAddPlanning} />
             </Tooltip>
           </div>
         {/if}
