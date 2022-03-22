@@ -7,7 +7,8 @@ const sharedManifest = {
   },
   permissions: [
     "storage",
-    "identity"
+    "identity",
+    "alarms"
   ],
 };
 

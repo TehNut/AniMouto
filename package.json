@@ -29,6 +29,7 @@
     "svelte-lazy": "1.1.0",
     "svelte-spa-router": "3.2.0",
     "timeago.js": "4.0.2",
+    "webext-storage-cache": "^5.0.0",
     "webextension-polyfill": "0.8.0"
   },
   "devDependencies": {

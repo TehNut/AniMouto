@@ -1,13 +1,14 @@
 <script lang="ts">
+  import { fade } from "svelte/transition";
   import { operationStore, query, mutation } from "@urql/svelte";
-  import { faHeart, faNotesMedical, faPlus, faRedo, faTrash } from "@fortawesome/free-solid-svg-icons";
+  import Icon from "svelte-fa";
+  import { faHeart, faNotesMedical, faPlus, faRedo, faTrash, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
   import { MediaQuery, ToggleFavoriteMutation, ChangeStatusMutation, type MediaResult } from "$lib/graphql";
+  import QueryContainer from "$lib/components/QueryContainer.svelte";
   import GeneralView from "./General.svelte";
   import DetailsView from "./Details.svelte";
   import StatsView from "./Stats.svelte";
   import SocialView from "./Social.svelte";
-  import Loader from "$lib/components/Loader.svelte";
-  import Error from "$lib/components/Error.svelte";
   import Tooltip from "$lib/components/Tooltip.svelte";
   import Button from "$lib/components/Button.svelte";
   import { loggedIn } from "$lib/store";
@@ -18,7 +19,6 @@
   const media = operationStore<{ Media: MediaResult }>(MediaQuery, {
     id: params.id
   });
-  query(media);
   const toggleFavoriteMutation = mutation({
     query: ToggleFavoriteMutation,
   });
@@ -46,12 +46,8 @@
   }
 </script>
 
-{#if $media.fetching}
-  <Loader />
-{:else if $media.error}
-  <Error text={$media.error.message} />
-{:else}
-  <div class="absolute w-full h-[20vh] inset-0 bg-cover bg-center" style="background-image:url({$media.data.Media.bannerImage})">
+<QueryContainer query={media}>
+  <div in:fade={{ duration: 1, delay: 150 }} class="absolute w-full h-[20vh] inset-0 bg-cover bg-center" style="background-image:url({$media.data.Media.bannerImage})">
     <div class="h-full w-full bg-gradient-to-b from-shadow/40 to-shadow/60" />
   </div>
   <div 
@@ -59,7 +55,7 @@
     style="--color-variable:{hexToRgb($media.data.Media.coverImage.color) || "--color-accent"};--scroller-thumb:{hexToRgb($media.data.Media.coverImage.color) || "var(--color-accent)"}"
   >
     <div class="flex space-x-4">
-      <div class="flex-none w-32 aspect-[3/4] bg-cover bg-center" style="background-image:url({$media.data.Media.coverImage.extraLarge})" />
+      <div class="flex-none w-32 aspect-[3/4] bg-variable bg-cover bg-center" style="background-image:url({$media.data.Media.coverImage.extraLarge})" />
       <div class="mt-14 flex flex-col justify-between">
         <div class="flex flex-col">
           <h3 class="-mt-7 text-xs font-semibold text-white">
@@ -95,23 +91,31 @@
       </div>
     </div>
     <div class="flex justify-evenly text-sm border-b border-b-variable">
-      <span 
-        class="px-2 pt-1 border-b-4 transition-colors cursor-pointer rounded-t-md hover:bg-foreground {subView === GeneralView ? "border-b-variable" : "border-b-transparent"}" 
+      <button 
+        class="px-2 pt-1 border-b-4 transition-colors rounded-t-md hover:bg-variable/10 {subView === GeneralView ? "border-b-variable" : "border-b-transparent"}" 
         on:click={() => subView = GeneralView}
-      >General</span>
-      <span 
-        class="px-2 pt-1 border-b-4 transition-colors cursor-pointer rounded-t-md hover:bg-foreground {subView === DetailsView ? "border-b-variable" : "border-b-transparent"}" 
+      >General</button>
+      <button 
+        class="px-2 pt-1 border-b-4 transition-colors rounded-t-md hover:bg-variable/10 {subView === DetailsView ? "border-b-variable" : "border-b-transparent"}" 
         on:click={() => subView = DetailsView}
-      >Details</span>
-      <span 
-        class="px-2 pt-1 border-b-4 transition-colors cursor-pointer rounded-t-md hover:bg-foreground {subView === StatsView ? "border-b-variable" : "border-b-transparent"}" 
+      >Details</button>
+      <button 
+        class="px-2 pt-1 border-b-4 transition-colors rounded-t-md hover:bg-variable/10 {subView === StatsView ? "border-b-variable" : "border-b-transparent"}" 
         on:click={() => subView = StatsView}
-      >Stats</span>
-      <span 
-        class="px-2 pt-1 border-b-4 transition-colors cursor-pointer rounded-t-md hover:bg-foreground {subView === SocialView ? "border-b-variable" : "border-b-transparent"}" 
+      >Stats</button>
+      <button 
+        class="px-2 pt-1 border-b-4 transition-colors rounded-t-md hover:bg-variable/10 {subView === SocialView ? "border-b-variable" : "border-b-transparent"}" 
         on:click={() => subView = SocialView}
-      >Social</span>
+      >Social</button>
+      <a 
+        class="px-2 pt-1 flex items-center border-b-4 transition-colors rounded-t-md hover:bg-variable/10 border-b-transparent" 
+        href={$media.data.Media.siteUrl}
+        target="_blank"
+      >
+        AniList
+        <Icon class="ml-2" icon={faExternalLinkAlt} />
+      </a>
     </div>
     <svelte:component this={subView} {media} {params} />
   </div>
-{/if}
+</QueryContainer>
