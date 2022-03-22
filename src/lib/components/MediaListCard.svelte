@@ -1,6 +1,7 @@
 <script lang="ts">
   import { link } from "svelte-spa-router";
   import { mutation } from "@urql/svelte";
+  import Lazy from "svelte-lazy";
   import { IncrementProgressMutation, type MediaListResult } from "$lib/graphql";
   import { hexToRgb, readableTime, parseSeconds } from "$lib/util";
   import Tooltip from "$lib/components/Tooltip.svelte";
@@ -34,9 +35,12 @@
   </div>
   <a href="#/media/{listEntry.media.id}" use:link>
     <div 
-      class="relative group bg-variable bg-cover bg-center aspect-[3/4] rounded-md overflow-hidden" 
-      style="--color-variable:{hexToRgb(listEntry.media.coverImage.color) || "var(--color-accent)"};background-image:url({listEntry.media.coverImage.extraLarge})"
+      class="relative group bg-variable aspect-[3/4] rounded-md overflow-hidden" 
+      style="--color-variable:{hexToRgb(listEntry.media.coverImage.color) || "var(--color-accent)"}"
     >
+      <Lazy fadeOption={{ duration: 200 }}>
+        <img class="h-full aspect-[3/4] object-cover object-center" src="{listEntry.media.coverImage.extraLarge}" alt="Key visual">
+      </Lazy>
       <div class="absolute w-full bottom-0 px-2 bg-overlay/70 text-white font-semibold text-center text-xs opacity-0 group-hover:opacity-100 transition-all">
         <button on:click|stopPropagation|preventDefault={incrementProgress} class="px-2 py-2 hover:font-bold hover:text-variable transition-all">
           {listEntry.progress} +

@@ -30,6 +30,23 @@ export const MediaQuery = gql`
         language
         color
       }
+      relations {
+        edges {
+          relationType
+          node {
+            id
+            title {
+              userPreferred
+            }
+            format
+            status
+            coverImage {
+              color
+              extraLarge
+            }
+          }
+        }
+      }
       staff(perPage: 12, sort: [RELEVANCE, ID]) {
         edges {
           id
@@ -100,6 +117,23 @@ export interface MediaResult {
     language: string
     color: string
   }[];
+  relations: {
+    edges: {
+      relationType: string
+      node: {
+        id: number
+        format: string
+        status: string
+        title: {
+          userPreferred: string
+        }
+        coverImage: {
+          color: string
+          extraLarge: string
+        }
+      }
+    }[]
+  }
   staff: Person;
   characters: Person;
 }

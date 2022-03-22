@@ -4,11 +4,24 @@
   import { faLink, faInfoCircle, faComments, faTv } from "@fortawesome/free-solid-svg-icons";
   import type { MediaResult } from "$lib/graphql";
   import Section from "$lib/components/Section.svelte";
+  import MediaCard from "$lib/components/MediaCard.svelte";
   import Tooltip from "$lib/components/Tooltip.svelte";
   import { textify } from "$lib/util";
 
   export let media: OperationStore<{ Media: MediaResult }>;
 
+  const relationSortOrder = [
+		"ADAPTATION",
+    "PREQUEL",
+    "SEQUEL",
+    "PARENT",
+    "ALTERNATIVE",
+    "SIDE_STORY",
+    "SPIN_OFF",
+    "SUMMARY",
+    "CHARACTER",
+    "OTHER"
+  ];
   const languageCodes: Record<string, string> = {
     "Japanese": "JP",
     "Chinese": "CN",
@@ -21,6 +34,9 @@
     "Thai": "TH",
     "Vietnamese": "VN",
   };
+
+  $: sortedRelations = ($media.data.Media.relations?.edges || [])
+    .sort((r1, r2) => relationSortOrder.indexOf(r1.relationType) - relationSortOrder.indexOf(r2.relationType));
 </script>
 
 {#if $media.data.Media.description}
@@ -28,7 +44,19 @@
     {@html $media.data.Media.description.replace(/<br><br \/>/g, '<br>').replace(/\\n/g, '')}
   </Section>
 {/if}
-{#if $media.data.Media.characters.edges.length > 0}
+{#if $media.data.Media.relations?.edges.length > 0}
+  <Section title="Relations">
+    <div class="grid grid-cols-4 gap-2">
+      {#each sortedRelations as relation}
+        <MediaCard media={relation.node}>
+          <div class="absolute w-full bottom-0 p-2 bg-overlay/70 text-white font-medium text-center text-xs pointer-events-none">
+            {textify(relation.relationType)}
+          </div>
+        </MediaCard>
+      {/each}
+  </Section>
+{/if}
+{#if $media.data.Media.characters?.edges.length > 0}
   <Section>
     <a class="hover:text-variable transition-colors" href="{$media.data.Media.siteUrl}/characters" target="_blank" slot="title">
       Characters
