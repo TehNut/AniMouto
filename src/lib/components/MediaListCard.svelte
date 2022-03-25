@@ -7,6 +7,7 @@
   import Tooltip from "$lib/components/Tooltip.svelte";
 
   export let listEntry: MediaListResult["mediaList"][0];
+  export let type: "ANIME" | "MANGA";
 
   const incrementProgressMutation = mutation({
     query: IncrementProgressMutation,
@@ -16,11 +17,13 @@
 
   async function incrementProgress() {
     const maxProgress = listEntry.media.episodes || listEntry.media.chapters;
+    const willFinish = listEntry.progress + 1 >= (maxProgress || Infinity);
     incrementProgressMutation({
       listId: listEntry.id,
       mediaId: listEntry.media.id,
       progress: listEntry.progress + 1,
-      status: listEntry.progress + 1 >= (maxProgress || Infinity) ? "COMPLETED" : undefined
+      status: willFinish ? "COMPLETED" : undefined,
+      volume: willFinish && listEntry.media.volumes && type === "MANGA" ? listEntry.media.volumes : undefined
     });
   }
 </script>

@@ -33,7 +33,7 @@
       </div>
       <div class="grid grid-cols-4 gap-4">
         {#each (airingAnime || []) as listEntry}
-          <MediaListCard {listEntry} />
+          <MediaListCard type="ANIME" {listEntry} />
         {/each}
       </div>
     </Section>
@@ -45,7 +45,7 @@
       </div>
       <div class="grid grid-cols-4 gap-4">
         {#each (watchingAnime || []) as listEntry}
-          <MediaListCard {listEntry} />
+          <MediaListCard type="ANIME" {listEntry} />
         {/each}
       </div>
     </Section>
@@ -57,7 +57,7 @@
       </div>
       <div class="grid grid-cols-4 gap-4">
         {#each $mangaList.data.Page.mediaList as listEntry}
-          <MediaListCard {listEntry} />
+          <MediaListCard type="MANGA" {listEntry} />
         {/each}
       </div>
     </Section>

@@ -11,6 +11,7 @@ export const MediaListQuery = gql`
           status
           episodes
           chapters
+          volumes
           title {
             userPreferred
           }
@@ -35,14 +36,15 @@ export interface MediaListResult {
     media: {
       id: number;
       status: string;
-      episodes: number | null;
-      chapters: null;
+      episodes?: number;
+      chapters?: number;
+      volumes?: number
       title: {
         userPreferred: string;
       };
       coverImage: {
         extraLarge: string;
-        color: null | string;
+        color?: string;
       };
       nextAiringEpisode?: {
         episode: number;
