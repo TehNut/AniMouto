@@ -3,6 +3,7 @@ import type { ExtensionConfiguration } from "$lib/model";
 import { Theme, Accent } from "$lib/model";
 
 export const lastPage = writable("/");
+export const unreadNotifications = writable(0);
 export const extensionConfig = writable<ExtensionConfiguration>({
   theme: {
     primary: Theme.LIGHT,

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { storage } from "webextension-polyfill";
   import Router, { push } from "svelte-spa-router";
   import type { RouteLoadedEvent } from "svelte-spa-router";
   import { faListUl, faSearch, faBell, faCog, faSignInAlt, faBullhorn } from "@fortawesome/free-solid-svg-icons";
@@ -9,11 +10,18 @@
   import { client } from "$lib/graphql";
   import routes from "./routes";
   import NavLink from "$lib/components/NavLink.svelte";
-  import { extensionConfig, lastPage, loggedIn, user } from "$lib/store";
+  import { extensionConfig, lastPage, loggedIn, user, unreadNotifications } from "$lib/store";
 
   setClient(client);
 
-  onMount(() => push($lastPage));
+  onMount(async () => {
+    push($lastPage);
+    if ($loggedIn) {
+      const { data } = await client.query("{ Viewer { unreadNotificationCount } }").toPromise();
+      $unreadNotifications = data.Viewer.unreadNotificationCount;
+      await storage.local.set({ unreadNotificationCount: $unreadNotifications });
+    }
+  });
 
   function onRouteChange(e: RouteLoadedEvent) {
     $lastPage = e.detail.location;
@@ -36,7 +44,13 @@
       <NavLink href="/new" icon={faBullhorn} title="What's New" />
       <NavLink href="/search" icon={faSearch} title="Search" />
       {#if $loggedIn}
-        <NavLink href="/notifications" icon={faBell} title="Notifications" />
+        <NavLink href="/notifications" icon={faBell} title="Notifications">
+          {#if $unreadNotifications > 0}
+            <span class="absolute -bottom-1 right-0.5 w-6 h-6 bg-red text-white text-sm text-center font-semibold rounded-full border-2 border-variable">
+              {$unreadNotifications > 100 ? $unreadNotifications : "99+"}
+            </span>
+          {/if}
+        </NavLink>
       {/if}
       <NavLink href="/settings" icon={faCog} title="Settings" />
     </div>

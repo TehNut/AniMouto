@@ -20,7 +20,7 @@ export const client = createClient({
         CharacterName: () => null,
         CharacterImage: () => null,
         AiringSchedule: () => null,
-
+        UserAvatar: () => null,
       },
       updates: {
         Mutation: {
@@ -68,6 +68,7 @@ export * from "./query/Search";
 export * from "./query/Media";
 export * from "./query/GetRecentMedia";
 export * from "./query/MediaList";
+export * from "./query/Notifications";
 export * from "./mutation/ToggleFavorite";
 export * from "./mutation/ChangeStatus";
 export * from "./mutation/IncrementProgress";

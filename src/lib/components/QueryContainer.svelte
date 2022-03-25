@@ -10,9 +10,13 @@
 </script>
 
 {#if $query.fetching}
-  <Loader />
+  <div class="w-full h-screen">
+    <Loader />
+  </div>
 {:else if $query.error}
-  <Error text={$query.error.message} />
+  <div class="w-full h-screen">
+    <Error text={$query.error.message} />
+  </div>
 {:else}
   <slot/>
 {/if}

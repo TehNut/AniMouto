@@ -2,7 +2,7 @@ import { get } from "svelte/store";
 import { storage } from "webextension-polyfill";
 import App from "./App.svelte";
 import type { ExtensionConfiguration, User } from "$lib/model";
-import { extensionConfig, lastPage, token, user } from "$lib/store";
+import { extensionConfig, lastPage, token, user, unreadNotifications } from "$lib/store";
 
 async function bootstrap() {
   await loadConfig();
@@ -39,9 +39,10 @@ async function loadLastPage() {
 }
 
 async function loadToken() {
-  const { token: storedToken, cachedUser }: { token: string, cachedUser?: User } = (await storage.local.get([ "token", "cachedUser" ])) as any;
+  const { token: storedToken, cachedUser, unreadNotificationCount }: { token: string, cachedUser?: User, unreadNotificationCount?: number } = (await storage.local.get([ "token", "cachedUser", "unreadNotificationCount" ])) as any;
   if (storedToken) {
     token.set(storedToken);
+    unreadNotifications.set(unreadNotificationCount || 0);
     if (cachedUser?.id > 0)
       user.set(cachedUser);
     else {
