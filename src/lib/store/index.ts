@@ -5,6 +5,9 @@ import { Theme, Accent } from "$lib/model";
 export const lastPage = writable("/");
 export const unreadNotifications = writable(0);
 export const extensionConfig = writable<ExtensionConfiguration>({
+  list: {
+    combineAnime: false
+  },
   theme: {
     primary: Theme.LIGHT,
     accent: Accent.BLUE,

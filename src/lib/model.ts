@@ -17,6 +17,10 @@ export enum Accent {
   PINK = "pink"
 }
 
+export type ListConfiguration = {
+  combineAnime: boolean;
+}
+
 export type ThemeConfiguration = {
   wide: boolean
   primary: Theme
@@ -30,6 +34,7 @@ export type NotificationConfiguration = {
 }
 
 export type ExtensionConfiguration = {
+  list: ListConfiguration
   theme: ThemeConfiguration
   notifications: NotificationConfiguration
 };
