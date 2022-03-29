@@ -33,7 +33,6 @@ function createUserStore() {
     update,
     fetch: async () => {
       const response = await client.query(ViewerQuery).toPromise();
-      console.log(response)
       set(response.data.Viewer);
     },
     logout() {

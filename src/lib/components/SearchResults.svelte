@@ -1,9 +1,11 @@
 <script type="ts">
+  import { mutation } from "@urql/svelte";
   import { link } from "svelte-spa-router";
   import Icon from "svelte-fa";
   import { faNotesMedical, faPlus, faRedo } from "@fortawesome/free-solid-svg-icons";
   import { loggedIn } from "$lib/store";
   import type { SearchResult } from "$lib/graphql";
+  import { ChangeStatusMutation } from "$lib/graphql";
   import { hexToRgb } from "$lib/util";
   import Tooltip from "./Tooltip.svelte";
   import Section from "./Section.svelte";
@@ -12,8 +14,17 @@
   export let title: string;
   export let results: SearchResult["media"];
 
-  function setStatus(status: SearchResult["media"][0]["mediaListEntry"]["status"]) {
-    // TODO
+  const changeStatusMutation = mutation({
+    query: ChangeStatusMutation
+  });
+
+  function setStatus(media: SearchResult["media"][0], status: SearchResult["media"][0]["mediaListEntry"]["status"]) {
+    changeStatusMutation({
+      media: media.id,
+      list: media.mediaListEntry?.id || undefined,
+      status,
+      delete: false
+    });
   }
 
   function canAddPlanning(media: SearchResult["media"][0]): boolean {
@@ -47,28 +58,28 @@
           </a>
           {#if $loggedIn}
             <div class="flex-none w-1/6 grid gap-x-1 grid-cols-3 items-center text-lg">
-              <Tooltip content="View on AniList" placement="left">
+              <Tooltip content="View on AniList" placement="top">
                 <a href={media.siteUrl} target="blank">
                   <img class="aspect-square bg-overlay rounded-md" src={anilistLogo} alt="AniList Logo">
                 </a>
               </Tooltip>
               {#if canAddPlanning(media)}
-                <Tooltip content="Add to planning" placement="left">
-                  <div on:click={() => setStatus("PLANNING")}>
+                <Tooltip content="Add to planning" placement="top">
+                  <div on:click={() => setStatus(media, "PLANNING")}>
                     <Icon icon={faNotesMedical} />
                   </div>
                 </Tooltip>
               {/if}
               {#if canAddCurrent(media)}
-                <Tooltip content="Add to current" placement="left">
-                  <div on:click={() => setStatus("CURRENT")}>
+                <Tooltip content="Add to current" placement="top">
+                  <div on:click={() => setStatus(media, "CURRENT")}>
                     <Icon icon={faPlus} />
                   </div>
                 </Tooltip>
               {/if}
               {#if canRewatch(media)}
-                <Tooltip content="Add to repeating" placement="left">
-                  <div on:click={() => setStatus("REPEATING")}>
+                <Tooltip content="Add to repeating" placement="top">
+                  <div on:click={() => setStatus(media, "REPEATING")}>
                     <Icon icon={faRedo} />
                   </div>
                 </Tooltip>
