@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
   import { operationStore } from "@urql/svelte";
+  import { unreadNotifications } from "$lib/store";
   import type { NotificationsResult } from "$lib/graphql";
   import { NotificationsQuery, NotificationType } from "$lib/graphql";
   import QueryContainer from "$lib/components/QueryContainer.svelte";
@@ -51,8 +52,8 @@
 
 <QueryContainer query={notifications}>
   <div class="flex flex-col space-y-2">
-    {#each $notifications.data.Page.notifications as notification}
-      <svelte:component this={getNotificationComponent(notification)} {notification} />
+    {#each $notifications.data.Page.notifications as notification, i}
+      <svelte:component this={getNotificationComponent(notification)} {notification} unread={i + ((page - 1) * 50) < $unreadNotifications} />
     {/each}
   </div>
 </QueryContainer>
