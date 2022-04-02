@@ -47,7 +47,7 @@
         <NavLink href="/notifications" icon={faBell} title="Notifications">
           {#if $unreadNotifications > 0}
             <span class="absolute -bottom-1 right-0.5 w-6 h-6 bg-red text-white text-sm text-center font-semibold rounded-full border-2 border-variable">
-              {$unreadNotifications > 100 ? $unreadNotifications : "99+"}
+              {$unreadNotifications < 100 ? $unreadNotifications : "99+"}
             </span>
           {/if}
         </NavLink>
