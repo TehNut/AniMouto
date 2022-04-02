@@ -1,7 +1,9 @@
 import { createClient, dedupExchange, fetchExchange, debugExchange, gql } from "@urql/svelte";
 import { cacheExchange } from "@urql/exchange-graphcache";
+import type { CacheExchangeOpts } from "@urql/exchange-graphcache"
 import { get } from "svelte/store";
 import { token } from "$lib/store";
+import schema from "./introspection.json";
 
 export const client = createClient({
   url: "https://graphql.anilist.co",
@@ -9,6 +11,7 @@ export const client = createClient({
     dedupExchange, 
     // debugExchange,
     cacheExchange({
+      schema: schema as CacheExchangeOpts["schema"],
       keys: {
         Page: () => null,
         PageInfo: () => null,
