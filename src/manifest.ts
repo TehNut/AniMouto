@@ -10,6 +10,9 @@ const sharedManifest = {
     "identity",
     "alarms"
   ],
+  optional_notifications: [
+    "notifications"
+  ]
 };
 
 const browserAction = {
