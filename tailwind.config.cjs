@@ -1,3 +1,5 @@
+const { black, transparent, current } = require("tailwindcss/colors");
+
 function withOpacityValue(variable) {
   return ({ opacityValue }) => {
     if (opacityValue === undefined) {
@@ -43,7 +45,9 @@ module.exports = {
       green: withOpacityValue("--color-green"),
       purple: withOpacityValue("--color-purple"),
       pink: withOpacityValue("--color-pink"),
-      transparent: "transparent",
+      transparent,
+      current,
+      black
     }
   },
   plugins: [
