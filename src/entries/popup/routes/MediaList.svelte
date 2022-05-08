@@ -20,15 +20,15 @@
   });
 
   $: combineAnime = $extensionConfig.list?.combineAnime;
-  $: airingAnime = !combineAnime ? $animeList.data?.Page.mediaList
+  $: airingAnime = !combineAnime ? $animeList.data?.Page?.mediaList
     .filter(l => l.media.status === "RELEASING")
     .sort((a, b) => a.media.nextAiringEpisode?.timeUntilAiring - b.media.nextAiringEpisode?.timeUntilAiring) : [];
-  $: watchingAnime = combineAnime ? $animeList.data?.Page.mediaList : $animeList.data?.Page.mediaList
+  $: watchingAnime = combineAnime ? $animeList.data?.Page.mediaList : $animeList.data?.Page?.mediaList
     .filter(l => l.media.status !== "RELEASING");
 </script>
 
-<div class="absolute top-3 right-2">
-  <Tooltip placement="bottom" class="w-12" content="{combineAnime ? "Split" : "Combine"} airing and completed anime">
+<div class="absolute top-3 right-3">
+  <Tooltip placement="bottom" content="{combineAnime ? "Split" : "Combine"} airing and completed anime">
     <button class="hover:text-accent transition-colors" on:click={() => $extensionConfig.list = { ...$extensionConfig.list, combineAnime: !combineAnime } }>
       <Icon icon={combineAnime ? faExpandAlt : faCompressAlt} />
     </button>
