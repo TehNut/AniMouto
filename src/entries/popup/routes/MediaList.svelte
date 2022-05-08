@@ -36,7 +36,7 @@
 </div>
 <div class="flex flex-col space-y-4">
   <QueryContainer query={animeList}>
-    {#if airingAnime.length > 0}
+    {#if airingAnime?.length > 0}
       <Section raise={false}>
         <div slot="title" class="flex items-center justify-between">
           <Tooltip placement="top" content="Currently airing anime">
@@ -50,7 +50,7 @@
         </div>
       </Section>
     {/if}
-    {#if watchingAnime.length > 0}
+    {#if watchingAnime?.length > 0}
       <Section raise={false}>
         <div slot="title" class="flex items-center justify-between">
           {#if !$extensionConfig.list?.combineAnime}
@@ -70,7 +70,7 @@
     {/if}
   </QueryContainer>
   <QueryContainer query={mangaList}>
-    {#if $mangaList.data.Page.mediaList.length > 0}
+    {#if $mangaList.data?.Page?.mediaList?.length > 0}
       <Section raise={false}>
         <div slot="title" class="flex items-center justify-between">
           Manga in Progress
