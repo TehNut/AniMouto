@@ -69,11 +69,11 @@
       <div class="flex-none w-32 aspect-[3/4] bg-variable bg-cover bg-center" style="background-image:url({$media.data.Media.coverImage.extraLarge})" />
       <div class="mt-14 flex flex-col justify-between">
         <div class="flex flex-col">
-          <h3 class="-mt-7 text-xs font-semibold text-white">
+          <h3 class="flex space-x-2 -mt-7 text-xs font-semibold text-white">
             <Tooltip placement="top" content="Media Format">
               <span class="uppercase">{textify($media.data.Media.format) || "Unknown"}</span>
             </Tooltip>
-            &#183; 
+            <span>&#183;</span> 
             <Tooltip placement="top" content="Release Status">
               <span class="uppercase">{textify($media.data.Media.status) || "Unknown"}</span>
             </Tooltip>

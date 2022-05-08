@@ -38,13 +38,13 @@
 
 {#if $loggedIn}
   <Section title="Account">
-    <h2 class="text-base">Logged in as <span class="text-accent">{$user.name}</span></h2>
+    <h2 class="text-base">Logged in as <a class="text-accent" href={$user.siteUrl} target="_blank">{$user.name}</a></h2>
     <p class="mt-1">
       Your token will expire on
-      <Tooltip placement="top" content={format(getTokenExpiration())}>
+      <Tooltip class="inline-block" placement="top" content={format(getTokenExpiration())}>
         <span class="text-orange">{getTokenExpiration().toLocaleDateString()}</span>
-      </Tooltip>
-      . You will need to re-login after this date.
+      </Tooltip>.
+      You will need to re-login after this date.
     </p>
     <div class="flex space-x-2 my-2">
       <Button type="WARNING" on:click={() => user.logout()}>
