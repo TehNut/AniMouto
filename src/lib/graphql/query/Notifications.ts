@@ -3,6 +3,7 @@ import gql from "graphql-tag";
 export const NotificationsQuery = gql`
   query($page: Int, $amount: Int, $reset: Boolean) {
     Viewer {
+      id
       unreadNotificationCount
     }
     Page(page: $page, perPage: $amount) {

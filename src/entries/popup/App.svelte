@@ -17,7 +17,7 @@
   onMount(async () => {
     push($lastPage);
     if ($loggedIn) {
-      const { data } = await client.query("{ Viewer { unreadNotificationCount } }").toPromise();
+      const { data } = await client.query("{ Viewer { id unreadNotificationCount } }").toPromise();
       $unreadNotifications = data.Viewer.unreadNotificationCount;
       await storage.local.set({ unreadNotificationCount: $unreadNotifications });
     }
