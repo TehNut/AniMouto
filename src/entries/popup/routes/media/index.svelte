@@ -15,7 +15,7 @@
   import { loggedIn } from "$lib/store";
   import { textify, hexToRgb } from "$lib/util";
 
-  export let params: { id: number };
+  export let params: { id: string };
   paramStore.subscribe(p => {
     if (!p)
       return;
@@ -28,7 +28,7 @@
   });
 
   const media = operationStore<{ Media: MediaResult }>(MediaQuery, {
-    id: params.id
+    id: parseInt(params.id)
   });
   const toggleFavoriteMutation = mutation({
     query: ToggleFavoriteMutation,
