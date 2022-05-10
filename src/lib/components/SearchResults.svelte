@@ -47,7 +47,7 @@
   }
 </script>
 
-{#if results.length > 0}
+{#if results?.length > 0}
   <Section raise={false} {title}>
     <div class="flex flex-col space-y-4">
       {#each results as media}
