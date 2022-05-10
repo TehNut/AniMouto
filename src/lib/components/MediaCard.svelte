@@ -12,19 +12,25 @@
       userPreferred: string
     }
     coverImage: {
-      color: string
+      color?: string
       extraLarge: string
     }
   };
 </script>
+
 <Tooltip placement="right">
   <div slot="content" class="flex flex-col w-48">
     <h2 class="font-semibold text-sm mb-2 leading-tight">{media.title.userPreferred}</h2>
-    <span>
-      {textify(media.format)} &#183; {textify(media.status)}
-    </span>
+    <slot name="tooltip-body">
+      <span>{textify(media.format)} &#183; {textify(media.status)}</span>
+    </slot>
   </div>
-  <a class="flex flex-col group" style="--color-variable:{hexToRgb(media.coverImage.color) || "var(--color-accent)"}" href="#/media/{media.id}" use:link>
+  <a 
+    class="flex flex-col group" 
+    style="--color-variable:{hexToRgb(media.coverImage.color) || "var(--color-accent)"}" 
+    href="#/media/{media.id}" 
+    use:link
+  >
     <div class="relative aspect-[3/4] bg-variable rounded-md overflow-hidden">
       <Lazy fadeOption={{ duration: 200 }}>
         <img class="h-full aspect-[3/4] object-cover object-center" src="{media.coverImage.extraLarge}" alt="Key visual">

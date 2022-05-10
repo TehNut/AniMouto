@@ -9,6 +9,7 @@ export const MediaListQuery = gql`
         media {
           id
           status
+          format
           episodes
           chapters
           volumes
@@ -36,6 +37,7 @@ export interface MediaListResult {
     media: {
       id: number;
       status: string;
+      format: string;
       episodes?: number;
       chapters?: number;
       volumes?: number
