@@ -12,8 +12,8 @@
     "watch:chromium": "vite build --watch --mode chromium",
     "watch:firefox": "vite build --watch --mode firefox",
     "dev": "vite",
-    "serve:firefox": "web-ext run --start-url \"about:debugging#/runtime/this-firefox\"  --source-dir ./dist/firefox",
-    "serve:chromium": "web-ext run -t chromium --start-url \"https://google.com\" --source-dir ./dist/chromium",
+    "serve:firefox": "web-ext run --start-url \"https://studio.apollographql.com/sandbox/explorer?endpoint=https://graphql.anilist.co\"  --source-dir ./dist/firefox",
+    "serve:chromium": "web-ext run -t chromium --start-url \"https://studio.apollographql.com/sandbox/explorer?endpoint=https://graphql.anilist.co\" --source-dir ./dist/chromium",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "introspect": "node ./scripts/createIntrospection.js"
   },
