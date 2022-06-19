@@ -92,12 +92,12 @@
     >Novel</button>
   </div>
   {#if $search.fetching}
-  <Loader />
+    <Loader />
   {:else if $search.error}
     <Error text={$search.error.message} />
   {:else if $search.data}
     <div class="w-full mt-6 flex flex-col space-y-4">
-      {#if $search.data.Page.media.length === 0}
+      {#if !$search.data.Page.media?.length}
         <Error warning text="No results found!" />
       {:else}
         <SearchResults 
