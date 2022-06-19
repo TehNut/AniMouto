@@ -1,3 +1,6 @@
+import { createHashHistory } from "history";
+import type { HistorySource } from "svelte-navigator";
+
 export function textify(enumValue?: string): string {
   if (!enumValue)
     return enumValue;
@@ -61,6 +64,45 @@ export function readableTime(parsed: ParsedTime, opts?: ReadableOpts): string {
     str += "<1m";
 
   return str.replace(/([a-z])/g, "$1 ");
+}
+
+export function createHashedHistory(): HistorySource {
+  const history = createHashHistory();
+  let listeners = [];
+
+  history.listen(location => {
+    if (history.action === "POP") {
+      listeners.forEach(listener => listener(location));
+    }
+  });
+
+  return {
+    get location(): Location {
+      return history.location as unknown as Location;
+    },
+    addEventListener(name, handler) {
+      if (name !== "popstate") return;
+      listeners.push(handler);
+    },
+    removeEventListener(name, handler) {
+      if (name !== "popstate") return;
+      listeners = listeners.filter(fn => fn !== handler);
+    },
+    history: {
+      get state() {
+        return history.location.state as object;
+      },
+      pushState(state: object, title, uri) {
+        history.push(uri, state);
+      },
+      replaceState(state, title, uri) {
+        history.replace(uri, state);
+      },
+      go(to) {
+        history.go(to);
+      },
+    },
+  }
 }
 
 type ReadableOpts = {

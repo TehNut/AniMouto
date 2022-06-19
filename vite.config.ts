@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => {
       outDir: `dist/${mode}`
     },
     optimizeDeps: {
-      exclude: [ "@urql/svelte" ]
+      exclude: [ "@urql/svelte", "svelte-navigator" ]
     },
     plugins: [
       svelte(),

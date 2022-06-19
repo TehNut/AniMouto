@@ -1,5 +1,6 @@
 <script lang="ts">
   import { format } from "timeago.js";
+  import { useNavigate } from "svelte-navigator";
   import type { JwtPayload } from "jwt-decode";
   import jwtDecode from "jwt-decode";
   import { Theme, Accent } from "$lib/model";
@@ -8,6 +9,7 @@
   import Section from "$lib/components/Section.svelte";
   import Button from "$lib/components/Button.svelte";
 
+  const navigate = useNavigate();
   const themes: { theme: Theme, background: String, color: string }[] = [
     {             
       theme: Theme.LIGHT,
@@ -34,6 +36,11 @@
   function getTokenExpiration(): Date {
     return new Date(jwtDecode<JwtPayload>($token).exp * 1000);
   }
+
+  function logout() {
+    user.logout();
+    navigate("/");
+  }
 </script>
 
 {#if $loggedIn}
@@ -47,7 +54,7 @@
       You will need to re-login after this date.
     </p>
     <div class="flex space-x-2 my-2">
-      <Button type="WARNING" on:click={() => user.logout()}>
+      <Button type="WARNING" on:click={() => logout()}>
         Logout
       </Button>
       <Button on:click={() => user.fetch()}>

@@ -1,5 +1,5 @@
 import { derived, writable } from "svelte/store";
-import { push } from "svelte-spa-router";
+import { navigate,  } from "svelte-navigator";
 import type { JwtPayload } from "jwt-decode";
 import jwtDecode from "jwt-decode";
 import { client, ViewerQuery } from "$lib/graphql";
@@ -38,7 +38,6 @@ function createUserStore() {
     logout() {
       set(PLACEHOLDER_USER);
       token.set(null);
-      push("/");
     },
     reset: () => {
       set(PLACEHOLDER_USER);

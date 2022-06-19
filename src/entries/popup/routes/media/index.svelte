@@ -1,6 +1,6 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import { params as paramStore } from "svelte-spa-router";
+  import { useParams } from "svelte-navigator";
   import { operationStore, mutation } from "@urql/svelte";
   import Icon from "svelte-fa";
   import { faHeart, faNotesMedical, faPlus, faRedo, faTrash, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
@@ -15,20 +15,10 @@
   import { loggedIn } from "$lib/store";
   import { textify, hexToRgb } from "$lib/util";
 
-  export let params: { id: string };
-  paramStore.subscribe(p => {
-    if (!p)
-      return;
-
-    $media.variables = {
-      id: parseInt(p.id)
-    };
-    $media.reexecute();
-    // TODO scroll to top
-  });
+  const params = useParams();
 
   const media = operationStore<{ Media: MediaResult }>(MediaQuery, {
-    id: parseInt(params.id)
+    id: parseInt($params.id)
   });
   const toggleFavoriteMutation = mutation({
     query: ToggleFavoriteMutation,

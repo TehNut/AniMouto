@@ -1,7 +1,9 @@
 <script lang="ts">
   import { runtime } from "webextension-polyfill";
-  import { push } from "svelte-spa-router";
+  import { useNavigate } from "svelte-navigator";
   import { token, user } from "$lib/store";
+
+  const navigate = useNavigate();
 
   let loginPromise: Promise<void> = Promise.resolve();
 
@@ -9,7 +11,7 @@
     loginPromise = runtime.sendMessage({ type: "AUTH" }).then(async (newToken: string) => {
       token.set(newToken);
       await user.fetch();
-      push("/medialist");
+      navigate("/medialist");
     });
   }
 </script>

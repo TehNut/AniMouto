@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { link } from "svelte-spa-router";
+  import { Link } from "svelte-navigator";
   import Lazy from "svelte-lazy";
   import { textify, hexToRgb } from "$lib/util";
   import Tooltip from "./Tooltip.svelte";
@@ -25,11 +25,10 @@
       <span>{textify(media.format)} &#183; {textify(media.status)}</span>
     </slot>
   </div>
-  <a 
+  <Link 
+    to="/media/{media.id}"
     class="flex flex-col group" 
     style="--color-variable:{hexToRgb(media.coverImage.color) || "var(--color-accent)"}" 
-    href="#/media/{media.id}" 
-    use:link
   >
     <div class="relative aspect-[3/4] bg-variable rounded-md overflow-hidden">
       <Lazy fadeOption={{ duration: 200 }}>
@@ -37,5 +36,5 @@
       </Lazy>
       <slot />
     </div>
-  </a>
+  </Link>
 </Tooltip>

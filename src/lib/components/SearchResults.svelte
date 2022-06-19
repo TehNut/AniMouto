@@ -1,6 +1,6 @@
 <script type="ts">
   import { mutation } from "@urql/svelte";
-  import { link } from "svelte-spa-router";
+  import { Link } from "svelte-navigator";
   import Icon from "svelte-fa";
   import { faNotesMedical, faPlus, faRedo } from "@fortawesome/free-solid-svg-icons";
   import { loggedIn } from "$lib/store";
@@ -52,10 +52,12 @@
     <div class="flex flex-col space-y-4">
       {#each results as media}
         <div class="w-full h-16 flex items-center space-x-2 bg-foreground rounded-md">
-          <div class="w-12 h-full flex-none aspect-[3/4] bg-cover rounded-l-md" style="background-image:url({media.coverImage.medium})" />
-          <a href="#/media/{media.id}" class="flex-1 hover:text-variable transition-colors" style="--color-variable:{hexToRgb(media.coverImage.color)}" use:link>
+          <Link to="/media/{media.id}">
+            <div class="w-12 h-full flex-none aspect-[3/4] bg-cover rounded-l-md" style="background-image:url({media.coverImage.medium})" />
+          </Link>
+          <Link to="/media/{media.id}" class="flex-1 hover:text-variable transition-colors" style="--color-variable:{hexToRgb(media.coverImage.color)}">
             <h2 class="line-clamp-2 font-medium text-sm">{media.title.userPreferred}</h2>
-          </a>
+          </Link>
           {#if $loggedIn}
             <div class="flex-none w-1/6 grid gap-x-1.5 grid-cols-3 items-center text-lg">
               <Tooltip content="View on AniList" placement="top">
