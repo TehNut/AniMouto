@@ -1,7 +1,7 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
   import { useParams } from "svelte-navigator";
-  import { operationStore, mutation } from "@urql/svelte";
+  import { queryStore, mutationStore, getContextClient } from "@urql/svelte";
   import Icon from "svelte-fa";
   import { faHeart, faNotesMedical, faPlus, faRedo, faTrash, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
   import { MediaQuery, ToggleFavoriteMutation, ChangeStatusMutation, type MediaResult } from "$lib/graphql";
@@ -16,15 +16,13 @@
   import { textify, hexToRgb } from "$lib/util";
 
   const params = useParams();
-
-  const media = operationStore<{ Media: MediaResult }>(MediaQuery, {
-    id: parseInt($params.id)
-  });
-  const toggleFavoriteMutation = mutation({
-    query: ToggleFavoriteMutation,
-  });
-  const changeStatusMutation = mutation({
-    query: ChangeStatusMutation,
+  const client = getContextClient();
+  const media = queryStore<{ Media: MediaResult }>({
+    client,
+    query: MediaQuery, 
+    variables: {
+      id: parseInt($params.id)
+    }
   });
 
   $: canAddPlanning = $media.data?.Media?.mediaListEntry === null;
@@ -34,15 +32,25 @@
   let subView: typeof GeneralView | typeof DetailsView | typeof StatsView | typeof SocialView = GeneralView;
 
   function toggleFavorite() {
-    toggleFavoriteMutation({ [$media.data.Media.type.toLowerCase()]: $media.data.Media.id });
+    mutationStore({
+      client,
+      query: ToggleFavoriteMutation,
+      variables: { 
+        [$media.data.Media.type.toLowerCase()]: $media.data.Media.id 
+      }
+    });
   }
 
   function setStatus(status?: MediaResult["mediaListEntry"]["status"]) {
-    changeStatusMutation({ 
-      media: $media.data.Media.id,
-      list: $media.data.Media.mediaListEntry?.id,
-      status,
-      delete: !status
+    mutationStore({
+      client,
+      query: ChangeStatusMutation,
+      variables: { 
+        media: $media.data.Media.id,
+        list: $media.data.Media.mediaListEntry?.id,
+        status,
+        delete: !status
+      }
     });
   }
 </script>

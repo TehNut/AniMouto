@@ -66,6 +66,18 @@ export function readableTime(parsed: ParsedTime, opts?: ReadableOpts): string {
   return str.replace(/([a-z])/g, "$1 ");
 }
 
+export const debounce = <F extends (...args: any[]) => any>(func: F, waitFor: number) => {
+  let timeout: ReturnType<typeof setTimeout>;
+
+  return (...args: Parameters<F>): Promise<ReturnType<F>> =>
+    new Promise(resolve => {
+      if (timeout)
+        clearTimeout(timeout)
+
+      timeout = setTimeout(() => resolve(func(...args)), waitFor)
+    });
+}
+
 export function createHashedHistory(): HistorySource {
   const history = createHashHistory();
   let listeners = [];

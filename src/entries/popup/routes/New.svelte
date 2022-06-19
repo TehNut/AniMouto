@@ -1,6 +1,5 @@
 <script lang="ts">
-  import type { OperationStore } from "@urql/svelte";
-  import { operationStore } from "@urql/svelte";
+  import { getContextClient, queryStore } from "@urql/svelte";
   import type { RecentMedia } from "$lib/graphql";
   import { RecentMediaQuery } from "$lib/graphql";
   import { extensionConfig } from "$lib/store";
@@ -8,23 +7,35 @@
   import Section from "$lib/components/Section.svelte";
   import MediaCard from "$lib/components/MediaCard.svelte";
 
-  const recentAnime = operationStore<{ Page: RecentMedia }>(RecentMediaQuery, {
-    type: "ANIME",
-    sort: [ "ID_DESC" ],
-    perPage: $extensionConfig.theme.wide ? 12 : 8,
-  }, { pause: false });
-  const recentManga = operationStore<{ Page: RecentMedia }>(RecentMediaQuery, {
-    type: "MANGA",
-    sort: [ "ID_DESC" ],
-    formatIn: [ "MANGA", "ONE_SHOT" ],
-    perPage: $extensionConfig.theme.wide ? 12 : 8,
-  }, { pause: false });
-  const recentNovels = operationStore<{ Page: RecentMedia }>(RecentMediaQuery, {
-    type: "MANGA",
-    sort: [ "ID_DESC" ],
-    formatIn: [ "NOVEL" ],
-    perPage: $extensionConfig.theme.wide ? 12 : 8,
-  }, { pause: false });
+  const recentAnime = queryStore<{ Page: RecentMedia }>({
+    client: getContextClient(),
+    query: RecentMediaQuery, 
+    variables: {
+      type: "ANIME",
+      sort: [ "ID_DESC" ],
+      perPage: $extensionConfig.theme.wide ? 12 : 8,
+    }
+  });
+  const recentManga = queryStore<{ Page: RecentMedia }>({
+    client: getContextClient(),
+    query: RecentMediaQuery, 
+    variables: {
+      type: "MANGA",
+      sort: [ "ID_DESC" ],
+      formatIn: [ "MANGA", "ONE_SHOT" ],
+      perPage: $extensionConfig.theme.wide ? 12 : 8,
+    }
+  });
+  const recentNovels = queryStore<{ Page: RecentMedia }>({
+    client: getContextClient(),
+    query: RecentMediaQuery, 
+    variables: {
+      type: "MANGA",
+      sort: [ "ID_DESC" ],
+      formatIn: [ "NOVEL" ],
+      perPage: $extensionConfig.theme.wide ? 12 : 8,
+    }
+  });
 </script>
 
 <div class="flex flex-col space-y-2">

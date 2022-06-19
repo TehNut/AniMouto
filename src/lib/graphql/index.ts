@@ -1,4 +1,4 @@
-import { createClient, dedupExchange, fetchExchange, debugExchange, gql } from "@urql/svelte";
+import { createClient, dedupExchange, fetchExchange, debugExchange, cacheExchange as documentCacheExchange, gql } from "@urql/svelte";
 import { cacheExchange } from "@urql/exchange-graphcache";
 import type { CacheExchangeOpts } from "@urql/exchange-graphcache"
 import { get } from "svelte/store";
@@ -9,6 +9,7 @@ export const client = createClient({
   url: "https://graphql.anilist.co",
   exchanges: [
     dedupExchange, 
+    // documentCacheExchange,
     // debugExchange,
     cacheExchange({
       schema: schema as CacheExchangeOpts["schema"],
@@ -39,6 +40,7 @@ export const client = createClient({
             cache.invalidate({ __typename: "MediaList", id: args.id as number });
           },
           ToggleFavourite: (result, args, cache, info) => {
+            console.log("foo")
             const data = cache.readFragment(gql`fragment _ on Media { isFavourite }`, {
               id: args.mangaId || args.animeId,
             });

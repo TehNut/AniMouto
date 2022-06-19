@@ -1,7 +1,7 @@
 <script lang="ts">
   import Icon from "svelte-fa";
   import { faCompressAlt, faExpandAlt } from "@fortawesome/free-solid-svg-icons";
-  import { operationStore } from "@urql/svelte";
+  import { getContextClient, queryStore } from "@urql/svelte";
   import type { MediaListResult } from "$lib/graphql";
   import { MediaListQuery } from "$lib/graphql";
   import { user, extensionConfig } from "$lib/store";
@@ -11,13 +11,21 @@
   import MediaListCard from "$lib/components/MediaListCard.svelte";
   import Tooltip from "$lib/components/Tooltip.svelte";
 
-  const animeList = operationStore<{ Page: MediaListResult }>(MediaListQuery, {
-    id: $user.id,
-    type: "ANIME"
+  const animeList = queryStore<{ Page: MediaListResult }>({
+    client: getContextClient(),
+    query: MediaListQuery, 
+    variables: {
+      id: $user.id,
+      type: "ANIME"
+    }
   });
-  const mangaList = operationStore<{ Page: MediaListResult }>(MediaListQuery, {
-    id: $user.id,
-    type: "MANGA"
+  const mangaList = queryStore<{ Page: MediaListResult }>({
+    client: getContextClient(),
+    query: MediaListQuery, 
+    variables: {
+      id: $user.id,
+      type: "MANGA"
+    }
   });
 
   $: combineAnime = $extensionConfig.list?.combineAnime;

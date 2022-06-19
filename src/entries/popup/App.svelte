@@ -3,7 +3,7 @@
   import { storage } from "webextension-polyfill";
   import { Router, Route, createHistory, navigate } from "svelte-navigator";
   import { faListUl, faSearch, faBell, faCog, faSignInAlt, faBullhorn } from "@fortawesome/free-solid-svg-icons";
-  import { setClient } from "@urql/svelte";
+  import { setContextClient } from "@urql/svelte";
   import "$assets/app.css";
   import anilistLogo from "$assets/anilist.svg";
   import { client } from "$lib/graphql";
@@ -14,7 +14,7 @@
 
   const history = createHistory(createHashedHistory());
 
-  setClient(client);
+  setContextClient(client);
 
   onMount(async () => {
     history.navigate($lastPage);

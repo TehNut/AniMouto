@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { mutation } from "@urql/svelte";
+  import { getContextClient, mutationStore } from "@urql/svelte";
   import { IncrementProgressMutation, type MediaListResult } from "$lib/graphql";
   import { readableTime, parseSeconds } from "$lib/util";
   import MediaCard from "./MediaCard.svelte";
@@ -7,22 +7,22 @@
   export let listEntry: MediaListResult["mediaList"][0];
   export let type: "ANIME" | "MANGA";
 
-  const incrementProgressMutation = mutation({
-    query: IncrementProgressMutation,
-  });
-
   $: behindCount = listEntry.media.nextAiringEpisode ? listEntry.media.nextAiringEpisode?.episode - 1 - listEntry.progress : 0;
   $: maxProgress = listEntry.media.episodes || listEntry.media.chapters || "";
 
   async function incrementProgress() {
     const maxProgress = listEntry.media.episodes || listEntry.media.chapters;
     const willFinish = listEntry.progress + 1 >= (maxProgress || Infinity);
-    incrementProgressMutation({
-      listId: listEntry.id,
-      mediaId: listEntry.media.id,
-      progress: listEntry.progress + 1,
-      status: willFinish ? "COMPLETED" : undefined,
-      volume: willFinish && listEntry.media.volumes && type === "MANGA" ? listEntry.media.volumes : undefined
+    mutationStore({
+      client: getContextClient(),
+      query: IncrementProgressMutation,
+      variables: {
+        listId: listEntry.id,
+        mediaId: listEntry.media.id,
+        progress: listEntry.progress + 1,
+        status: willFinish ? "COMPLETED" : undefined,
+        volume: willFinish && listEntry.media.volumes && type === "MANGA" ? listEntry.media.volumes : undefined
+      }
     });
   }
 </script>

@@ -6,53 +6,33 @@
   import { onMount } from "svelte";
   import Icon from "svelte-fa";
   import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-  import { operationStore, query } from "@urql/svelte";
+  import { getContextClient, queryStore } from "@urql/svelte";
   import type { SearchResult } from "$lib/graphql";
   import { SearchQuery, } from "$lib/graphql";
+  import { debounce } from "$lib/util";
   import SearchResults from "$lib/components/SearchResults.svelte";
   import Loader from "$lib/components/Loader.svelte";
   import Error from "$lib/components/Error.svelte";
 
-  const search = operationStore<{ Page: SearchResult }>(SearchQuery, undefined, {
-    pause: true
-  });
-  query(search);
-
   let selectedMode: SearchMode = "ALL";
-  let lastSearch = "";
   let searchText = "";
-  let debouncer = null;
   let textField: HTMLInputElement = null;
 
-  onMount(() => textField?.focus());
-
-  function changeSearchMode(mode: SearchMode) {
-    selectedMode = mode;
-    submitSearch();
-  }
-
-  function debounce() {
-    clearTimeout(debouncer);
-    debouncer = setTimeout(() => {
-      if (searchText !== lastSearch) {
-        submitSearch()
-        lastSearch = searchText;
-      }
-    }, 700);
-  }
-
-  function submitSearch() {
-    if (searchText.length === 0)
-      return;
-
-    $search.context.pause = false;
-    $search.variables = {
+  $: search = queryStore<{ Page: SearchResult }>({
+    client: getContextClient(),
+    query: SearchQuery,
+    variables: {
       search: searchText,
       type: selectedMode === "ALL" ? undefined : selectedMode === "ANIME" ? "ANIME" : "MANGA",
       format: selectedMode === "ALL" ? undefined : selectedMode === "MANGA" ? [ "MANGA", "ONE_SHOT" ] : selectedMode === "LIGHT_NOVEL" ? [ "NOVEL" ] : undefined,
-    }
-    $search.reexecute();
-  }
+    },
+    pause: searchText === ""
+  });
+  const debounceSearchText = debounce<(text: string) => void>(text => {
+    searchText = text
+  }, 700);
+
+  onMount(() => textField?.focus());
 </script>
 
 <div class="w-full h-full flex flex-col items-center">
@@ -62,8 +42,7 @@
       placeholder="Search AniList..." 
       class="w-full p-2 mt-4 rounded-md text-md bg-foreground focus:outline-none focus:ring-2 ring-accent"
       bind:this={textField}
-      bind:value={searchText}
-      on:keyup={() => debounce()}
+      on:input={e => debounceSearchText(e.currentTarget.value)}
     />
     {#if $search.fetching}
       <Icon class="absolute right-2 bottom-3 pointer-events-none text-accent" icon={faSpinner} spin />
@@ -73,22 +52,22 @@
     <button 
       class="px-2 py-0.5 text-sm rounded-md hover:bg-accent/40 hover:text-text-400 transition-colors" 
       class:selected={selectedMode === "ALL"}
-      on:click={() => changeSearchMode("ALL")}
+      on:click={() => selectedMode = "ALL"}
     >All</button>
     <button 
       class="px-2 py-0.5 text-sm rounded-md hover:bg-accent/40 hover:text-text-400 transition-colors" 
       class:selected={selectedMode === "ANIME"}
-      on:click={() => changeSearchMode("ANIME")}
+      on:click={() => selectedMode = "ANIME"}
     >Anime</button>
     <button
       class="px-2 py-0.5 text-sm rounded-md hover:bg-accent/40 hover:text-text-400 transition-colors" 
       class:selected={selectedMode === "MANGA"}
-      on:click={() => changeSearchMode("MANGA")}
+      on:click={() => selectedMode = "MANGA"}
     >Manga</button>
     <button
       class="px-2 py-0.5 text-sm rounded-md hover:bg-accent/40 hover:text-text-400 transition-colors" 
       class:selected={selectedMode === "LIGHT_NOVEL"}
-      on:click={() => changeSearchMode("LIGHT_NOVEL")}
+      on:click={() => selectedMode = "LIGHT_NOVEL"}
     >Novel</button>
   </div>
   {#if $search.fetching}

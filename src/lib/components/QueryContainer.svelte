@@ -1,12 +1,9 @@
 <script lang="ts">
-  import type { OperationStore } from "@urql/svelte";
-  import { query as runQuery } from "@urql/svelte";
+  import type { OperationResultStore } from "@urql/svelte/dist/types/common";
   import Error from "./Error.svelte";
   import Loader from "./Loader.svelte";
 
-  export let query: OperationStore;
-
-  runQuery(query);
+  export let query: OperationResultStore;
 </script>
 
 {#if $query.fetching}

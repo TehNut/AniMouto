@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import { operationStore } from "@urql/svelte";
+  import { getContextClient, queryStore } from "@urql/svelte";
   import { unreadNotifications } from "$lib/store";
   import type { NotificationsResult } from "$lib/graphql";
   import { NotificationsQuery, NotificationType } from "$lib/graphql";
@@ -10,10 +10,15 @@
   export let page: number;
 
   const dispatch = createEventDispatcher();
-  const notifications = operationStore<{ Page: NotificationsResult }>(NotificationsQuery, { 
-    reset: false,
-    page
-  }, { requestPolicy: "network-only" });
+  const notifications = queryStore<{ Page: NotificationsResult }>({
+    client: getContextClient(),
+    query: NotificationsQuery, 
+    variables: { 
+      reset: false,
+      page
+    }, 
+    requestPolicy: "network-only"
+  });
 
   notifications.subscribe(r => {
     if (r.data && !r.data.Page.pageInfo.hasNextPage)

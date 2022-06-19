@@ -1,5 +1,5 @@
 <script type="ts">
-  import { mutation } from "@urql/svelte";
+  import { getContextClient, mutationStore } from "@urql/svelte";
   import { Link } from "svelte-navigator";
   import Icon from "svelte-fa";
   import { faNotesMedical, faPlus, faRedo } from "@fortawesome/free-solid-svg-icons";
@@ -14,16 +14,16 @@
   export let title: string;
   export let results: SearchResult["media"];
 
-  const changeStatusMutation = mutation({
-    query: ChangeStatusMutation
-  });
-
   function setStatus(media: SearchResult["media"][0], status: SearchResult["media"][0]["mediaListEntry"]["status"]) {
-    changeStatusMutation({
-      media: media.id,
-      list: media.mediaListEntry?.id || undefined,
-      status,
-      delete: false
+    mutationStore({
+      client: getContextClient(),
+      query: ChangeStatusMutation,
+      variables: {
+        media: media.id,
+        list: media.mediaListEntry?.id || undefined,
+        status,
+        delete: false
+      }
     });
   }
 
