@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { storage } from "webextension-polyfill";
-  import { Router, Route, createHistory, navigate } from "svelte-navigator";
+  import { Router, createHistory } from "svelte-navigator";
   import { faListUl, faSearch, faBell, faCog, faSignInAlt, faBullhorn } from "@fortawesome/free-solid-svg-icons";
   import { setContextClient } from "@urql/svelte";
   import "$assets/app.css";
@@ -16,9 +16,14 @@
 
   setContextClient(client);
 
+  let scrollAnchor: HTMLElement;
+
   onMount(async () => {
     history.navigate($lastPage);
-    history.listen(h => $lastPage = h.location.pathname);
+    history.listen(h => {
+      $lastPage = h.location.pathname;
+      scrollAnchor.scrollIntoView({ behavior: "smooth" })
+    });
     if ($loggedIn) {
       const { data } = await client.query("{ Viewer { id unreadNotificationCount } }").toPromise();
       $unreadNotifications = data.Viewer.unreadNotificationCount;
@@ -59,6 +64,7 @@
       </a>
     </nav>
     <div class="flex-1 p-2 relative h-full bg-background text-text-400 overflow-y-auto overflow-x-hidden">
+      <div class="absolute top-0 w-0 h-0 pointer-events-none" bind:this={scrollAnchor} />
       <Routes />
     </div>
   </Router>
