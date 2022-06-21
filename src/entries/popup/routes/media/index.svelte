@@ -17,7 +17,7 @@
 
   const params = useParams();
   const client = getContextClient();
-  const media = queryStore<{ Media: MediaResult }>({
+  $: media = queryStore<{ Media: MediaResult }>({
     client,
     query: MediaQuery, 
     variables: {
