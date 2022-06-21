@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type { OperationResultStore } from "@urql/svelte/dist/types/common";
+  import type { OperationResultStore, Pausable } from "@urql/svelte/dist/types/common";
   import Error from "./Error.svelte";
   import Loader from "./Loader.svelte";
 
-  export let query: OperationResultStore;
+  export let query: OperationResultStore & Pausable;
 </script>
 
-{#if $query.fetching}
+{#if $query.fetching || query.isPaused$ && !$query.data}
   <div class="w-full h-screen">
     <Loader />
   </div>
