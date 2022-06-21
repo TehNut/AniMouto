@@ -7,10 +7,10 @@
   import "$assets/app.css";
   import anilistLogo from "$assets/anilist.svg";
   import { client } from "$lib/graphql";
-  import { LoginPage, MediaListPage, MediaPage, NewPage, NotificationsPage, SearchPage, SettingsPage } from "./routes";
-  import NavLink from "$lib/components/NavLink.svelte";
   import { extensionConfig, lastPage, loggedIn, user, unreadNotifications } from "$lib/store";
   import { createHashedHistory } from "$lib/util";
+  import NavLink from "$lib/components/NavLink.svelte";
+  import Routes from "$lib/components/Routes.svelte";
 
   const history = createHistory(createHashedHistory());
 
@@ -59,13 +59,7 @@
       </a>
     </nav>
     <div class="flex-1 p-2 relative h-full bg-background text-text-400 overflow-y-auto overflow-x-hidden">
-      <Route path="/"><LoginPage /></Route>
-      <Route path="/medialist"><MediaListPage /></Route>
-      <Route path="/new"><NewPage /></Route>
-      <Route path="/search"><SearchPage /></Route>
-      <Route path="/notifications"><NotificationsPage /></Route>
-      <Route path="/settings"><SettingsPage /></Route>
-      <Route path="/media/:id"><MediaPage /></Route>
+      <Routes />
     </div>
   </Router>
 </div>
