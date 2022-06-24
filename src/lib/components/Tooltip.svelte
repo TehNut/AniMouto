@@ -22,7 +22,7 @@
   } as FlyParams;
 
   const arrowRef = writable<HTMLElement>(null);
-  const [ floatingRef, floatingContent ] = createFloatingActions({
+  const [ floatingRef, floatingContent, update ] = createFloatingActions({
     strategy: "absolute",
     placement,
     middleware: [
@@ -44,6 +44,8 @@
       });
     }
   });
+
+  $: if (content) update();
 
   let shown = false;
 
