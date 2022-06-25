@@ -29,7 +29,7 @@
 <button 
   {disabled}
   on:click={onClick}
-  class="{customClasses} {getColor()} px-4 py-3 flex justify-center rounded-md hover:bg-opacity-95 disabled:bg-text-400/60 disabled:text-400 disabled:cursor-not-allowed"
+  class="{customClasses} {getColor()} px-4 py-3 flex justify-center rounded-md font-medium hover:bg-opacity-95 disabled:bg-text-400/60 disabled:text-400 disabled:cursor-not-allowed"
 >
   {#if icon}
     <Icon class={$$slots.default ? "mr-2" : ""} {icon} />

@@ -74,6 +74,7 @@ export * from "./query/Media";
 export * from "./query/GetRecentMedia";
 export * from "./query/MediaList";
 export * from "./query/Notifications";
+export * from "./query/PopularMedia";
 export * from "./mutation/ToggleFavorite";
 export * from "./mutation/ChangeStatus";
 export * from "./mutation/IncrementProgress";

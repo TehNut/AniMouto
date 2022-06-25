@@ -29,14 +29,14 @@
   });
 
   $: combineAnime = $extensionConfig.list?.combineAnime;
-  $: airingAnime = !combineAnime ? $animeList.data?.Page?.mediaList
+  $: airingAnime = !combineAnime ? ($animeList.data?.Page?.mediaList || [])
     .filter(l => l.media.status === "RELEASING")
     .filter(l => l.status !== "COMPLETED")
     .sort((a, b) => a.media.nextAiringEpisode?.timeUntilAiring - b.media.nextAiringEpisode?.timeUntilAiring) : [];
-  $: watchingAnime = combineAnime ? $animeList.data?.Page.mediaList : $animeList.data?.Page?.mediaList
+  $: watchingAnime = combineAnime ? ($animeList.data?.Page.mediaList || []) : ($animeList.data?.Page?.mediaList || [])
     .filter(l => l.media.status !== "RELEASING")
     .filter(l => l.status !== "COMPLETED");
-  $: reading = $mangaList.data?.Page.mediaList
+  $: reading = ($mangaList.data?.Page.mediaList || [])
     .filter(l => l.status !== "COMPLETED");
   $: airingBehind = getTotalBehind(airingAnime || []);
   $: watchingBehind = getTotalBehind(watchingAnime || []);
