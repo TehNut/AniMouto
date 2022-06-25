@@ -61,7 +61,7 @@
       <div class="h-full w-full bg-gradient-to-b from-shadow/40 to-shadow/60" />
     </div>
   {:else}
-    <div in:fade={{ duration: 1, delay: 150 }} class="absolute w-full h-[20vh] inset-0 bg-cover bg-center" style="background-image:url({$media.data.Media.coverImage.extraLarge})">
+    <div in:fade={{ duration: 1, delay: 150 }} class="absolute w-full h-[24vh] -mt-[4vh] inset-0 bg-cover bg-center" style="background-image:url({$media.data.Media.coverImage.extraLarge})">
       <div class="h-full w-full bg-gradient-to-b from-shadow/40 to-shadow/60 backdrop-blur-sm" />
     </div>
   {/if}
