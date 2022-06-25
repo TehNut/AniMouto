@@ -25,9 +25,9 @@
     }
   });
 
-  $: canAddPlanning = $media.data?.Media?.mediaListEntry === null;
-  $: canRepeat = $media.data?.Media?.mediaListEntry?.status === "COMPLETED";
-  $: canAddCurrent = $media.data?.Media && $media.data.Media.status !== "NOT_YET_RELEASED" && ![ "CURRENT", "COMPLETED", "REPEATING" ].includes($media.data.Media.mediaListEntry?.status);
+  $: canAddPlanning = $media.data?.Media.mediaListEntry === null;
+  $: canRepeat = $media.data?.Media.mediaListEntry?.status === "COMPLETED";
+  $: canAddCurrent = $media.data?.Media && $media.data?.Media.status !== "NOT_YET_RELEASED" && ![ "CURRENT", "COMPLETED", "REPEATING" ].includes($media.data?.Media.mediaListEntry?.status);
 
   let subView: typeof GeneralView | typeof DetailsView | typeof StatsView | typeof SocialView = GeneralView;
 
@@ -56,9 +56,15 @@
 </script>
 
 <QueryContainer query={media}>
-  <div in:fade={{ duration: 1, delay: 150 }} class="absolute w-full h-[20vh] inset-0 bg-cover bg-center" style="background-image:url({$media.data.Media.bannerImage})">
-    <div class="h-full w-full bg-gradient-to-b from-shadow/40 to-shadow/60" />
-  </div>
+  {#if $media.data.Media.bannerImage}
+    <div in:fade={{ duration: 1, delay: 150 }} class="absolute w-full h-[20vh] inset-0 bg-cover bg-center" style="background-image:url({$media.data.Media.bannerImage})">
+      <div class="h-full w-full bg-gradient-to-b from-shadow/40 to-shadow/60" />
+    </div>
+  {:else}
+    <div in:fade={{ duration: 1, delay: 150 }} class="absolute w-full h-[20vh] inset-0 bg-cover bg-center" style="background-image:url({$media.data.Media.coverImage.extraLarge})">
+      <div class="h-full w-full bg-gradient-to-b from-shadow/40 to-shadow/60 backdrop-blur-sm" />
+    </div>
+  {/if}
   <div 
     class="w-full mt-16 flex flex-col space-y-4 relative z-10" 
     style="--color-variable:{hexToRgb($media.data.Media.coverImage.color) || "--color-accent"};--scroller-thumb:{hexToRgb($media.data.Media.coverImage.color) || "var(--color-accent)"}"
@@ -125,6 +131,6 @@
         <Icon class="ml-2" icon={faExternalLinkAlt} />
       </a>
     </div>
-    <svelte:component this={subView} {media} {params} />
+    <svelte:component this={subView} {media} />
   </div>
 </QueryContainer>
