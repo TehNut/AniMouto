@@ -38,7 +38,8 @@
   $: sortedRelations = ($media.data.Media.relations?.edges || [])
     .sort((r1, r2) => relationSortOrder.indexOf(r1.relationType) - relationSortOrder.indexOf(r2.relationType));
   $: recommendations = $media.data.Media.recommendations.nodes
-    .filter(r => r.mediaRecommendation);
+    .filter(r => r.mediaRecommendation)
+    .filter(r => r.rating > 1);
 </script>
 
 {#if $media.data.Media.description}
@@ -115,7 +116,7 @@
         <MediaCard media={recommendation.mediaRecommendation}>
           <svelte:fragment slot="tooltip-body">
             <span class="flex items-center mb-2 text-green">
-              <Icon icon={faThumbsUp} class="mr-2 text-base" />
+              <Icon icon={faThumbsUp} class="mr-1 text-base" />
               +{recommendation.rating} votes
             </span>
             <span>{textify(recommendation.mediaRecommendation.format)} &#183; {textify(recommendation.mediaRecommendation.status)}</span>
