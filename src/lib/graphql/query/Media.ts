@@ -85,6 +85,27 @@ export const MediaQuery = gql`
           hasNextPage
         }
       }
+      recommendations(perPage: 8, sort: [ RATING_DESC, ID ]) {
+        pageInfo {
+          hasNextPage
+        }
+        nodes {
+          id
+          rating
+          mediaRecommendation {
+            id
+            title {
+              userPreferred
+            }
+            format
+            status
+            coverImage {
+              color
+              extraLarge
+            }
+          }
+        }
+      }
     }
   }
 `;
@@ -120,22 +141,21 @@ export interface MediaResult {
   relations: {
     edges: {
       relationType: string
-      node: {
-        id: number
-        format: string
-        status: string
-        title: {
-          userPreferred: string
-        }
-        coverImage: {
-          color: string
-          extraLarge: string
-        }
-      }
+      node: SimpleMedia
     }[]
   }
   staff: Person;
   characters: Person;
+  recommendations: {
+    pageInfo: {
+      hasNextPage: boolean
+    }
+    nodes: {
+      id: number
+      rating: number
+      mediaRecommendation: SimpleMedia
+    }[]
+  }
 }
 
 interface Person {
@@ -155,5 +175,18 @@ interface Person {
   }[];
   pageInfo: {
     hasNextPage: boolean
+  }
+}
+
+interface SimpleMedia {
+  id: number
+  format: string
+  status: string
+  title: {
+    userPreferred: string
+  }
+  coverImage: {
+    color: string
+    extraLarge: string
   }
 }

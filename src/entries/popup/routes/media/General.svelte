@@ -1,14 +1,14 @@
 <script lang="ts">
-  import type { OperationStore } from "@urql/svelte";
   import Icon from "svelte-fa";
-  import { faLink, faInfoCircle, faComments, faTv } from "@fortawesome/free-solid-svg-icons";
+  import { faLink, faInfoCircle, faComments, faTv, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+  import type { OperationResultStore } from "@urql/svelte/dist/types/common";
   import type { MediaResult } from "$lib/graphql";
   import Section from "$lib/components/Section.svelte";
   import MediaCard from "$lib/components/MediaCard.svelte";
   import Tooltip from "$lib/components/Tooltip.svelte";
   import { textify } from "$lib/util";
 
-  export let media: OperationStore<{ Media: MediaResult }>;
+  export let media: OperationResultStore<{ Media: MediaResult }>;
 
   const relationSortOrder = [
 		"ADAPTATION",
@@ -45,7 +45,7 @@
   </Section>
 {/if}
 {#if $media.data.Media.relations?.edges.length > 0}
-  <Section title="Relations">
+  <Section title="Relations" raise={false}>
     <div class="grid grid-cols-4 gap-2">
       {#each sortedRelations as relation}
         <MediaCard media={relation.node}>
@@ -57,7 +57,7 @@
   </Section>
 {/if}
 {#if $media.data.Media.characters?.edges.length > 0}
-  <Section>
+  <Section raise={false}>
     <a class="hover:text-variable transition-colors" href="{$media.data.Media.siteUrl}/characters" target="_blank" slot="title">
       Characters
     </a>
@@ -74,7 +74,7 @@
         </Tooltip>
       {/each}
       {#if $media.data.Media.characters.pageInfo.hasNextPage}
-        <a class="col-span-full text-text-300 hover:text-variable transition-colors text-center text-xs -mb-2" href="{$media.data.Media.siteUrl}/characters" target="_blank">
+        <a class="col-span-full text-text-300 hover:text-variable transition-colors text-center text-xs font-medium -mb-2" href="{$media.data.Media.siteUrl}/characters" target="_blank">
           See more on AniList
         </a>
       {/if}
@@ -82,7 +82,7 @@
   </Section>
 {/if}
 {#if $media.data.Media.staff.edges.length > 0}
-  <Section>
+  <Section raise={false}>
     <a class="hover:text-variable transition-colors" href="{$media.data.Media.siteUrl}/staff" target="_blank" slot="title">
       Staff
     </a>
@@ -99,11 +99,32 @@
         </Tooltip>
       {/each}
       {#if $media.data.Media.staff.pageInfo.hasNextPage}
-        <a class="col-span-full text-text-300 hover:text-variable transition-colors text-center text-xs -mb-2" href="{$media.data.Media.siteUrl}/staff" target="_blank">
+        <a class="col-span-full text-text-300 hover:text-variable transition-colors text-center text-xs font-medium -mb-2" href="{$media.data.Media.siteUrl}/staff" target="_blank">
           See more on AniList
         </a>
       {/if}
     </div>
+  </Section>
+{/if}
+{#if $media.data.Media.recommendations?.nodes.length > 0}
+  <Section title="Recommendations" raise={false}>
+    <div class="grid grid-cols-4 gap-2">
+      {#each $media.data.Media.recommendations.nodes as recommendation}
+        <MediaCard media={recommendation.mediaRecommendation}>
+          <svelte:fragment slot="tooltip-body">
+            <span class="flex items-center mb-2 text-green">
+              <Icon icon={faThumbsUp} class="mr-2 text-base" />
+              +{recommendation.rating} votes
+            </span>
+            <span>{textify(recommendation.mediaRecommendation.format)} &#183; {textify(recommendation.mediaRecommendation.status)}</span>
+          </svelte:fragment>
+        </MediaCard>
+      {/each}
+    {#if $media.data.Media.recommendations.pageInfo.hasNextPage}
+      <a class="col-span-full text-text-300 hover:text-variable transition-colors text-center text-xs font-medium -mb-2" href="{$media.data.Media.siteUrl}" target="_blank">
+        See more on AniList
+      </a>
+    {/if}
   </Section>
 {/if}
 {#if $media.data.Media.externalLinks.length > 0}
