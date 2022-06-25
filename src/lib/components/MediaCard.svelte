@@ -22,7 +22,7 @@
   <div slot="content" class="flex flex-col w-48">
     <h2 class="font-semibold text-sm mb-2 leading-tight">{media.title.userPreferred}</h2>
     <slot name="tooltip-body">
-      <span>{textify(media.format)} &#183; {textify(media.status)}</span>
+      <span>{textify(media.format) || "Unknown"} &#183; {textify(media.status) || "Unknown"}</span>
     </slot>
   </div>
   <Link 
