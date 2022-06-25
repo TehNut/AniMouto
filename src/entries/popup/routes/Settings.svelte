@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { permissions } from "webextension-polyfill";
+  import { onMount } from "svelte";
+  import { permissions, runtime } from "webextension-polyfill";
   import { format } from "timeago.js";
   import { useNavigate } from "svelte-navigator";
   import type { JwtPayload } from "jwt-decode";
   import jwtDecode from "jwt-decode";
   import { Theme, Accent } from "$lib/model";
-  import { extensionConfig, user, token, loggedIn } from "$lib/store";
+  import { extensionConfig, previousExtensionConfig, user, token, loggedIn } from "$lib/store";
   import Tooltip from "$lib/components/Tooltip.svelte";
   import Section from "$lib/components/Section.svelte";
   import Button from "$lib/components/Button.svelte";
-import { onMount } from "svelte";
   
   const navigate = useNavigate();
   const themes: { theme: Theme, background: String, color: string }[] = [
@@ -39,6 +39,15 @@ import { onMount } from "svelte";
 
   onMount(async () => {
     hasNotificationPermission = await permissions.contains({ permissions: [ "notifications" ] });
+
+    return extensionConfig.subscribe(c => {
+      if (
+        c.notifications.enablePolling !== $previousExtensionConfig.notifications.enablePolling ||
+        c.notifications.pollingInterval !== $previousExtensionConfig.notifications.pollingInterval ||
+        c.notifications.desktopNotifications !== $previousExtensionConfig.notifications.desktopNotifications
+      )
+        runtime.sendMessage({ type: "RESET_ALARMS" });
+    })
   });
 
   function getTokenExpiration(): Date {
@@ -136,7 +145,7 @@ import { onMount } from "svelte";
     >
   </label>
   <p>The number of minutes between polling checks.</p>
-  <label class="flex items-center mt-4 text-lg cursor-pointer" on:click={e => !hasNotificationPermission && requestPermission(e)}>
+  <label class="flex items-center mt-4 text-lg {!$extensionConfig.notifications.enablePolling ? "pointer-events-none cursor-not-allowed opacity-50" : "cursor-pointer"}" on:click={e => !hasNotificationPermission && requestPermission(e)}>
     <input 
       type="checkbox"
       class="w-5 h-5"

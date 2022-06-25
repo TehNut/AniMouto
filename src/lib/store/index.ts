@@ -1,10 +1,11 @@
 import { writable } from "svelte/store";
+import { withPrevious } from "svelte-previous";
 import type { ExtensionConfiguration } from "$lib/model";
 import { Theme, Accent } from "$lib/model";
 
 export const lastPage = writable("/");
 export const unreadNotifications = writable(0);
-export const extensionConfig = writable<ExtensionConfiguration>({
+const [ currentExtensionConfig_, previousExtensionConfig_ ] = withPrevious<ExtensionConfiguration>({
   list: {
     combineAnime: false
   },
@@ -19,5 +20,8 @@ export const extensionConfig = writable<ExtensionConfiguration>({
     desktopNotifications: false
   }
 });
+
+export const extensionConfig = currentExtensionConfig_;
+export const previousExtensionConfig = previousExtensionConfig_;
 
 export * from "./auth";

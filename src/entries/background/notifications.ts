@@ -6,17 +6,13 @@ import { queryAniList } from "./main";
 runtime.onInstalled.addListener(setupAlarms);
 runtime.onStartup.addListener(setupAlarms);
 
-permissions.onAdded.addListener(p => {
-  if (p.permissions?.includes("notifications"))
-notifications?.onClicked.addListener(handleNotificationClick);
-});
-
-permissions.onRemoved.addListener(p => {
-  if (p.permissions?.includes("notifications"))
-    notifications?.onClicked.removeListener(handleNotificationClick);
+permissions.onAdded.addListener(permissions => {
+  if (permissions.permissions?.includes("notifications") && !notifications?.onClicked.hasListener(handleNotificationClick))
+    notifications.onClicked.addListener(handleNotificationClick)
 });
 
 function handleNotificationClick(id: string) {
+  console.log(id)
   if (id.startsWith("https://anilist.co/"))
     window.open(id);
 
@@ -24,20 +20,17 @@ function handleNotificationClick(id: string) {
     window.open("https://github.com/TehNut/AniMouto"); // Maybe add a section to the readme about this
 }
 
-permissions.onAdded.addListener(permissions => {
-  if (permissions.permissions?.includes("notifications") && !notifications?.onClicked.hasListeners())
-    notifications.onClicked.addListener(handleNotificationClick)
-});
-
 export async function setupAlarms() {
   const { token, config } = await storage.local.get(["token", "config"]) as { token: string, config: ExtensionConfiguration };
   await alarms.clearAll();
 
-  console.log(token, config.notifications.enablePolling)
   if (token && config.notifications.enablePolling)
     alarms.create("notifications", { delayInMinutes: config.notifications.pollingInterval, periodInMinutes: config.notifications.pollingInterval });
 
   checkForNotifications();
+
+  if (notifications)
+    notifications.onClicked.addListener(handleNotificationClick)
 }
 
 alarms.onAlarm.addListener(alarm => {
@@ -46,7 +39,7 @@ alarms.onAlarm.addListener(alarm => {
 });
 
 async function checkForNotifications() {
-  const { token, unreadNotificationCount: currentCount } = await storage.local.get() as { token: string, unreadNotificationCount: number };
+  const { token, unreadNotificationCount: currentCount, config } = await storage.local.get() as { token: string, unreadNotificationCount: number, config: ExtensionConfiguration };
   if (!token)
     return;
 
@@ -55,10 +48,10 @@ async function checkForNotifications() {
   await action.setBadgeText({ text: response.Viewer.unreadNotificationCount ? response.Viewer.unreadNotificationCount.toString() : "" });
   await action.setBadgeBackgroundColor({ color: [61, 180, 242, Math.floor(255 * 0.8)] });
 
-  if (response.Viewer.unreadNotificationCount > 0 && response.Viewer.unreadNotificationCount - currentCount > 0)
+  if (config.notifications.desktopNotifications && response.Viewer.unreadNotificationCount > 0 && response.Viewer.unreadNotificationCount - currentCount > 0)
     handleDesktopNotifications(response.Viewer.unreadNotificationCount - currentCount);
 
-  await storage.local.set({ unreadNotificationCount: response.Viewer.unreadNotificationCount });
+  await storage.local.set({ unreadNotificationCount: 0 });
 }
 
 async function handleDesktopNotifications(totalUnread: number) {
