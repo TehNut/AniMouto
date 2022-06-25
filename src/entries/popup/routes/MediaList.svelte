@@ -73,7 +73,7 @@
             ({airingBehind.episodesBehind} Episodes)
           </span>
         </div>
-        <div class="grid grid-cols-4 gap-4">
+        <div class="grid {$extensionConfig.theme.wide ? "grid-cols-6" : "grid-cols-4"} gap-4">
           {#each (airingAnime || []) as listEntry}
             <MediaListCard type="ANIME" {listEntry} />
           {/each}
@@ -95,7 +95,7 @@
             ({watchingBehind.episodesBehind} Episodes)
           </span>
         </div>
-        <div class="grid grid-cols-4 gap-4">
+        <div class="grid {$extensionConfig.theme.wide ? "grid-cols-6" : "grid-cols-4"} gap-4">
           {#each (watchingAnime || []) as listEntry}
             <MediaListCard type="ANIME" {listEntry} />
           {/each}
@@ -109,7 +109,7 @@
         <div slot="title" class="flex items-center justify-between">
           Manga in Progress
         </div>
-        <div class="grid grid-cols-4 gap-4">
+        <div class="grid {$extensionConfig.theme.wide ? "grid-cols-6" : "grid-cols-4"} gap-4">
           {#each reading as listEntry}
             <MediaListCard type="MANGA" {listEntry} />
           {/each}
