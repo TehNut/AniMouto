@@ -37,6 +37,8 @@
 
   $: sortedRelations = ($media.data.Media.relations?.edges || [])
     .sort((r1, r2) => relationSortOrder.indexOf(r1.relationType) - relationSortOrder.indexOf(r2.relationType));
+  $: recommendations = $media.data.Media.recommendations.nodes
+    .filter(r => r.mediaRecommendation);
 </script>
 
 {#if $media.data.Media.description}
@@ -106,10 +108,10 @@
     </div>
   </Section>
 {/if}
-{#if $media.data.Media.recommendations?.nodes.length > 0}
+{#if recommendations.length > 0}
   <Section title="Recommendations" raise={false}>
     <div class="grid grid-cols-4 gap-2">
-      {#each $media.data.Media.recommendations.nodes as recommendation}
+      {#each recommendations as recommendation}
         <MediaCard media={recommendation.mediaRecommendation}>
           <svelte:fragment slot="tooltip-body">
             <span class="flex items-center mb-2 text-green">
