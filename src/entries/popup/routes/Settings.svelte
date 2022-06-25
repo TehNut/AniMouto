@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { permissions } from "webextension-polyfill";
   import { format } from "timeago.js";
   import { useNavigate } from "svelte-navigator";
   import type { JwtPayload } from "jwt-decode";
@@ -8,7 +9,8 @@
   import Tooltip from "$lib/components/Tooltip.svelte";
   import Section from "$lib/components/Section.svelte";
   import Button from "$lib/components/Button.svelte";
-
+import { onMount } from "svelte";
+  
   const navigate = useNavigate();
   const themes: { theme: Theme, background: String, color: string }[] = [
     {             
@@ -33,6 +35,12 @@
     }
   ];
 
+  let hasNotificationPermission = false;
+
+  onMount(async () => {
+    hasNotificationPermission = await permissions.contains({ permissions: [ "notifications" ] });
+  });
+
   function getTokenExpiration(): Date {
     return new Date(jwtDecode<JwtPayload>($token).exp * 1000);
   }
@@ -40,6 +48,12 @@
   function logout() {
     user.logout();
     navigate("/");
+  }
+
+  async function requestPermission(e: Event) {
+    const allowed = await permissions.request({ permissions: [ "notifications" ] });
+    e.preventDefault();
+    hasNotificationPermission = allowed;
   }
 </script>
 
@@ -122,4 +136,14 @@
     >
   </label>
   <p>The number of minutes between polling checks.</p>
+  <label class="flex items-center mt-4 text-lg cursor-pointer" on:click={e => !hasNotificationPermission && requestPermission(e)}>
+    <input 
+      type="checkbox"
+      class="w-5 h-5"
+      disabled={!hasNotificationPermission}
+      bind:checked={$extensionConfig.notifications.desktopNotifications}
+    >
+    <span class="ml-2">Desktop Notifications</span>
+  </label>
+  <p>Pushes AniList notifications to your desktop. Requires you to accept the permission popup, then enable it again.</p>
 </Section>

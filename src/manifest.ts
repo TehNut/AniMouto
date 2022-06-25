@@ -10,7 +10,7 @@ const sharedManifest = {
     "identity",
     "alarms"
   ],
-  optional_notifications: [
+  optional_permissions: [
     "notifications"
   ]
 };

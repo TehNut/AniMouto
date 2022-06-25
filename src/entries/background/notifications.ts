@@ -6,7 +6,15 @@ import { queryAniList } from "./main";
 runtime.onInstalled.addListener(setupAlarms);
 runtime.onStartup.addListener(setupAlarms);
 
+permissions.onAdded.addListener(p => {
+  if (p.permissions?.includes("notifications"))
 notifications?.onClicked.addListener(handleNotificationClick);
+});
+
+permissions.onRemoved.addListener(p => {
+  if (p.permissions?.includes("notifications"))
+    notifications?.onClicked.removeListener(handleNotificationClick);
+});
 
 function handleNotificationClick(id: string) {
   if (id.startsWith("https://anilist.co/"))
