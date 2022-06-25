@@ -10,100 +10,106 @@ notifications?.onClicked.addListener(handleNotificationClick);
 
 function handleNotificationClick(id: string) {
   if (id.startsWith("https://anilist.co/"))
-  window.open(id);
-  
-if (id === "unknown")
-  window.open("https://github.com/TehNut/AniMouto"); // Maybe add a section to the readme about this
+    window.open(id);
+
+  if (id === "unknown")
+    window.open("https://github.com/TehNut/AniMouto"); // Maybe add a section to the readme about this
 }
 
 permissions.onAdded.addListener(permissions => {
   if (permissions.permissions?.includes("notifications") && !notifications?.onClicked.hasListeners())
-  notifications.onClicked.addListener(handleNotificationClick)
-})
+    notifications.onClicked.addListener(handleNotificationClick)
+});
 
 export async function setupAlarms() {
-  const { token, config } = await storage.local.get("config") as { token: string, config: ExtensionConfiguration };
+  const { token, config } = await storage.local.get(["token", "config"]) as { token: string, config: ExtensionConfiguration };
   await alarms.clearAll();
 
+  console.log(token, config.notifications.enablePolling)
   if (token && config.notifications.enablePolling)
     alarms.create("notifications", { delayInMinutes: config.notifications.pollingInterval, periodInMinutes: config.notifications.pollingInterval });
- 
+
   checkForNotifications();
 }
+
+alarms.onAlarm.addListener(alarm => {
+  if (alarm.name === "notifications")
+    checkForNotifications();
+});
 
 async function checkForNotifications() {
   const { token, unreadNotificationCount: currentCount } = await storage.local.get() as { token: string, unreadNotificationCount: number };
   if (!token)
     return;
-  
+
   const response = await queryAniList<{ Viewer: { unreadNotificationCount: number } }>({ query: "{ Viewer { unreadNotificationCount } }", token }).then(res => res.data);
 
   await action.setBadgeText({ text: response.Viewer.unreadNotificationCount ? response.Viewer.unreadNotificationCount.toString() : "" });
-  await action.setBadgeBackgroundColor({ color: [ 61, 180, 242, Math.floor(255 * 0.8) ] });
+  await action.setBadgeBackgroundColor({ color: [61, 180, 242, Math.floor(255 * 0.8)] });
 
-  if (response.Viewer.unreadNotificationCount > 0/* && response.Viewer.unreadNotificationCount - currentCount > 0 */)
-    handleDesktopNotifications(response.Viewer.unreadNotificationCount/* - currentCount */);
+  if (response.Viewer.unreadNotificationCount > 0 && response.Viewer.unreadNotificationCount - currentCount > 0)
+    handleDesktopNotifications(response.Viewer.unreadNotificationCount - currentCount);
 
   await storage.local.set({ unreadNotificationCount: response.Viewer.unreadNotificationCount });
 }
 
 async function handleDesktopNotifications(totalUnread: number) {
-  if (!(await permissions.contains({ permissions: [ "notifications" ] })))
+  if (!(await permissions.contains({ permissions: ["notifications"] })))
     return;
 
-const { token } = await storage.local.get("token") as { token: string };
-const maxPage = Math.ceil(totalUnread / 50);
+  const { token } = await storage.local.get("token") as { token: string };
+  const maxPage = Math.ceil(totalUnread / 50);
 
-async function handlePage(page: number, perPage?: number) {
-  const { Page: { notifications } } = await queryAniList<{ Page: { notifications: any[] } }>({ token, query: notificationQuery, variables: { amount: perPage || 50, page }})
-    .then(res => res.data);
+  async function handlePage(page: number, perPage?: number) {
+    const { Page: { notifications } } = await queryAniList<{ Page: { notifications: any[] } }>({ token, query: notificationQuery, variables: { amount: perPage || 50, page } })
+      .then(res => res.data);
 
-  notifications.forEach(notification => {
-    switch(notification.type) {
-      case NotificationType.ACTIVITY_LIKE:
-      case NotificationType.ACTIVITY_MENTION:
-      case NotificationType.ACTIVITY_REPLY:
-      case NotificationType.ACTIVITY_REPLY_LIKE:
-      case NotificationType.ACTIVITY_REPLY_SUBSCRIBED: {
-        createNotification(notification.activity ? notification.activity.url : notification.user!.url, "Activity", notification.type, { user: notification.user!.name });
-        break;
+    notifications.forEach(notification => {
+      switch (notification.type) {
+        case NotificationType.ACTIVITY_LIKE:
+        case NotificationType.ACTIVITY_MENTION:
+        case NotificationType.ACTIVITY_REPLY:
+        case NotificationType.ACTIVITY_REPLY_LIKE:
+        case NotificationType.ACTIVITY_REPLY_SUBSCRIBED: {
+          createNotification(notification.activity ? notification.activity.url : notification.user!.url, "Activity", notification.type, { user: notification.user!.name });
+          break;
+        }
+        case NotificationType.ACTIVITY_MESSAGE: {
+          createNotification(`https://anilist.co/activity/${notification.activityId}`, "Message", notification.type, { user: notification.user!.name });
+          break;
+        }
+        case NotificationType.AIRING: {
+          createNotification(notification.media!.url, "Episode", notification.type, { episode: notification.episode, media: notification.media?.title?.userPreferred });
+          break;
+        }
+        case NotificationType.RELATED_MEDIA_ADDITION: {
+          createNotification(notification.media!.url, "Related Media", notification.type, { media: notification.media?.title?.userPreferred });
+          break;
+        }
+        case NotificationType.FOLLOWING: {
+          createNotification(notification.activity ? notification.activity.url : notification.user!.url, "Follower", notification.type, { user: notification.user!.name });
+          break;
+        }
+        case NotificationType.THREAD_COMMENT_LIKE:
+        case NotificationType.THREAD_COMMENT_MENTION:
+        case NotificationType.THREAD_COMMENT_REPLY:
+        case NotificationType.THREAD_LIKE:
+        case NotificationType.THREAD_SUBSCRIBED: {
+          createNotification(notification.thread!.url + "/comment/" + notification.commentId, "Forum Activity", notification.type, { user: notification.user!.name, thread: notification.thread!.title });
+          break;
+        }
+        default: {
+          createNotification("unknown", "unknown", null);
+        }
       }
-      case NotificationType.ACTIVITY_MESSAGE: {
-        createNotification(`https://anilist.co/activity/${notification.activityId}`, "Message", notification.type, { user: notification.user!.name });
-        break;
-      }
-      case NotificationType.AIRING: {
-        createNotification(notification.media!.url, "Episode", notification.type, { episode: notification.episode, media: notification.media?.title?.userPreferred });
-        break;
-      }
-      case NotificationType.RELATED_MEDIA_ADDITION: {
-        createNotification(notification.media!.url, "Related Media", notification.type, { media: notification.media?.title?.userPreferred });
-        break;
-      }
-      case NotificationType.FOLLOWING: {
-        createNotification(notification.activity ? notification.activity.url : notification.user!.url, "Follower", notification.type, { user: notification.user!.name });
-        break;
-      }
-      case NotificationType.THREAD_COMMENT_LIKE:
-      case NotificationType.THREAD_COMMENT_MENTION:
-      case NotificationType.THREAD_COMMENT_REPLY:
-      case NotificationType.THREAD_LIKE:
-      case NotificationType.THREAD_SUBSCRIBED: {
-        createNotification(notification.thread!.url + "/comment/" + notification.commentId, "Forum Activity", notification.type, {user: notification.user!.name, thread: notification.thread!.title });
-        break;
-      }
-      default: {
-        createNotification("unknown", "unknown", null);
-      }
-    }
-  });
+    });
 
-  totalUnread -= notifications.length;
-  if (page < maxPage)
-    await handlePage(page + 1, totalUnread);
-}
+    totalUnread -= notifications.length;
+    if (page < maxPage)
+      await handlePage(page + 1, totalUnread);
+  }
 
-await handlePage(1, totalUnread);
+  await handlePage(1, totalUnread);
 }
 
 const notificationContexts = {
@@ -120,7 +126,7 @@ const notificationContexts = {
   media_deletion: "{deleted} was deleted from the site.",
   media_merge: "{merged} was merged into {media}.",
   thread_like: "{user} liked your forum thread, {thread}.",
-  thread_subscribed: "{user} commented in your subscribed forum thread  {thread}.", 
+  thread_subscribed: "{user} commented in your subscribed forum thread  {thread}.",
   thread_comment_like: "{user} liked your comment, in the forum thread {thread}.",
   thread_comment_reply: "{user} replied to your comment, in the forum thread {thread}.",
   thread_comment_mention: "{user} mentioned you, in the forum thread {thread}.",
@@ -133,7 +139,7 @@ export function formatHandlebars(template: string, data?: any) {
   Object.entries(data).forEach(([k, v]) => {
     template = template.replace(new RegExp(`\{${k}\}`, "g"), v + "");
   });
-  
+
   return template;
 }
 
