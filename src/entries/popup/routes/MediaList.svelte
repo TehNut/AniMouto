@@ -31,9 +31,13 @@
   $: combineAnime = $extensionConfig.list?.combineAnime;
   $: airingAnime = !combineAnime ? $animeList.data?.Page?.mediaList
     .filter(l => l.media.status === "RELEASING")
+    .filter(l => l.status !== "COMPLETED")
     .sort((a, b) => a.media.nextAiringEpisode?.timeUntilAiring - b.media.nextAiringEpisode?.timeUntilAiring) : [];
   $: watchingAnime = combineAnime ? $animeList.data?.Page.mediaList : $animeList.data?.Page?.mediaList
-    .filter(l => l.media.status !== "RELEASING");
+    .filter(l => l.media.status !== "RELEASING")
+    .filter(l => l.status !== "COMPLETED");
+  $: reading = $mangaList.data?.Page.mediaList
+    .filter(l => l.status !== "COMPLETED");
   $: airingBehind = getTotalBehind(airingAnime || []);
   $: watchingBehind = getTotalBehind(watchingAnime || []);
 
@@ -100,13 +104,13 @@
     {/if}
   </QueryContainer>
   <QueryContainer query={mangaList}>
-    {#if $mangaList.data?.Page?.mediaList?.length > 0}
+    {#if reading?.length > 0}
       <Section raise={false}>
         <div slot="title" class="flex items-center justify-between">
           Manga in Progress
         </div>
         <div class="grid grid-cols-4 gap-4">
-          {#each $mangaList.data.Page.mediaList as listEntry}
+          {#each reading as listEntry}
             <MediaListCard type="MANGA" {listEntry} />
           {/each}
         </div>

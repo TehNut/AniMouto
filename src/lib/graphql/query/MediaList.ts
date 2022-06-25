@@ -6,6 +6,7 @@ export const MediaListQuery = gql`
       mediaList(userId: $id, type: $type, status_in: [ CURRENT, REPEATING ], sort: [UPDATED_TIME_DESC]) {
         id
         progress
+        status
         media {
           id
           status
@@ -35,6 +36,7 @@ export interface MediaListResult {
   mediaList: {
     id: number;
     progress: number;
+    status: string;
     media: {
       id: number;
       status: string;
