@@ -81,11 +81,13 @@
               <span class="uppercase">{textify($media.data.Media.status) || "Unknown"}</span>
             </Tooltip>
             <div class="flex-1 flex justify-end text-sm">
-              <Tooltip class="w-max" placement="top" content={$media.data.Media.isFavorite ? "Remove from favorites" : "Add to favorites"}>
-                <button on:click={() => toggleFavorite()}>
-                  <Icon class="text-red" icon={$media.data.Media.isFavorite ? faHeart : faHeartOutline} />
-                </button>
-              </Tooltip>
+              {#if $loggedIn}
+                <Tooltip class="w-max" placement="top" content={$media.data.Media.isFavorite ? "Remove from favorites" : "Add to favorites"}>
+                  <button on:click={() => toggleFavorite()}>
+                    <Icon class="text-red" icon={$media.data.Media.isFavorite ? faHeart : faHeartOutline} />
+                  </button>
+                </Tooltip>
+              {/if}
             </div>
           </h3>
           <h1 class="mt-3 text-lg font-medium leading-tight line-clamp-3">{$media.data.Media.title.userPreferred}</h1>
