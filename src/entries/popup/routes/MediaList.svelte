@@ -1,6 +1,6 @@
 <script lang="ts">
   import Icon from "svelte-fa";
-  import { faCompressAlt, faExpandAlt } from "@fortawesome/free-solid-svg-icons";
+  import { faCompressAlt, faExpandAlt, faRedo } from "@fortawesome/free-solid-svg-icons";
   import { getContextClient, queryStore } from "@urql/svelte";
   import type { MediaListResult } from "$lib/graphql";
   import { MediaListQuery } from "$lib/graphql";
@@ -11,16 +11,18 @@
   import MediaListCard from "$lib/components/MediaListCard.svelte";
   import Tooltip from "$lib/components/Tooltip.svelte";
 
-  const animeList = queryStore<{ Page: MediaListResult }>({
-    client: getContextClient(),
+  const client = getContextClient();
+
+  $: animeList = queryStore<{ Page: MediaListResult }>({
+    client,
     query: MediaListQuery, 
     variables: {
       id: $user.id,
       type: "ANIME"
     }
   });
-  const mangaList = queryStore<{ Page: MediaListResult }>({
-    client: getContextClient(),
+  $: mangaList = queryStore<{ Page: MediaListResult }>({
+    client,
     query: MediaListQuery, 
     variables: {
       id: $user.id,
@@ -41,6 +43,27 @@
   $: airingBehind = getTotalBehind(airingAnime || []);
   $: watchingBehind = getTotalBehind(watchingAnime || []);
 
+  function refreshLists() {
+    queryStore({
+      client,
+      query: MediaListQuery,
+      variables: {
+        id: $user.id,
+        type: "ANIME"
+      },
+      requestPolicy: "network-only"
+    });
+    queryStore({
+      client,
+      query: MediaListQuery,
+      variables: {
+        id: $user.id,
+        type: "MANGA"
+      },
+      requestPolicy: "network-only"
+    });
+  }
+
   function getTotalBehind(entries: MediaListResult["mediaList"]) {
     return entries
       .map(e => ({ behind: (e.media.nextAiringEpisode ? e.media.nextAiringEpisode.episode - 1 : e.media.episodes) - e.progress, duration: e.media.duration }))
@@ -53,10 +76,15 @@
   };
 </script>
 
-<div class="absolute top-3 right-3">
+<div class="absolute top-3 right-3 flex space-x-2">
   <Tooltip placement="bottom" content="{combineAnime ? "Split" : "Combine"} airing and completed anime">
     <button class="hover:text-accent transition-colors" on:click={() => $extensionConfig.list = { ...$extensionConfig.list, combineAnime: !combineAnime } }>
       <Icon icon={combineAnime ? faExpandAlt : faCompressAlt} />
+    </button>
+  </Tooltip>
+  <Tooltip placement="bottom" content="Refresh list">
+    <button class="hover:text-accent transition-colors" on:click={() => refreshLists() }>
+      <Icon icon={faRedo} spin={$animeList.fetching || $mangaList.fetching} />
     </button>
   </Tooltip>
 </div>
