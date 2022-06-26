@@ -1,7 +1,8 @@
-import { defineConfig, loadEnv } from "vite";
+import path from "path";
+import { defineConfig, loadEnv, type Plugin } from "vite";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import webExtension from "@samrum/vite-plugin-web-extension";
-import path from "path";
+import zip from "./scripts/zipVitePlugin";
 import { ManifestV2, ManifestV3 } from "./src/manifest";
 import pkg from "./package.json";
 
@@ -30,6 +31,14 @@ export default defineConfig(({ mode }) => {
           ...manifest,
         },
       }),
+      {
+        // @ts-ignore idk why the .default is necessary :shrug:
+        ...zip({
+          dir: `dist/${mode}`,
+          outputName: `../${pkg.name}-${pkg.version}-${mode}`
+        }),
+        apply: () => configEnv.zip !== undefined
+      } as Plugin,
     ],
     resolve: {
       alias: {

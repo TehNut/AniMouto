@@ -15,6 +15,8 @@
     "serve:firefox": "web-ext run --start-url \"https://studio.apollographql.com/sandbox/explorer?endpoint=https://graphql.anilist.co\" --source-dir ./dist/firefox",
     "dev:chromium": "concurrently --restart-tries 5 --restart-after 5000 -c \"bgBlue.bold,bgMagenta.bold\" \"npm:watch:chromium\" \"npm:serve:chromium\"",
     "dev:firefox": "concurrently --restart-tries 5 --restart-after 5000 -c \"bgBlue.bold,bgMagenta.bold\" \"npm:watch:firefox\" \"npm:serve:firefox\"",
+    "package:chromium": "cross-env zip=1 vite build --mode chromium",
+    "package:firefox": "cross-env zip=1 vite build --mode firefox",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "introspect": "node ./scripts/createIntrospection.js"
   },
@@ -45,6 +47,7 @@
     "@urql/introspection": "0.3.2",
     "autoprefixer": "10.4.7",
     "concurrently": "^7.2.2",
+    "cross-env": "^7.0.3",
     "node-fetch": "3.2.6",
     "postcss": "8.4.14",
     "svelte": "3.48.0",
@@ -54,6 +57,7 @@
     "tslib": "2.4.0",
     "typescript": "4.7.4",
     "vite": "2.9.12",
-    "web-ext": "7.0.0"
+    "web-ext": "7.0.0",
+    "yazl": "^2.5.1"
   }
 }
