@@ -3,7 +3,8 @@
   import { useParams } from "svelte-navigator";
   import { queryStore, mutationStore, getContextClient } from "@urql/svelte";
   import Icon from "svelte-fa";
-  import { faHeart, faNotesMedical, faPlus, faRedo, faTrash, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
+  import { faHeart, faFilePen, faNotesMedical, faPlus, faRedo, faTrash, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
+  import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
   import { MediaQuery, ToggleFavoriteMutation, ChangeStatusMutation, type MediaResult } from "$lib/graphql";
   import QueryContainer from "$lib/components/QueryContainer.svelte";
   import GeneralView from "./General.svelte";
@@ -56,15 +57,13 @@
 </script>
 
 <QueryContainer query={media}>
-  {#if $media.data.Media.bannerImage}
-    <div in:fade={{ duration: 1, delay: 150 }} class="absolute w-full h-[20vh] inset-0 bg-cover bg-center" style="background-image:url({$media.data.Media.bannerImage})">
-      <div class="h-full w-full bg-gradient-to-b from-shadow/40 to-shadow/60" />
-    </div>
-  {:else}
-    <div in:fade={{ duration: 1, delay: 150 }} class="absolute w-full h-[24vh] -mt-[4vh] inset-0 bg-cover bg-center" style="background-image:url({$media.data.Media.coverImage.extraLarge})">
-      <div class="h-full w-full bg-gradient-to-b from-shadow/40 to-shadow/60 backdrop-blur-sm" />
-    </div>
-  {/if}
+  <div 
+    in:fade={{ duration: 1, delay: 150 }} 
+    class="absolute w-full {$media.data.Media.bannerImage ? "h-[20vh]" : "h-[24vh] -mt-[4vh]"} inset-0 bg-cover bg-center" 
+    style="background-image:url({$media.data.Media.bannerImage || $media.data.Media.coverImage.extraLarge})"
+  >
+    <div class="h-full w-full bg-gradient-to-b from-shadow/40 to-shadow/60 {!$media.data.Media.bannerImage ? "backdrop-blur-sm" : ""}" />
+  </div>
   <div 
     class="w-full mt-16 flex flex-col space-y-4 relative z-10" 
     style="--color-variable:{hexToRgb($media.data.Media.coverImage.color) || "--color-accent"};--scroller-thumb:{hexToRgb($media.data.Media.coverImage.color) || "var(--color-accent)"}"
@@ -73,7 +72,7 @@
       <div class="flex-none w-32 aspect-[3/4] bg-variable bg-cover bg-center" style="background-image:url({$media.data.Media.coverImage.extraLarge})" />
       <div class="mt-14 flex flex-col justify-between">
         <div class="flex flex-col">
-          <h3 class="flex space-x-2 -mt-7 text-xs font-semibold text-white">
+          <h3 class="flex items-center space-x-2 -mt-7 text-xs font-semibold text-white">
             <Tooltip placement="top" content="Media Format">
               <span class="uppercase">{textify($media.data.Media.format) || "Unknown"}</span>
             </Tooltip>
@@ -81,13 +80,20 @@
             <Tooltip placement="top" content="Release Status">
               <span class="uppercase">{textify($media.data.Media.status) || "Unknown"}</span>
             </Tooltip>
+            <div class="flex-1 flex justify-end text-sm">
+              <Tooltip class="w-max" placement="top" content={$media.data.Media.isFavorite ? "Remove from favorites" : "Add to favorites"}>
+                <button on:click={() => toggleFavorite()}>
+                  <Icon class="text-red" icon={$media.data.Media.isFavorite ? faHeart : faHeartOutline} />
+                </button>
+              </Tooltip>
+            </div>
           </h3>
           <h1 class="mt-3 text-lg font-medium leading-tight line-clamp-3">{$media.data.Media.title.userPreferred}</h1>
         </div>
         {#if $loggedIn}
           <div class="grid grid-cols-5 gap-2">
-            <Tooltip placement="right" content={$media.data.Media.isFavorite ? "Remove from favorites" : "Add to favorites"}>
-              <Button on:click={() => toggleFavorite()} icon={faHeart} class="w-full py-2 !bg-red {$media.data.Media.isFavorite ? "text-white/30" : "text-white/80"}" />
+            <Tooltip placement="right" content="Open editor (Not yet implemented)">
+              <Button icon={faFilePen} class="w-full py-2" disabled={true} />
             </Tooltip>
             <Tooltip placement="right" content="Add to planning">
               <Button on:click={() => setStatus("PLANNING")} icon={faNotesMedical} class="w-full py-2" disabled={!canAddPlanning} />

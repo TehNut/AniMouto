@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@floating-ui/dom": "0.5.3",
+    "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "6.1.1",
     "@tailwindcss/line-clamp": "0.4.0",
     "@urql/exchange-graphcache": "4.4.3",
