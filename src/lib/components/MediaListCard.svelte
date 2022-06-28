@@ -36,13 +36,13 @@
     {/if}
     <span class="justify-self-end">Progress: {listEntry.progress}{maxProgress ? "/" + maxProgress : ""}</span>
   </svelte:fragment>
-  <div class="absolute w-full bottom-0 px-2 bg-overlay/70 text-white backdrop-blur-sm font-semibold text-center text-xs opacity-0 group-hover:opacity-100 transition-all">
+  <div class="absolute w-full bottom-0 px-2 bg-overlay/70 text-white backdrop-blur-sm font-semibold text-center text-xs opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-all">
     <button on:click|stopPropagation|preventDefault={incrementProgress} class="px-2 py-2 hover:font-bold hover:text-variable transition-all">
       {listEntry.progress} +
     </button>
   </div>
   {#if listEntry.media.nextAiringEpisode}
-    <div class="absolute w-full bottom-0 p-2 bg-overlay/70 text-white backdrop-blur-sm font-medium text-center text-xs group-hover:opacity-0 pointer-events-none transition-all">
+    <div class="absolute w-full bottom-0 p-2 bg-overlay/70 text-white backdrop-blur-sm font-medium text-center text-xs group-hover:opacity-0 group-focus-within:opacity-0 pointer-events-none transition-all">
       Ep {listEntry.media.nextAiringEpisode.episode}
       <br />
       {readableTime(parseSeconds(listEntry.media.nextAiringEpisode.timeUntilAiring), { includeSeconds: false, includeWeeks: true })}

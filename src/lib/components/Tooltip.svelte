@@ -70,7 +70,9 @@
 
 <div
   on:mouseenter={() => shown = true}
+  on:focusin={() => shown = true}
   on:mouseleave={() => shown = false}
+  on:focusout={() => shown = false}
   use:floatingRef
   class="relative {containerClasses}"
 >

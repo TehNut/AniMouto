@@ -27,7 +27,7 @@
   </div>
   <Link 
     to="/media/{media.id}"
-    class="flex flex-col group" 
+    class="flex flex-col group outline-none focus:ring-2 ring-black rounded-md" 
     style="--color-variable:{hexToRgb(media.coverImage.color) || "var(--color-accent)"}" 
   >
     <div class="relative aspect-[3/4] bg-variable rounded-md overflow-hidden">
