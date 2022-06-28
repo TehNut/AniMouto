@@ -22,6 +22,7 @@ export const MediaQuery = gql`
       format
       status(version: 2)
       type
+      averageScore
       externalLinks {
         type
         site
@@ -130,6 +131,7 @@ export interface MediaResult {
   format: string;
   status: string;
   type: string;
+  averageScore: number;
   externalLinks: {
     type: string
     site: string

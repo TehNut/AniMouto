@@ -4,7 +4,7 @@
   import { queryStore, mutationStore, getContextClient } from "@urql/svelte";
   import Icon from "svelte-fa";
   import { faHeart, faFilePen, faNotesMedical, faPlus, faRedo, faTrash, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
-  import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
+  import { faHeart as faHeartOutline, faSmile, faFrown, faMeh } from "@fortawesome/free-regular-svg-icons";
   import { MediaQuery, ToggleFavoriteMutation, ChangeStatusMutation, type MediaResult } from "$lib/graphql";
   import QueryContainer from "$lib/components/QueryContainer.svelte";
   import GeneralView from "./General.svelte";
@@ -79,6 +79,13 @@
             <span>&#183;</span> 
             <Tooltip placement="top" content="Release Status">
               <span class="uppercase">{textify($media.data.Media.status) || "Unknown"}</span>
+            </Tooltip>
+            <span>&#183;</span> 
+            <Tooltip placement="top" content="{$media.data.Media.averageScore}% Average Rating">
+              <Icon 
+                class="text-sm {$media.data.Media.averageScore > 70 ? "text-green" : $media.data.Media.averageScore < 50 ? "text-red" : "text-yellow"}" 
+                icon={$media.data.Media.averageScore > 70 ? faSmile : $media.data.Media.averageScore < 50 ? faFrown : faMeh}
+              />
             </Tooltip>
             <div class="flex-1 flex justify-end text-sm">
               {#if $loggedIn}
