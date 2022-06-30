@@ -80,13 +80,15 @@
             <Tooltip placement="top" content="Release Status">
               <span class="uppercase">{textify($media.data.Media.status) || "Unknown"}</span>
             </Tooltip>
-            <span>&#183;</span> 
-            <Tooltip placement="top" content="{$media.data.Media.averageScore}% Average Rating">
-              <Icon 
-                class="text-sm {$media.data.Media.averageScore > 70 ? "text-green" : $media.data.Media.averageScore < 50 ? "text-red" : "text-yellow"}" 
-                icon={$media.data.Media.averageScore > 70 ? faSmile : $media.data.Media.averageScore < 50 ? faFrown : faMeh}
-              />
-            </Tooltip>
+            {#if $media.data.Media.averageScore}
+              <span>&#183;</span> 
+              <Tooltip placement="top" content="{$media.data.Media.averageScore}% Average Rating">
+                <Icon 
+                  class="text-sm {$media.data.Media.averageScore > 70 ? "text-green" : $media.data.Media.averageScore < 50 ? "text-red" : "text-yellow"}" 
+                  icon={$media.data.Media.averageScore > 70 ? faSmile : $media.data.Media.averageScore < 50 ? faFrown : faMeh}
+                />
+              </Tooltip>
+            {/if}
             <div class="flex-1 flex justify-end text-sm">
               {#if $loggedIn}
                 <Tooltip class="w-max" placement="top" content={$media.data.Media.isFavorite ? "Remove from favorites" : "Add to favorites"}>
