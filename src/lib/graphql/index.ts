@@ -2,7 +2,7 @@ import { createClient, dedupExchange, fetchExchange, debugExchange, cacheExchang
 import { cacheExchange } from "@urql/exchange-graphcache";
 import type { CacheExchangeOpts } from "@urql/exchange-graphcache"
 import { get } from "svelte/store";
-import { token } from "$lib/store";
+import { token, queryCount } from "$lib/store";
 import schema from "./introspection.json";
 
 export const client = createClient({
@@ -55,6 +55,12 @@ export const client = createClient({
     }), 
     fetchExchange
   ],
+  async fetch(input, init?) {
+    const result = await fetch(input, init);
+    if(result.headers.has("x-ratelimit-remaining"))
+      queryCount.set(parseInt(result.headers.get("x-ratelimit-remaining")))
+    return result;
+  },
   fetchOptions: () => {
     const storedToken = get(token);
     const headers: Record<string, string> = {};

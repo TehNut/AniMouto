@@ -33,10 +33,15 @@ export type NotificationConfiguration = {
   desktopNotifications: boolean
 }
 
+export type DebugConfiguration = {
+  displayQueryLimits: boolean
+}
+
 export type ExtensionConfiguration = {
   list: ListConfiguration
   theme: ThemeConfiguration
   notifications: NotificationConfiguration
+  debug: DebugConfiguration
 };
 
 export type User = {

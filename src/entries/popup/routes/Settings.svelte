@@ -156,3 +156,15 @@
   </label>
   <p>Pushes AniList notifications to your desktop. Requires you to accept the permission popup, then enable it again.</p>
 </Section>
+
+<Section title="Debug">
+  <label class="flex items-center mt-4 text-lg cursor-pointer">
+    <input 
+      type="checkbox"
+      class="w-5 h-5"
+      bind:checked={$extensionConfig.debug.displayQueryLimits} 
+    >
+    <span class="ml-2">Display Query Limits</span>
+  </label>
+  <p>Adds an overlay that displays the current rate limit status.</p>
+</Section>

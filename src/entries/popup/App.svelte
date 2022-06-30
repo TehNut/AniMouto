@@ -11,6 +11,7 @@
   import { createHashedHistory } from "$lib/util";
   import NavLink from "$lib/components/NavLink.svelte";
   import Routes from "$lib/components/Routes.svelte";
+  import DebugOverlay from "$lib/components/DebugOverlay.svelte";
 
   const history = createHistory(createHashedHistory());
 
@@ -65,6 +66,7 @@
     </nav>
     <div class="flex-1 p-2 relative h-full bg-background text-text-400 overflow-y-auto overflow-x-hidden">
       <div class="absolute top-0 w-0 h-0 pointer-events-none" bind:this={scrollAnchor} />
+      <DebugOverlay />
       <Routes />
     </div>
   </Router>
