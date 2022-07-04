@@ -39,7 +39,7 @@
               <Tooltip placement="left">
                 <div slot="content" class="max-w-xs flex flex-col">
                   <h2 class="font-medium text-sm mb-1">User Notes</h2>
-                  <p>{following.notes}</p>
+                  <p>{@html following.notes.split("\n").join("<br>")}</p>
                 </div>
                 <Icon icon={faNoteSticky} />
               </Tooltip>
