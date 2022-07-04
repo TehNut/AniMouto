@@ -135,10 +135,12 @@
         class="px-2 pt-1 border-b-4 transition-colors rounded-t-md hover:bg-variable/10 {subView === StatsView ? "border-b-variable" : "border-b-transparent"}" 
         on:click={() => subView = StatsView}
       >Stats</button>
-      <button 
-        class="px-2 pt-1 border-b-4 transition-colors rounded-t-md hover:bg-variable/10 {subView === SocialView ? "border-b-variable" : "border-b-transparent"}" 
-        on:click={() => subView = SocialView}
-      >Social</button>
+      {#if $loggedIn}
+        <button 
+          class="px-2 pt-1 border-b-4 transition-colors rounded-t-md hover:bg-variable/10 {subView === SocialView ? "border-b-variable" : "border-b-transparent"}" 
+          on:click={() => subView = SocialView}
+        >Following</button>
+      {/if}
       <a 
         class="px-2 pt-1 flex items-center border-b-4 transition-colors rounded-t-md hover:bg-variable/10 border-b-transparent" 
         href={$media.data.Media.siteUrl}

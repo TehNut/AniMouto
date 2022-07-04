@@ -78,6 +78,7 @@ export * from "./query/Viewer";
 export * from "./query/Search";
 export * from "./query/Media";
 export * from "./query/GetRecentMedia";
+export * from "./query/GetMediaSocials";
 export * from "./query/MediaList";
 export * from "./query/Notifications";
 export * from "./query/PopularMedia";
