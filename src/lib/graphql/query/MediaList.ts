@@ -20,6 +20,8 @@ export const MediaListQuery = gql`
           }
           coverImage {
             extraLarge
+            large
+            medium
             color
           }
           nextAiringEpisode {
@@ -50,6 +52,8 @@ export interface MediaListResult {
       };
       coverImage: {
         extraLarge: string;
+        large: string
+        medium: string
         color?: string;
       };
       nextAiringEpisode?: {

@@ -13,7 +13,7 @@
     }
     coverImage: {
       color?: string
-      extraLarge: string
+      large: string
     }
   };
 </script>
@@ -32,7 +32,7 @@
   >
     <div class="relative aspect-[3/4] bg-variable rounded-md overflow-hidden">
       <Lazy fadeOption={{ duration: 200 }}>
-        <img class="h-full aspect-[3/4] object-cover object-center" src="{media.coverImage.extraLarge}" alt="Key visual">
+        <img class="h-full aspect-[3/4] object-cover object-center" src="{media.coverImage.large}" alt="Key visual">
       </Lazy>
       <slot />
     </div>

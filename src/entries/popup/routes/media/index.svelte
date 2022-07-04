@@ -69,7 +69,7 @@
     style="--color-variable:{hexToRgb($media.data.Media.coverImage.color) || "--color-accent"};--scroller-thumb:{hexToRgb($media.data.Media.coverImage.color) || "var(--color-accent)"}"
   >
     <div class="flex space-x-4">
-      <div class="flex-none w-32 aspect-[3/4] bg-variable bg-cover bg-center" style="background-image:url({$media.data.Media.coverImage.extraLarge})" />
+      <div class="flex-none w-32 aspect-[3/4] bg-variable bg-cover bg-center" style="background-image:url({$media.data.Media.coverImage.large})" />
       <div class="mt-14 flex flex-col justify-between">
         <div class="flex flex-col">
           <h3 class="flex items-center space-x-2 -mt-7 text-xs font-semibold text-white">

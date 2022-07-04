@@ -7,6 +7,8 @@ export const MediaQuery = gql`
       coverImage {
         color
         extraLarge
+        large
+        medium
       }
       bannerImage
       title {
@@ -35,16 +37,7 @@ export const MediaQuery = gql`
         edges {
           relationType
           node {
-            id
-            title {
-              userPreferred
-            }
-            format
-            status
-            coverImage {
-              color
-              extraLarge
-            }
+            ...SimpleMedia
           }
         }
       }
@@ -94,19 +87,23 @@ export const MediaQuery = gql`
           id
           rating
           mediaRecommendation {
-            id
-            title {
-              userPreferred
-            }
-            format
-            status
-            coverImage {
-              color
-              extraLarge
-            }
+            ...SimpleMedia
           }
         }
       }
+    }
+  }
+
+  fragment SimpleMedia on Media {
+    id
+    title {
+      userPreferred
+    }
+    format
+    status
+    coverImage {
+      color
+      large
     }
   }
 `;
@@ -116,6 +113,8 @@ export interface MediaResult {
   coverImage: {
     color: string
     extraLarge: string
+    large: string
+    medium: string
   };
   bannerImage: string;
   title: {
@@ -189,6 +188,6 @@ interface SimpleMedia {
   }
   coverImage: {
     color: string
-    extraLarge: string
+    large: string
   }
 }

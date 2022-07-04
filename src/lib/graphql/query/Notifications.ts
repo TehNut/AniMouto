@@ -231,7 +231,7 @@ export const NotificationsQuery = gql`
       userPreferred
     }
     img: coverImage {
-      large
+      large: medium
       color
     }
     url: siteUrl
@@ -241,7 +241,7 @@ export const NotificationsQuery = gql`
     id
     name
     img: avatar {
-      large
+      large: medium
     }
     url: siteUrl
   }

@@ -14,6 +14,7 @@ export const RecentMediaQuery = gql`
         coverImage {
           color
           extraLarge
+          large
         }
       }
     }
@@ -31,6 +32,7 @@ export type RecentMedia = {
     };
     coverImage:     {
       extraLarge: string;
+      large: string
       color: string;
     };
   }[];
