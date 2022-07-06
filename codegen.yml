@@ -9,3 +9,6 @@ generates:
       - typescript
       - typescript-operations
       - typed-document-node
+  ./src/lib/graphql/introspection.json:
+    plugins:
+      - urql-introspection

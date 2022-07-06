@@ -24,6 +24,7 @@ Run these commands to get the project locally:
 git clone https://github.com/TehNut/AniMouto.git # or clone your own fork
 cd AniMouto
 npm install
+npm run codegen:graphql
 ```
 
 The dependencies should now all be installed. Next, run the `watch:*` script. This will watch for file changes and rebuild the extension for each supported browser environment. You can either install the built directories as temporary extensions, or run the relevant `serve` command to launch temporary browser environments with the extension pre-installed.
