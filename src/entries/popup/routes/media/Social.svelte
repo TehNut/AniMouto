@@ -4,18 +4,18 @@
   import Icon from "svelte-fa";
   import { faNoteSticky, faRedoAlt } from "@fortawesome/free-solid-svg-icons";
   import { faSmile, faFrown, faMeh } from "@fortawesome/free-regular-svg-icons";
-  import { GetMediaSocialsQuery, type GetMediaSocials, type MediaResult } from "$lib/graphql";
+  import { GetMediaFollowingStatsDocument, type GetMediaByIdQuery } from "@anilist/graphql";
   import QueryContainer from "$lib/components/QueryContainer.svelte";
   import Tooltip from "$lib/components/Tooltip.svelte";
   import Section from "$lib/components/Section.svelte";
 
-  export let media: OperationResultStore<{ Media: MediaResult }>;
+  export let media: OperationResultStore<GetMediaByIdQuery>;
 
   const client = getContextClient();
 
-  const followingStats = queryStore<{ Page: GetMediaSocials }>({
+  $: followingStats = queryStore({
     client,
-    query: GetMediaSocialsQuery,
+    query: GetMediaFollowingStatsDocument,
     variables: {
       id: $media.data.Media.id
     }

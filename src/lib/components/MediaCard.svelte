@@ -1,21 +1,14 @@
 <script lang="ts">
   import { Link } from "svelte-navigator";
   import Lazy from "svelte-lazy";
+  import type { Media, MediaTitle, MediaCoverImage } from "@anilist/graphql";
   import { textify, hexToRgb } from "$lib/util";
   import Tooltip from "./Tooltip.svelte";
 
-  export let media: {
-    id: number
-    format: string
-    status: string
-    title: {
-      userPreferred: string
-    }
-    coverImage: {
-      color?: string
-      large: string
-    }
-  };
+  export let media: Partial<Pick<Media, "id" | "format" | "status"> & {
+    title: Pick<MediaTitle, "userPreferred">,
+    coverImage: Pick<MediaCoverImage, "color" | "large">,
+  }>
 </script>
 
 <Tooltip placement="right">

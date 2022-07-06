@@ -3,21 +3,22 @@
   import { Link } from "svelte-navigator";
   import Icon from "svelte-fa";
   import { faNotesMedical, faPlus, faRedo } from "@fortawesome/free-solid-svg-icons";
+  import { SetMediaListStatusDocument, MediaListStatus, type SearchResultMediaFragment } from "@anilist/graphql";
   import { loggedIn } from "$lib/store";
-  import type { SearchResult } from "$lib/graphql";
-  import { ChangeStatusMutation } from "$lib/graphql";
   import { hexToRgb } from "$lib/util";
   import Tooltip from "./Tooltip.svelte";
   import Section from "./Section.svelte";
   import anilistLogo from "$assets/anilist.svg";
 
-  export let title: string;
-  export let results: SearchResult["media"];
+  const client = getContextClient();
 
-  function setStatus(media: SearchResult["media"][0], status: SearchResult["media"][0]["mediaListEntry"]["status"]) {
+  export let title: string;
+  export let results: SearchResultMediaFragment[];
+
+  function setStatus(media: SearchResultMediaFragment, status: MediaListStatus) {
     mutationStore({
-      client: getContextClient(),
-      query: ChangeStatusMutation,
+      client,
+      query: SetMediaListStatusDocument,
       variables: {
         media: media.id,
         list: media.mediaListEntry?.id || undefined,
@@ -27,11 +28,11 @@
     });
   }
 
-  function canAddPlanning(media: SearchResult["media"][0]): boolean {
+  function canAddPlanning(media: SearchResultMediaFragment): boolean {
     return media.mediaListEntry === null;
   }
 
-  function canAddCurrent(media: SearchResult["media"][0]): boolean {
+  function canAddCurrent(media: SearchResultMediaFragment): boolean {
     if (media.status === "NOT_YET_RELEASED")
       return false;
       
@@ -42,7 +43,7 @@
     return ![ "CURRENT", "COMPLETED", "REPEATING" ].includes(status);
   }
 
-  function canRewatch(media: SearchResult["media"][0]): boolean {
+  function canRewatch(media: SearchResultMediaFragment): boolean {
     return media.mediaListEntry?.status === "COMPLETED";
   }
 </script>
@@ -67,21 +68,21 @@
               </Tooltip>
               {#if canAddPlanning(media)}
                 <Tooltip class="h-min flex items-center" content="Add to planning" placement="top">
-                  <button on:click={() => setStatus(media, "PLANNING")}>
+                  <button on:click={() => setStatus(media, MediaListStatus.PLANNING)}>
                     <Icon class="aspect-square text-lg" icon={faNotesMedical} />
                   </button>
                 </Tooltip>
               {/if}
               {#if canAddCurrent(media)}
                 <Tooltip class="h-min flex items-center" content="Add to current" placement="top">
-                  <button on:click={() => setStatus(media, "CURRENT")}>
+                  <button on:click={() => setStatus(media, MediaListStatus.CURRENT)}>
                     <Icon icon={faPlus} />
                   </button>
                 </Tooltip>
               {/if}
               {#if canRewatch(media)}
                 <Tooltip class="h-min flex items-center" content="Add to repeating" placement="top">
-                  <button on:click={() => setStatus(media, "REPEATING")}>
+                  <button on:click={() => setStatus(media, MediaListStatus.REPEATING)}>
                     <Icon icon={faRedo} />
                   </button>
                 </Tooltip>

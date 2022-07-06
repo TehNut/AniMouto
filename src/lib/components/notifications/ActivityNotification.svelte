@@ -1,8 +1,14 @@
 <script lang="ts">
   import { format } from "timeago.js";
-  import type { NotificationsResult } from "$lib/graphql";
+  import type { UserFragment, UserAvatar, ActivityFragment, ActivityLikeNotification, ActivityMentionNotification, ActivityMessageNotification, ActivityReplyNotification, ActivityReplyLikeNotification, ActivityReplySubscribedNotification, FollowingNotification } from "@anilist/graphql";
 
-  export let notification: NotificationsResult["notifications"][0];
+  export let notification: Pick<ActivityLikeNotification | ActivityMentionNotification | ActivityMessageNotification | ActivityReplyNotification | ActivityReplyLikeNotification | ActivityReplySubscribedNotification | FollowingNotification, "context" | "createdAt"> & {
+    user?: Pick<UserFragment, "name" | "url"> & {
+      img: Pick<UserAvatar, "large">
+    },
+    activityId?: number,
+    activity?: Pick<ActivityFragment, "url">
+  };
   export let unread = false;
 
   const creationDate = new Date(notification.createdAt * 1000);

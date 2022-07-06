@@ -1,4 +1,4 @@
-import { createClient, dedupExchange, fetchExchange, debugExchange, cacheExchange as documentCacheExchange, gql } from "@urql/svelte";
+import { createClient, dedupExchange, fetchExchange, gql } from "@urql/svelte";
 import { cacheExchange } from "@urql/exchange-graphcache";
 import type { CacheExchangeOpts } from "@urql/exchange-graphcache"
 import { get } from "svelte/store";
@@ -73,15 +73,3 @@ export const client = createClient({
     };
   },
 });
-
-export * from "./query/Viewer";
-export * from "./query/Search";
-export * from "./query/Media";
-export * from "./query/GetRecentMedia";
-export * from "./query/GetMediaSocials";
-export * from "./query/MediaList";
-export * from "./query/Notifications";
-export * from "./query/PopularMedia";
-export * from "./mutation/ToggleFavorite";
-export * from "./mutation/ChangeStatus";
-export * from "./mutation/IncrementProgress";

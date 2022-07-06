@@ -1,0 +1,10 @@
+query GetViewer {
+  Viewer {
+    id
+    name
+    siteUrl
+    avatar {
+      large
+    }
+  }
+}

@@ -14,7 +14,8 @@ export default defineConfig(({ mode }) => {
 
   return {
     build: {
-      outDir: `dist/${mode}`
+      outDir: `dist/${mode}`,
+      chunkSizeWarningLimit: undefined,
     },
     optimizeDeps: {
       exclude: [ "@urql/svelte", "svelte-navigator" ]
@@ -42,6 +43,7 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: {
+        "@anilist/graphql": path.resolve(__dirname, "./node_modules/@anilist/graphql"),
         "$lib": path.resolve(__dirname, "./src/lib"),
         "$assets": path.resolve(__dirname, "./src/assets"),
         "~": path.resolve(__dirname, "./src"),

@@ -2,8 +2,7 @@
   import Icon from "svelte-fa";
   import { faCompressAlt, faExpandAlt, faRedo } from "@fortawesome/free-solid-svg-icons";
   import { getContextClient, queryStore } from "@urql/svelte";
-  import type { MediaListResult } from "$lib/graphql";
-  import { MediaListQuery } from "$lib/graphql";
+  import { GetUserMediaListDocument, type MediaList } from "@anilist/graphql";
   import { user, extensionConfig } from "$lib/store";
   import { parseSeconds, readableTime } from "$lib/util";
   import QueryContainer from "$lib/components/QueryContainer.svelte";
@@ -13,17 +12,17 @@
 
   const client = getContextClient();
 
-  $: animeList = queryStore<{ Page: MediaListResult }>({
+  $: animeList = queryStore({
     client,
-    query: MediaListQuery, 
+    query: GetUserMediaListDocument,
     variables: {
       id: $user.id,
       type: "ANIME"
     }
   });
-  $: mangaList = queryStore<{ Page: MediaListResult }>({
+  $: mangaList = queryStore({
     client,
-    query: MediaListQuery, 
+    query: GetUserMediaListDocument,
     variables: {
       id: $user.id,
       type: "MANGA"
@@ -34,10 +33,10 @@
   $: airingAnime = !combineAnime ? ($animeList.data?.Page?.mediaList || [])
     .filter(l => l.media.status === "RELEASING")
     .filter(l => l.status !== "COMPLETED")
-    .sort((a, b) => a.media.nextAiringEpisode?.timeUntilAiring - b.media.nextAiringEpisode?.timeUntilAiring) : [];
-  $: watchingAnime = combineAnime ? ($animeList.data?.Page.mediaList || []) : ($animeList.data?.Page?.mediaList || [])
+    .sort((a, b) => a.media.nextAiringEpisode?.timeUntilAiring - b.media.nextAiringEpisode?.timeUntilAiring) as MediaList[] : [];
+  $: watchingAnime = combineAnime ? ($animeList.data?.Page.mediaList || []) as MediaList[] : ($animeList.data?.Page?.mediaList || [])
     .filter(l => l.media.status !== "RELEASING")
-    .filter(l => l.status !== "COMPLETED");
+    .filter(l => l.status !== "COMPLETED") as MediaList[];
   $: reading = ($mangaList.data?.Page.mediaList || [])
     .filter(l => l.status !== "COMPLETED");
   $: airingBehind = getTotalBehind(airingAnime || []);
@@ -46,7 +45,7 @@
   function refreshLists() {
     queryStore({
       client,
-      query: MediaListQuery,
+      query: GetUserMediaListDocument,
       variables: {
         id: $user.id,
         type: "ANIME"
@@ -55,7 +54,7 @@
     });
     queryStore({
       client,
-      query: MediaListQuery,
+      query: GetUserMediaListDocument,
       variables: {
         id: $user.id,
         type: "MANGA"
@@ -64,7 +63,7 @@
     });
   }
 
-  function getTotalBehind(entries: MediaListResult["mediaList"]) {
+  function getTotalBehind(entries: MediaList[]) {
     return entries
       .map(e => ({ behind: (e.media.nextAiringEpisode ? e.media.nextAiringEpisode.episode - 1 : e.media.episodes) - e.progress, duration: e.media.duration }))
       .filter(e => e.behind > 0)

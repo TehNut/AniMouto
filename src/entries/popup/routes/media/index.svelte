@@ -5,7 +5,7 @@
   import Icon from "svelte-fa";
   import { faHeart, faFilePen, faNotesMedical, faPlus, faRedo, faTrash, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
   import { faHeart as faHeartOutline, faSmile, faFrown, faMeh } from "@fortawesome/free-regular-svg-icons";
-  import { MediaQuery, ToggleFavoriteMutation, ChangeStatusMutation, type MediaResult } from "$lib/graphql";
+  import { GetMediaByIdDocument, ToggleMediaFavoriteDocument, SetMediaListStatusDocument, MediaListStatus } from "@anilist/graphql";
   import QueryContainer from "$lib/components/QueryContainer.svelte";
   import GeneralView from "./General.svelte";
   import DetailsView from "./Details.svelte";
@@ -18,9 +18,9 @@
 
   const params = useParams();
   const client = getContextClient();
-  $: media = queryStore<{ Media: MediaResult }>({
+  $: media = queryStore({
     client,
-    query: MediaQuery, 
+    query: GetMediaByIdDocument, 
     variables: {
       id: parseInt($params.id)
     }
@@ -35,17 +35,17 @@
   function toggleFavorite() {
     mutationStore({
       client,
-      query: ToggleFavoriteMutation,
+      query: ToggleMediaFavoriteDocument,
       variables: { 
         [$media.data.Media.type.toLowerCase()]: $media.data.Media.id 
       }
     });
   }
 
-  function setStatus(status?: MediaResult["mediaListEntry"]["status"]) {
+  function setStatus(status?: MediaListStatus) {
     mutationStore({
       client,
-      query: ChangeStatusMutation,
+      query: SetMediaListStatusDocument,
       variables: { 
         media: $media.data.Media.id,
         list: $media.data.Media.mediaListEntry?.id,
@@ -107,13 +107,13 @@
               <Button icon={faFilePen} class="w-full py-2" disabled={true} />
             </Tooltip>
             <Tooltip placement="right" content="Add to planning">
-              <Button on:click={() => setStatus("PLANNING")} icon={faNotesMedical} class="w-full py-2" disabled={!canAddPlanning} />
+              <Button on:click={() => setStatus(MediaListStatus.PLANNING)} icon={faNotesMedical} class="w-full py-2" disabled={!canAddPlanning} />
             </Tooltip>
             <Tooltip placement="left" content="Add to current">
-              <Button on:click={() => setStatus("CURRENT")} icon={faPlus} class="w-full py-2" disabled={!canAddCurrent} />
+              <Button on:click={() => setStatus(MediaListStatus.CURRENT)} icon={faPlus} class="w-full py-2" disabled={!canAddCurrent} />
             </Tooltip>
             <Tooltip placement="left" content="Add to repeating">
-              <Button on:click={() => setStatus("REPEATING")} icon={faRedo} class="w-full py-2" disabled={!canRepeat} />
+              <Button on:click={() => setStatus(MediaListStatus.REPEATING)} icon={faRedo} class="w-full py-2" disabled={!canRepeat} />
             </Tooltip>
             <Tooltip placement="left" content="Remove from list">
               <Button type="ERROR" on:click={() => setStatus(null)} icon={faTrash} class="w-full py-2" disabled={canAddPlanning} />

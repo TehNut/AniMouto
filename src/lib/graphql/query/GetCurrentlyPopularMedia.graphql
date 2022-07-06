@@ -1,0 +1,10 @@
+query GetCurrentlyPopularMedia {
+  Page {
+    media(sort: [ TRENDING_DESC, ID ], isAdult: false) {
+      id
+      coverImage {
+        medium
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { runtime, storage, alarms, action, notifications, permissions } from "webextension-polyfill";
-import { NotificationType } from "$lib/graphql";
+import { NotificationType } from "@anilist/graphql";
 import type { ExtensionConfiguration } from "$lib/model";
 import { queryAniList } from "./main";
 

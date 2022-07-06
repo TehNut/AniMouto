@@ -1,18 +1,17 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
   import { getContextClient, queryStore } from "@urql/svelte";
+  import { GetNotificationsDocument, NotificationType } from "@anilist/graphql";
   import { unreadNotifications } from "$lib/store";
-  import type { NotificationsResult } from "$lib/graphql";
-  import { NotificationsQuery, NotificationType } from "$lib/graphql";
   import QueryContainer from "$lib/components/QueryContainer.svelte";
   import { ActivityNotification, MediaNotification, MediaMergeNotification, MediaDeletionNotification, ThreadNotification, UnknownNotification } from "$lib/components/notifications";
 
   export let page: number;
 
   const dispatch = createEventDispatcher();
-  const notifications = queryStore<{ Page: NotificationsResult }>({
+  const notifications = queryStore({
     client: getContextClient(),
-    query: NotificationsQuery, 
+    query: GetNotificationsDocument, 
     variables: { 
       reset: false,
       page
@@ -25,8 +24,8 @@
       dispatch("last-page")
   });
 
-  function getNotificationComponent(notification: NotificationsResult["notifications"][0]) {
-    switch (notification.type) {
+  function getNotificationComponent(notificationType: NotificationType) {
+    switch (notificationType) {
       case NotificationType.ACTIVITY_LIKE: 
       case NotificationType.ACTIVITY_MENTION:
       case NotificationType.ACTIVITY_MESSAGE:
@@ -58,7 +57,7 @@
 <QueryContainer query={notifications}>
   <div class="flex flex-col space-y-2">
     {#each $notifications.data.Page.notifications as notification, i}
-      <svelte:component this={getNotificationComponent(notification)} {notification} unread={i + ((page - 1) * 50) < $unreadNotifications} />
+      <svelte:component this={getNotificationComponent(notification.type)} {notification} unread={i + ((page - 1) * 50) < $unreadNotifications} />
     {/each}
   </div>
 </QueryContainer>

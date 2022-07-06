@@ -1,10 +1,10 @@
 <script lang="ts">
   import { getContextClient, mutationStore } from "@urql/svelte";
-  import { IncrementProgressMutation, type MediaListResult } from "$lib/graphql";
+  import { UpdateMediaListProgressDocument, MediaListStatus, type GetUserMediaListQuery } from "@anilist/graphql";
   import { readableTime, parseSeconds } from "$lib/util";
   import MediaCard from "./MediaCard.svelte";
 
-  export let listEntry: MediaListResult["mediaList"][0];
+  export let listEntry: GetUserMediaListQuery["Page"]["mediaList"][0];
   export let type: "ANIME" | "MANGA";
 
   const client = getContextClient();
@@ -17,12 +17,12 @@
     const willFinish = listEntry.progress + 1 >= (maxProgress || Infinity);
     mutationStore({
       client,
-      query: IncrementProgressMutation,
+      query: UpdateMediaListProgressDocument,
       variables: {
         listId: listEntry.id,
         mediaId: listEntry.media.id,
         progress: listEntry.progress + 1,
-        status: willFinish ? "COMPLETED" : undefined,
+        status: willFinish ? MediaListStatus.COMPLETED : undefined,
         volume: willFinish && listEntry.media.volumes && type === "MANGA" ? listEntry.media.volumes : undefined
       }
     });

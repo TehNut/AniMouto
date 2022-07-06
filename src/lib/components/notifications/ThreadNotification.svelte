@@ -1,8 +1,12 @@
 <script lang="ts">
   import { format } from "timeago.js";
-  import type { NotificationsResult } from "$lib/graphql";
+  import type { ThreadFragment, UserFragment, ThreadLikeNotification, ThreadCommentLikeNotification, ThreadCommentReplyNotification, ThreadCommentMentionNotification, ThreadCommentSubscribedNotification } from "@anilist/graphql";
 
-  export let notification: NotificationsResult["notifications"][0];
+  export let notification: Pick<ThreadLikeNotification | ThreadCommentLikeNotification | ThreadCommentReplyNotification | ThreadCommentMentionNotification | ThreadCommentSubscribedNotification, "createdAt" | "context"> & {
+    commentId?: number,
+    thread?: ThreadFragment,
+    user?: UserFragment
+  };
   export let unread = false;
 
   const creationDate = new Date(notification.createdAt * 1000);

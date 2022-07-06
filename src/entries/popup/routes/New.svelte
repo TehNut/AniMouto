@@ -1,38 +1,38 @@
 <script lang="ts">
   import { getContextClient, queryStore } from "@urql/svelte";
-  import type { RecentMedia } from "$lib/graphql";
-  import { RecentMediaQuery } from "$lib/graphql";
+  import { GetRecentMediaDocument, MediaType, MediaSort, MediaFormat } from "@anilist/graphql";
   import { extensionConfig } from "$lib/store";
   import QueryContainer from "$lib/components/QueryContainer.svelte";
   import Section from "$lib/components/Section.svelte";
   import MediaCard from "$lib/components/MediaCard.svelte";
 
-  const recentAnime = queryStore<{ Page: RecentMedia }>({
-    client: getContextClient(),
-    query: RecentMediaQuery, 
+  const client = getContextClient();
+  const recentAnime = queryStore({
+    client,
+    query: GetRecentMediaDocument, 
     variables: {
-      type: "ANIME",
-      sort: [ "ID_DESC" ],
+      type: MediaType.ANIME,
+      sort: [ MediaSort.ID_DESC ],
       perPage: $extensionConfig.theme.wide ? 12 : 8,
     }
   });
-  const recentManga = queryStore<{ Page: RecentMedia }>({
-    client: getContextClient(),
-    query: RecentMediaQuery, 
+  const recentManga = queryStore({
+    client,
+    query: GetRecentMediaDocument,
     variables: {
-      type: "MANGA",
-      sort: [ "ID_DESC" ],
-      formatIn: [ "MANGA", "ONE_SHOT" ],
+      type: MediaType.MANGA,
+      sort: [ MediaSort.ID_DESC ],
+      formatIn: [ MediaFormat.MANGA, MediaFormat.ONE_SHOT ],
       perPage: $extensionConfig.theme.wide ? 12 : 8,
     }
   });
-  const recentNovels = queryStore<{ Page: RecentMedia }>({
-    client: getContextClient(),
-    query: RecentMediaQuery, 
+  const recentNovels = queryStore({
+    client,
+    query: GetRecentMediaDocument, 
     variables: {
-      type: "MANGA",
-      sort: [ "ID_DESC" ],
-      formatIn: [ "NOVEL" ],
+      type: MediaType.MANGA,
+      sort: [ MediaSort.ID_DESC ],
+      formatIn: [ MediaFormat.NOVEL ],
       perPage: $extensionConfig.theme.wide ? 12 : 8,
     }
   });

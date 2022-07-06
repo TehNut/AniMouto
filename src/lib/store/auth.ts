@@ -1,11 +1,14 @@
 import { derived, writable } from "svelte/store";
-import { navigate,  } from "svelte-navigator";
 import type { JwtPayload } from "jwt-decode";
 import jwtDecode from "jwt-decode";
-import { client, ViewerQuery } from "$lib/graphql";
-import type { User } from "$lib/model";
+import { client } from "$lib/graphql";
+import { GetViewerDocument, type User, type UserAvatar } from "@anilist/graphql";
 
-const PLACEHOLDER_USER = {
+type StoredUser = Pick<User, "id" | "name" | "siteUrl"> & {
+  avatar?: Pick<UserAvatar, "large">,
+};
+
+const PLACEHOLDER_USER: StoredUser = {
   id: 0,
   name: "Foo",
   avatar: {
@@ -25,14 +28,14 @@ export const loggedIn = derived(token, token => {
 });
 
 function createUserStore() {
-  const { set, subscribe, update } = writable<User>(PLACEHOLDER_USER);
+  const { set, subscribe, update } = writable<StoredUser>(PLACEHOLDER_USER);
 
   return {
     set,
     subscribe,
     update,
     fetch: async () => {
-      const response = await client.query(ViewerQuery).toPromise();
+      const response = await client.query(GetViewerDocument).toPromise();
       set(response.data.Viewer);
     },
     logout() {

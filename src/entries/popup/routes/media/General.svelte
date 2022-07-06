@@ -2,13 +2,13 @@
   import Icon from "svelte-fa";
   import { faLink, faInfoCircle, faComments, faTv, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
   import type { OperationResultStore } from "@urql/svelte/dist/types/common";
-  import type { MediaResult } from "$lib/graphql";
+  import type { GetMediaByIdQuery } from "@anilist/graphql";
   import Section from "$lib/components/Section.svelte";
   import MediaCard from "$lib/components/MediaCard.svelte";
   import Tooltip from "$lib/components/Tooltip.svelte";
   import { textify } from "$lib/util";
 
-  export let media: OperationResultStore<{ Media: MediaResult }>;
+  export let media: OperationResultStore<GetMediaByIdQuery>;
 
   const relationSortOrder = [
 		"ADAPTATION",

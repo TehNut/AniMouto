@@ -7,8 +7,7 @@
   import Icon from "svelte-fa";
   import { faSpinner } from "@fortawesome/free-solid-svg-icons";
   import { getContextClient, queryStore } from "@urql/svelte";
-  import type { SearchResult } from "$lib/graphql";
-  import { SearchQuery, } from "$lib/graphql";
+  import { SearchMediaDocument, MediaType, MediaFormat } from "@anilist/graphql";
   import { debounce } from "$lib/util";
   import SearchResults from "$lib/components/SearchResults.svelte";
   import Loader from "$lib/components/Loader.svelte";
@@ -18,13 +17,13 @@
   let searchText = "";
   let textField: HTMLInputElement = null;
 
-  $: search = queryStore<{ Page: SearchResult }>({
+  $: search = queryStore({
     client: getContextClient(),
-    query: SearchQuery,
+    query: SearchMediaDocument,
     variables: {
       search: searchText,
-      type: selectedMode === "ALL" ? undefined : selectedMode === "ANIME" ? "ANIME" : "MANGA",
-      format: selectedMode === "ALL" ? undefined : selectedMode === "MANGA" ? [ "MANGA", "ONE_SHOT" ] : selectedMode === "LIGHT_NOVEL" ? [ "NOVEL" ] : undefined,
+      type: selectedMode === "ALL" ? undefined : selectedMode === "ANIME" ? MediaType.ANIME : MediaType.MANGA,
+      format: selectedMode === "ALL" ? undefined : selectedMode === "MANGA" ? [ MediaFormat.MANGA, MediaFormat.ONE_SHOT ] : selectedMode === "LIGHT_NOVEL" ? [ MediaFormat.NOVEL ] : undefined,
     },
     pause: searchText === ""
   });
@@ -81,15 +80,15 @@
       {:else}
         <SearchResults 
           title="Anime" 
-          results={$search.data.Page.media.filter(m => m.type === "ANIME")} 
+          results={$search.data.Page.media.filter(m => m.type === MediaType.ANIME)} 
         />
         <SearchResults 
           title="Manga" 
-          results={$search.data.Page.media.filter(m => m.type === "MANGA" && m.format !== "NOVEL")} 
+          results={$search.data.Page.media.filter(m => m.type === MediaType.MANGA && m.format !== MediaFormat.NOVEL)} 
         />
         <SearchResults 
           title="Light Novels" 
-          results={$search.data.Page.media.filter(m => m.format === "NOVEL")} 
+          results={$search.data.Page.media.filter(m => m.format === MediaFormat.NOVEL)} 
         />
       {/if}
     </div>

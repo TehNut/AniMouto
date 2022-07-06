@@ -5,16 +5,16 @@
   import { runtime } from "webextension-polyfill";
   import { useNavigate } from "svelte-navigator";
   import { getContextClient, queryStore } from "@urql/svelte";
+  import { GetCurrentlyPopularMediaDocument } from "@anilist/graphql";
   import { token, user } from "$lib/store";
-  import { PopularMediaQuery, type PopularMediaResult } from "$lib/graphql";
   import Button from "$lib/components/Button.svelte";
   import Error from "$lib/components/Error.svelte";
 
   const navigate = useNavigate();
   const client = getContextClient();
-  const popularMedia = queryStore<{ Page: PopularMediaResult }>({
+  const popularMedia = queryStore({
     client,
-    query: PopularMediaQuery,
+    query: GetCurrentlyPopularMediaDocument,
   });
 
   let loginPromise: Promise<void> = Promise.resolve();
@@ -56,21 +56,3 @@
     <Error text={e} />
   {/await}
 </div>
-
-<!-- <button on:click={() => login()}>
-  Login
-</button>
-
-{#await loginPromise}
-  Logging in
-{:then}
-  {$user.name}
-{:catch e}
-  <Error text={e} />
-{/await} -->
-
-<!-- <div class="absolute inset-0 h-48 grid grid-cols-12 grid-rows-2"> -->
-  <!-- Elements should span 2 columns and -->
-<!-- </div> -->
-
-<!-- <div class="absolute inset-0 h-48 bg-gradient-to-b from-shadow/40 to-shadow/80" /> -->

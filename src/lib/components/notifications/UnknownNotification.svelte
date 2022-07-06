@@ -2,24 +2,14 @@
   import Icon from "svelte-fa";
   import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
   import { format } from "timeago.js";
-  import type { NotificationsResult } from "$lib/graphql";
+  import type { GetNotificationsQuery } from "@anilist/graphql";
 
-  export let notification: NotificationsResult["notifications"][0];
+  export let notification: GetNotificationsQuery["Page"]["notifications"][0];
   export let unread = false;
 
   const creationDate = new Date(notification.createdAt * 1000);
   let displayDate = format(creationDate);
-  displayDate = displayDate.substring(0, displayDate.indexOf(" ") + 2).replace(" ", ""); 
-
-  function getContentUrl(): string {
-    if (notification.thread.url === "#")
-      return "";
-
-    if (notification.commentId)
-      return `${notification.thread.url}/comment/${notification.commentId}`;
-
-    return notification.thread.url;
-  }
+  displayDate = displayDate.substring(0, displayDate.indexOf(" ") + 2).replace(" ", "");
 </script>
 
 <div class="relative p-2 flex items-center bg-foreground rounded-md border-r-4 { unread ? "border-r-accent" : "border-r-transparent" }">

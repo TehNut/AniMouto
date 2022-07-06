@@ -1,0 +1,105 @@
+query GetMediaById($id: Int!) {
+  Media(id: $id) {
+    id
+    coverImage {
+      color
+      extraLarge
+      large
+      medium
+    }
+    bannerImage
+    title {
+      userPreferred
+    }
+    mediaListEntry {
+      id
+      status
+    }
+    siteUrl
+    description(asHtml: true)
+    isFavorite: isFavourite
+    format
+    status(version: 2)
+    type
+    averageScore
+    externalLinks {
+      type
+      site
+      url
+      icon
+      language
+      color
+    }
+    relations {
+      edges {
+        relationType
+        node {
+          ...SimpleMedia
+        }
+      }
+    }
+    staff(perPage: 12, sort: [RELEVANCE, ID]) {
+      edges {
+        id
+        role
+        node {
+          id
+          name {
+            userPreferred
+          }
+          image {
+            large
+          }
+          siteUrl
+        }
+      }
+      pageInfo {
+        hasNextPage
+      }
+    }
+    characters(perPage: 12, sort: [ROLE, RELEVANCE, ID]) {
+      edges {
+        id
+        role
+        node {
+          id
+          name {
+            userPreferred
+          }
+          image {
+            large
+          }
+          siteUrl
+        }
+      }
+      pageInfo {
+        hasNextPage
+      }
+    }
+    recommendations(perPage: 8, sort: [ RATING_DESC, ID ]) {
+      pageInfo {
+        hasNextPage
+      }
+      nodes {
+        id
+        rating
+        mediaRecommendation {
+          ...SimpleMedia
+        }
+      }
+    }
+  }
+}
+
+fragment SimpleMedia on Media {
+  id
+  title {
+    userPreferred
+  }
+  format
+  status
+  coverImage {
+    color
+    large
+  }
+}

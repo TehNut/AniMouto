@@ -1,11 +1,15 @@
 <script lang="ts">
   import { Link } from "svelte-navigator";
   import { format } from "timeago.js";
-  import type { NotificationsResult } from "$lib/graphql";
-  import { NotificationType } from "$lib/graphql";
+  import { NotificationType, type MediaFragment, type MediaTitle, type MediaCoverImage, type AiringNotification, type RelatedMediaAdditionNotification, type MediaDataChangeNotification } from "@anilist/graphql";
   import { hexToRgb } from "$lib/util";
 
-  export let notification: NotificationsResult["notifications"][0];
+  export let notification: Pick<AiringNotification | RelatedMediaAdditionNotification | MediaDataChangeNotification, "createdAt" | "type"> & {
+    context?: string,
+    contexts?: string[],
+    episode?: number,
+    media: Pick<MediaFragment, "id" | "title" | "img">,
+  };
   export let unread = false;
 
   const creationDate = new Date(notification.createdAt * 1000);

@@ -2,9 +2,9 @@
   import Icon from "svelte-fa";
   import { faTrash } from "@fortawesome/free-solid-svg-icons";
   import { format } from "timeago.js";
-  import type { NotificationsResult } from "$lib/graphql";
+  import type { MediaDeletionNotification } from "@anilist/graphql";
 
-  export let notification: NotificationsResult["notifications"][0];
+  export let notification: MediaDeletionNotification;
   export let unread = false;
 
   const creationDate = new Date(notification.createdAt * 1000);

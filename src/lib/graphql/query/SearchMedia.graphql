@@ -1,0 +1,26 @@
+query SearchMedia($search: String!, $adult: Boolean, $type: MediaType, $format: [MediaFormat!]) {
+  Page {
+    media(search: $search, type: $type, format_in: $format, isAdult: $adult) {
+      ...SearchResultMedia
+    }
+  }
+}
+
+fragment SearchResultMedia on Media {
+  id
+  title {
+    userPreferred
+  }
+  coverImage {
+    medium
+    color
+  }
+  mediaListEntry {
+    id
+    status
+  }
+  status
+  type
+  format
+  siteUrl
+}
