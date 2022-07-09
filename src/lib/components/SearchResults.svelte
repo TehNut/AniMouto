@@ -51,7 +51,7 @@
 {#if results?.length > 0}
   <Section raise={false} {title}>
     <div class="flex flex-col space-y-4">
-      {#each results as media}
+      {#each results as media (media.id)}
         <div class="w-full h-16 flex items-center space-x-2 bg-foreground rounded-md">
           <Link to="/media/{media.id}">
             <div class="w-12 h-full flex-none aspect-[3/4] bg-cover rounded-l-md" style="background-image:url({media.coverImage.medium})" />

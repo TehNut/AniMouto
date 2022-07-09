@@ -50,7 +50,7 @@
 {#if $media.data.Media.relations?.edges.length > 0}
   <Section title="Relations" raise={false}>
     <div class="grid grid-cols-4 gap-2">
-      {#each sortedRelations as relation}
+      {#each sortedRelations as relation (relation.node.id)}
         <MediaCard media={relation.node}>
           <div class="absolute w-full bottom-0 p-2 bg-overlay/70 text-white font-medium text-center text-xs pointer-events-none">
             {textify(relation.relationType)}
@@ -65,7 +65,7 @@
       Characters
     </a>
     <div class="grid grid-cols-6 gap-2">
-      {#each $media.data.Media.characters.edges as character}
+      {#each $media.data.Media.characters.edges as character (character.node.id)}
         <Tooltip placement="right">
           <a href={character.node.siteUrl} target="_blank">
             <div class="aspect-[3/4] bg-cover bg-center rounded-md" style="background-image:url({character.node.image.large})" />
@@ -90,7 +90,7 @@
       Staff
     </a>
     <div class="grid grid-cols-6 gap-2">
-      {#each $media.data.Media.staff.edges as staff}
+      {#each $media.data.Media.staff.edges as staff (staff.node.id)}
         <Tooltip placement="right">
           <a href={staff.node.siteUrl} target="_blank">
             <div class="aspect-[3/4] bg-cover bg-center rounded-md" style="background-image:url({staff.node.image.large})" />
@@ -112,7 +112,7 @@
 {#if recommendations.length > 0}
   <Section title="Recommendations" raise={false}>
     <div class="grid grid-cols-4 gap-2">
-      {#each recommendations as recommendation}
+      {#each recommendations as recommendation (recommendation.id)}
         <MediaCard media={recommendation.mediaRecommendation}>
           <svelte:fragment slot="tooltip-body">
             <span class="flex items-center mb-2 text-green">
@@ -133,7 +133,7 @@
 {#if $media.data.Media.externalLinks.length > 0}
   <Section title="External & Streaming Links" raise={false}>
     <div class="grid grid-cols-2 gap-x-4 gap-y-2">
-      {#each $media.data.Media.externalLinks.sort((a, b) => a.type.localeCompare(b.type) || a.site.localeCompare(b.site)) as link}
+      {#each $media.data.Media.externalLinks.sort((a, b) => a.type.localeCompare(b.type) || a.site.localeCompare(b.site)) as link (link.url)}
         <a href={link.url} target="_blank" style="--color-variable:{link.color ? link.color : "#0C65A6"}">
           <div class="relative h-8 p-1 flex bg-foreground {link.color ? "hover:bg-variable-hex hover:text-white bg-opacity-90" : "hover:text-accent"} items-center rounded-md overflow-hidden transition-all">
             <div class="h-full p-1 bg-variable-hex text-white rounded-sm">

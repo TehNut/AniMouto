@@ -25,7 +25,7 @@
 <QueryContainer query={followingStats}>
   <Section raise={false} title="Following">
     <div class="w-full flex flex-col space-y-2">
-      {#each ($followingStats.data.Page.mediaList || []) as following}
+      {#each ($followingStats.data.Page.mediaList || []) as following (following.user.id)}
         <div class="w-full h-10 flex items-center space-x-4 bg-foreground rounded-md">
           <a href={following.user.siteUrl} target="_blank" class="flex-none">
             <div class="w-10 h-full aspect-square bg-cover rounded-full" style="background-image:url({following.user.avatar.large})" />

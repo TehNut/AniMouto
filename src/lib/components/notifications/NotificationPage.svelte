@@ -56,7 +56,7 @@
 
 <QueryContainer query={notifications}>
   <div class="flex flex-col space-y-2">
-    {#each $notifications.data.Page.notifications as notification, i}
+    {#each $notifications.data.Page.notifications as notification, i (notification.id)}
       <svelte:component this={getNotificationComponent(notification.type)} {notification} unread={i + ((page - 1) * 50) < $unreadNotifications} />
     {/each}
   </div>

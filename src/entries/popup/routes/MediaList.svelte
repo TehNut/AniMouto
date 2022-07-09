@@ -101,7 +101,7 @@
           </span>
         </div>
         <div class="grid {$extensionConfig.theme.wide ? "grid-cols-6" : "grid-cols-4"} gap-4">
-          {#each (airingAnime || []) as listEntry}
+          {#each (airingAnime || []) as listEntry (listEntry.id)}
             <MediaListCard type="ANIME" {listEntry} />
           {/each}
         </div>
@@ -123,7 +123,7 @@
           </span>
         </div>
         <div class="grid {$extensionConfig.theme.wide ? "grid-cols-6" : "grid-cols-4"} gap-4">
-          {#each (watchingAnime || []) as listEntry}
+          {#each (watchingAnime || []) as listEntry (listEntry.id)}
             <MediaListCard type="ANIME" {listEntry} />
           {/each}
         </div>
@@ -137,7 +137,7 @@
           Manga in Progress
         </div>
         <div class="grid {$extensionConfig.theme.wide ? "grid-cols-6" : "grid-cols-4"} gap-4">
-          {#each reading as listEntry}
+          {#each reading as listEntry (listEntry.id)}
             <MediaListCard type="MANGA" {listEntry} />
           {/each}
         </div>
