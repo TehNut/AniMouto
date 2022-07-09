@@ -90,7 +90,7 @@
       Staff
     </a>
     <div class="grid grid-cols-6 gap-2">
-      {#each $media.data.Media.staff.edges as staff (staff.node.id)}
+      {#each $media.data.Media.staff.edges as staff}
         <Tooltip placement="right">
           <a href={staff.node.siteUrl} target="_blank">
             <div class="aspect-[3/4] bg-cover bg-center rounded-md" style="background-image:url({staff.node.image.large})" />
