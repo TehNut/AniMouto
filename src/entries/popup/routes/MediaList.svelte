@@ -108,10 +108,12 @@
           <Tooltip placement="top" content="Currently airing anime">
             <a href="https://anilist.co/airing" target="_blank">Airing</a>
           </Tooltip>
-          <span class="text-xs text-red">
-            {readableTime(parseSeconds(airingBehind.minutesBehind * 60))} behind
-            ({airingBehind.episodesBehind} Episodes)
-          </span>
+          {#if airingBehind.minutesBehind > 0}
+            <span class="text-xs text-red">
+              {readableTime(parseSeconds(airingBehind.minutesBehind * 60))} behind
+              ({airingBehind.episodesBehind} Episodes)
+            </span>
+          {/if}
         </div>
         <div class="grid {$extensionConfig.theme.wide ? "grid-cols-6" : "grid-cols-4"} gap-4">
           {#each (airingAnime || []) as listEntry (listEntry.id)}
@@ -123,17 +125,19 @@
     {#if watchingAnime?.length > 0}
       <Section raise={false}>
         <div slot="title" class="flex items-center space-x-2">
-          {#if !$extensionConfig.list?.combineAnime}
+          {#if !combineAnime}
             <Tooltip placement="top" content="Anime that have finished releasing">
               Anime in Progress
             </Tooltip>
           {:else}
             <span>Anime in Progress</span>
           {/if}
-          <span class="text-xs text-orange">
-            {readableTime(parseSeconds(watchingBehind.minutesBehind * 60))} left
-            ({watchingBehind.episodesBehind} Episodes)
-          </span>
+          {#if watchingBehind.minutesBehind > 0}
+            <span class="text-xs text-orange">
+              {readableTime(parseSeconds(watchingBehind.minutesBehind * 60))} left
+              ({watchingBehind.episodesBehind} Episodes)
+            </span>
+          {/if}
         </div>
         <div class="grid {$extensionConfig.theme.wide ? "grid-cols-6" : "grid-cols-4"} gap-4">
           {#each (watchingAnime || []) as listEntry (listEntry.id)}
