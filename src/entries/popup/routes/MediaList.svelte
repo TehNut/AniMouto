@@ -1,8 +1,9 @@
 <script lang="ts">
   import Icon from "svelte-fa";
-  import { faCompressAlt, faExpandAlt, faRedo } from "@fortawesome/free-solid-svg-icons";
+  import { faCompressAlt, faExpandAlt, faRedo, faStar } from "@fortawesome/free-solid-svg-icons";
+  import { faStar as faStarOutline } from "@fortawesome/free-regular-svg-icons";
   import { getContextClient, queryStore } from "@urql/svelte";
-  import { GetUserMediaListDocument, type MediaList } from "@anilist/graphql";
+  import { GetUserMediaListDocument, MediaType, type MediaList } from "@anilist/graphql";
   import { user, extensionConfig } from "$lib/store";
   import { parseSeconds, readableTime } from "$lib/util";
   import QueryContainer from "$lib/components/QueryContainer.svelte";
@@ -17,7 +18,8 @@
     query: GetUserMediaListDocument,
     variables: {
       id: $user.id,
-      type: "ANIME"
+      type: MediaType.ANIME,
+      starred: $extensionConfig.list.showStarred ? $extensionConfig.list.starredMedia : undefined,
     }
   });
   $: mangaList = queryStore({
@@ -25,11 +27,13 @@
     query: GetUserMediaListDocument,
     variables: {
       id: $user.id,
-      type: "MANGA"
+      type: MediaType.MANGA,
+      starred: $extensionConfig.list.showStarred ? $extensionConfig.list.starredMedia : undefined,
     }
   });
 
-  $: combineAnime = $extensionConfig.list?.combineAnime;
+  $: showStarred = $extensionConfig.list?.showStarred;
+  $: combineAnime = $extensionConfig.list?.combineAnime || showStarred;
   $: airingAnime = !combineAnime ? ($animeList.data?.Page?.mediaList || [])
     .filter(l => l.media.status === "RELEASING")
     .filter(l => l.status !== "COMPLETED")
@@ -48,7 +52,7 @@
       query: GetUserMediaListDocument,
       variables: {
         id: $user.id,
-        type: "ANIME"
+        type: MediaType.ANIME,
       },
       requestPolicy: "network-only"
     });
@@ -57,7 +61,7 @@
       query: GetUserMediaListDocument,
       variables: {
         id: $user.id,
-        type: "MANGA"
+        type: MediaType.MANGA,
       },
       requestPolicy: "network-only"
     });
@@ -76,11 +80,20 @@
 </script>
 
 <div class="absolute top-3 right-3 flex space-x-2">
-  <Tooltip placement="bottom" content="{combineAnime ? "Split" : "Combine"} airing and completed anime">
-    <button class="hover:text-accent transition-colors" on:click={() => $extensionConfig.list = { ...$extensionConfig.list, combineAnime: !combineAnime } }>
-      <Icon icon={combineAnime ? faExpandAlt : faCompressAlt} />
-    </button>
-  </Tooltip>
+  {#if !showStarred}
+    <Tooltip placement="bottom" content="{combineAnime ? "Split" : "Combine"} airing and completed anime">
+      <button class="hover:text-accent transition-colors" on:click={() => $extensionConfig.list = { ...$extensionConfig.list, combineAnime: !combineAnime } }>
+        <Icon icon={combineAnime ? faExpandAlt : faCompressAlt} />
+      </button>
+    </Tooltip>
+  {/if}
+  {#if $extensionConfig.list.starredMedia.length > 0}
+    <Tooltip placement="bottom" content={showStarred ? "Show standard overview" : "Show starred media"}>
+      <button class="hover:text-yellow transition-colors" on:click={() => $extensionConfig.list = { ...$extensionConfig.list, showStarred: !showStarred } }>
+        <Icon icon={showStarred ? faStar : faStarOutline} />
+      </button>
+    </Tooltip>
+  {/if}
   <Tooltip placement="bottom" content="Refresh list">
     <button class="hover:text-accent transition-colors" on:click={() => refreshLists() }>
       <Icon icon={faRedo} spin={$animeList.fetching || $mangaList.fetching} />

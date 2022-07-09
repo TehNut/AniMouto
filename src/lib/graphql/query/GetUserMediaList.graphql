@@ -1,6 +1,6 @@
-query GetUserMediaList($id: Int!, $type: MediaType!) {
+query GetUserMediaList($id: Int!, $type: MediaType!, $starred: [Int!]) {
   Page {
-    mediaList(userId: $id, type: $type, status_in: [ CURRENT, REPEATING ], sort: [UPDATED_TIME_DESC]) {
+    mediaList(userId: $id, type: $type, mediaId_in: $starred, status_in: [ CURRENT, REPEATING ], sort: [UPDATED_TIME_DESC]) {
       id
       progress
       status

@@ -3,8 +3,8 @@
   import { useParams } from "svelte-navigator";
   import { queryStore, mutationStore, getContextClient } from "@urql/svelte";
   import Icon from "svelte-fa";
-  import { faHeart, faFilePen, faNotesMedical, faPlus, faRedo, faTrash, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
-  import { faHeart as faHeartOutline, faSmile, faFrown, faMeh } from "@fortawesome/free-regular-svg-icons";
+  import { faHeart, faFilePen, faNotesMedical, faPlus, faRedo, faTrash, faExternalLinkAlt, faStar } from "@fortawesome/free-solid-svg-icons";
+  import { faHeart as faHeartOutline, faSmile, faFrown, faMeh, faStar as faStarOutline } from "@fortawesome/free-regular-svg-icons";
   import { GetMediaByIdDocument, ToggleMediaFavoriteDocument, SetMediaListStatusDocument, MediaListStatus } from "@anilist/graphql";
   import QueryContainer from "$lib/components/QueryContainer.svelte";
   import GeneralView from "./General.svelte";
@@ -13,7 +13,7 @@
   import SocialView from "./Social.svelte";
   import Tooltip from "$lib/components/Tooltip.svelte";
   import Button from "$lib/components/Button.svelte";
-  import { loggedIn } from "$lib/store";
+  import { loggedIn, extensionConfig } from "$lib/store";
   import { textify, hexToRgb } from "$lib/util";
 
   const params = useParams();
@@ -29,6 +29,7 @@
   $: canAddPlanning = $media.data?.Media.mediaListEntry === null;
   $: canRepeat = $media.data?.Media.mediaListEntry?.status === "COMPLETED";
   $: canAddCurrent = $media.data?.Media && $media.data?.Media.status !== "NOT_YET_RELEASED" && ![ "CURRENT", "COMPLETED", "REPEATING" ].includes($media.data?.Media.mediaListEntry?.status);
+  $: isStarred = $extensionConfig.list.starredMedia.includes($media.data?.Media.id);
 
   let subView: typeof GeneralView | typeof DetailsView | typeof StatsView | typeof SocialView = GeneralView;
 
@@ -40,6 +41,16 @@
         [$media.data.Media.type.toLowerCase()]: $media.data.Media.id 
       }
     });
+  }
+
+  function toggleStar() {
+    if (isStarred) {
+      $extensionConfig.list.starredMedia = $extensionConfig.list.starredMedia.filter(id => id !== $media.data.Media.id);
+      if ($extensionConfig.list.starredMedia.length === 0)
+        $extensionConfig.list.showStarred = false;
+    }
+    else
+      $extensionConfig.list.starredMedia = [ ...$extensionConfig.list.starredMedia, $media.data.Media.id ];
   }
 
   function setStatus(status?: MediaListStatus) {
@@ -89,13 +100,20 @@
                 />
               </Tooltip>
             {/if}
-            <div class="flex-1 flex justify-end text-sm">
+            <div class="flex-1 flex space-x-1 justify-end text-sm">
               {#if $loggedIn}
                 <Tooltip class="w-max" placement="top" content={$media.data.Media.isFavorite ? "Remove from favorites" : "Add to favorites"}>
                   <button on:click={() => toggleFavorite()}>
                     <Icon class="text-red" icon={$media.data.Media.isFavorite ? faHeart : faHeartOutline} />
                   </button>
                 </Tooltip>
+                {#if $media.data.Media.mediaListEntry}
+                  <Tooltip class="w-max" placement="top" content={isStarred ? "Remove from starred" : "Add to starred"}>
+                    <button on:click={() => toggleStar()}>
+                      <Icon class="text-yellow" icon={isStarred ? faStar : faStarOutline} />
+                    </button>
+                  </Tooltip>
+                {/if}
               {/if}
             </div>
           </h3>

@@ -19,6 +19,8 @@ export enum Accent {
 
 export type ListConfiguration = {
   combineAnime: boolean;
+  showStarred: boolean;
+  starredMedia: number[];
 }
 
 export type ThemeConfiguration = {
