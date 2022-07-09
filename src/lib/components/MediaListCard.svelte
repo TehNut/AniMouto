@@ -38,7 +38,7 @@
   </svelte:fragment>
   <div class="absolute w-full bottom-0 px-2 bg-overlay/70 text-white backdrop-blur-sm font-semibold text-center text-xs opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-all">
     <button on:click|stopPropagation|preventDefault={incrementProgress} class="px-2 py-2 hover:font-bold hover:text-variable transition-all">
-      {listEntry.progress} +
+      {listEntry.progress}{maxProgress ? "/" + maxProgress : ""} +
     </button>
   </div>
   {#if listEntry.media.nextAiringEpisode}
