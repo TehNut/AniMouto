@@ -22,14 +22,16 @@
   }
 </script>
 
+<div class="absolute top-3 right-3 flex space-x-2 text-text-200">
+  <Tooltip content="Refresh" placement="left">
+    <button class="hover:text-accent transition-colors" on:click={reset}>
+      <Icon icon={faRedo} />
+    </button>
+  </Tooltip>
+</div>
 <Section raise={false}>
-  <div slot="title" class="flex justify-between items-center font-semibold">
+  <div slot="title" class="items-center font-semibold">
     <a href="https://anilist.co/notifications" target="_blank">Notifications</a>
-    <Tooltip content="Refresh" placement="left">
-      <button class="hover:text-accent transition-colors" on:click={reset}>
-        <Icon icon={faRedo} />
-      </button>
-    </Tooltip>
   </div>
   <div class="flex flex-col space-y-2">
     {#each pages as _, page}
