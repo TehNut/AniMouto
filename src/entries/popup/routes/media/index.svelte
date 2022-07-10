@@ -102,13 +102,13 @@
             {/if}
             <div class="flex-1 flex space-x-1 justify-end text-sm">
               {#if $loggedIn}
-                <Tooltip class="w-max" placement="top" content={$media.data.Media.isFavorite ? "Remove from favorites" : "Add to favorites"}>
+                <Tooltip class="w-max flex items-center" placement="top" content={$media.data.Media.isFavorite ? "Remove from favorites" : "Add to favorites"}>
                   <button on:click={() => toggleFavorite()}>
                     <Icon class="text-red" icon={$media.data.Media.isFavorite ? faHeart : faHeartOutline} />
                   </button>
                 </Tooltip>
                 {#if $media.data.Media.mediaListEntry}
-                  <Tooltip class="w-max" placement="top" content={isStarred ? "Remove from starred" : "Add to starred"}>
+                  <Tooltip class="w-max flex items-center" placement="top" content={isStarred ? "Remove from starred" : "Add to starred"}>
                     <button on:click={() => toggleStar()}>
                       <Icon class="text-yellow" icon={isStarred ? faStar : faStarOutline} />
                     </button>
