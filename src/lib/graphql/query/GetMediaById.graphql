@@ -30,6 +30,25 @@ query GetMediaById($id: Int!) {
       language
       color
     }
+    stats {
+      scoreDistribution {
+        amount
+        score
+      }
+      statusDistribution {
+        amount
+        status
+      }
+    }
+    rankings {
+      format
+      context
+      type
+      rank
+      year
+      season
+      allTime
+    }
     relations {
       edges {
         relationType

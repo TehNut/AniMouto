@@ -4,7 +4,7 @@
   export let raise = true;
 </script>
 
-<div class="flex flex-col space-y-1">
+<div class="relative flex flex-col space-y-1">
   <h2 class="ml-4 font-semibold">
     <slot name="title">
       {title}

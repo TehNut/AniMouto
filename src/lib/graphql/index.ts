@@ -25,6 +25,10 @@ export const client = createClient({
         CharacterImage: () => null,
         AiringSchedule: () => null,
         UserAvatar: () => null,
+        MediaRank: () => null,
+        MediaStats: () => null,
+        StatusDistribution: () => null,
+        ScoreDistribution: () => null,
       },
       updates: {
         Mutation: {

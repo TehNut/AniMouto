@@ -16,7 +16,7 @@
       case "INFO": return "bg-accent text-white";
       case "WARNING": return "bg-orange text-white";
       case "ERROR": return "bg-red text-white";
-      case "VARIABLE": return "bg-variable text-variable"
+      case "VARIABLE": return "bg-variable text-white"
     }
   }
 
