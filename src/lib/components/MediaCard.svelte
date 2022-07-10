@@ -24,10 +24,16 @@
     style="--color-variable:{hexToRgb(media.coverImage.color) || "var(--color-accent)"}" 
   >
     <div class="relative aspect-[3/4] bg-variable rounded-md overflow-hidden">
-      <Lazy fadeOption={{ duration: 200 }}>
+      <Lazy fadeOption={{ duration: 200 }} class="!h-full">
         <img class="h-full aspect-[3/4] object-cover object-center" src="{media.coverImage.large}" alt="Key visual">
       </Lazy>
       <slot />
     </div>
   </Link>
 </Tooltip>
+
+<style scoped>
+  :global(.svelte-lazy-content) {
+    @apply h-full;
+  }
+</style>
