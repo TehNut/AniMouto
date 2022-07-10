@@ -5,6 +5,7 @@
   import { type GetMediaByIdQuery, type MediaRank, MediaListStatus, MediaRankType } from "@anilist/graphql";
   import Button from "$lib/components/Button.svelte";
   import Section from "$lib/components/Section.svelte";
+import { find } from "webextension-polyfill";
 
   export let media: OperationResultStore<GetMediaByIdQuery>;
 
@@ -39,18 +40,20 @@
 </script>
 
 <div class="flex flex-col space-y-2">
-  <Section title="Rankings" raise={false}>
-    <div class="grid grid-cols-2 gap-2">
-      {#each $media.data.Media.rankings as rank}
-        <a href={getRankBrowse(rank)} target="_blank">
-          <div class="h-8 flex items-center bg-foreground rounded-md">
-            <Icon class="flex-0 aspect-square w-6 mr-1 {rank.type === MediaRankType.POPULAR ? "text-peach" : "text-yellow"}" icon={rank.type === MediaRankType.POPULAR ? faHeart : faStar } />
-            <span class="capitalize text-xs font-semibold leading-none">#{rank.rank} {rank.context} {rank.allTime ? "" : `${rank.season ? rank.season.toLowerCase() + " " : ""} ${rank.year}`}</span>
-          </div>
-        </a>
-      {/each}
-    </div>
-  </Section>
+  {#if $media.data.Media.rankings.length > 0}
+    <Section title="Rankings" raise={false}>
+      <div class="grid grid-cols-2 gap-2">
+        {#each $media.data.Media.rankings as rank}
+          <a href={getRankBrowse(rank)} target="_blank">
+            <div class="h-8 flex items-center bg-foreground rounded-md">
+              <Icon class="flex-0 aspect-square w-6 mr-1 {rank.type === MediaRankType.POPULAR ? "text-peach" : "text-yellow"}" icon={rank.type === MediaRankType.POPULAR ? faHeart : faStar } />
+              <span class="capitalize text-xs font-semibold leading-none">#{rank.rank} {rank.context} {rank.allTime ? "" : `${rank.season ? rank.season.toLowerCase() + " " : ""} ${rank.year}`}</span>
+            </div>
+          </a>
+        {/each}
+      </div>
+    </Section>
+  {/if}
   <Section title="Status Distribution">
     <div class="grid grid-cols-5 gap-2">
       {#each $media.data.Media.stats.statusDistribution as status}
@@ -68,7 +71,8 @@
   </Section>
   <Section title="Score Distribution">
     <div class="group h-24 py-2 grid grid-cols-10 gap-2">
-      {#each $media.data.Media.stats.scoreDistribution as score}
+      {#each new Array(10) as _, index}
+        {@const score = $media.data.Media.stats.scoreDistribution.find(s => s.score === (index + 1) * 10) || { amount: 0, score: (index + 1) * 10 }}
         {@const percentage = score.amount / highestRating * 100}
         <div class="relative w-full flex flex-col-reverse items-center text-center text-sm font-medium" style="--color-variable:hsl({score.score}, 65%, 50%)">
           <span class="absolute -bottom-5 text-variable-hex">{ score.score }</span>
