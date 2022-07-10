@@ -39,8 +39,9 @@ const zip = (options = { }) => {
 }
 
 const deleteExistingArchive = (dir, outputName) => {
-  const outFile = path.resolve(process.cwd(), `${dir}/${outputName}.zip`)
-  fs.rmSync(outFile);
+  const outFile = path.resolve(process.cwd(), `${dir}/${outputName}.zip`);
+  if (fs.existsSync(outFile))
+    fs.rmSync(outFile);
 }
 
 const getFileList = function(dir, arr) {
