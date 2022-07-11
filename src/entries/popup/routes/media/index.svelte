@@ -5,7 +5,7 @@
   import Icon from "svelte-fa";
   import { faHeart, faFilePen, faNotesMedical, faPlus, faRedo, faTrash, faExternalLinkAlt, faStar } from "@fortawesome/free-solid-svg-icons";
   import { faHeart as faHeartOutline, faSmile, faFrown, faMeh, faStar as faStarOutline } from "@fortawesome/free-regular-svg-icons";
-  import { GetMediaByIdDocument, ToggleMediaFavoriteDocument, SetMediaListStatusDocument, MediaListStatus } from "@anilist/graphql";
+  import { GetMediaByIdDocument, ToggleMediaFavoriteDocument, SetMediaListStatusDocument, MediaListStatus, MediaStatus } from "@anilist/graphql";
   import QueryContainer from "$lib/components/QueryContainer.svelte";
   import GeneralView from "./General.svelte";
   import DetailsView from "./Details.svelte";
@@ -14,7 +14,7 @@
   import Tooltip from "$lib/components/Tooltip.svelte";
   import Button from "$lib/components/Button.svelte";
   import { loggedIn, extensionConfig } from "$lib/store";
-  import { textify, hexToRgb } from "$lib/util";
+  import { textify, hexToRgb, readableTime, parseSeconds } from "$lib/util";
 
   const params = useParams();
   const client = getContextClient();
@@ -87,10 +87,23 @@
             <Tooltip placement="top" content="Media Format">
               <span class="uppercase">{textify($media.data.Media.format) || "Unknown"}</span>
             </Tooltip>
-            <span>&#183;</span> 
-            <Tooltip placement="top" content="Release Status">
-              <span class="uppercase">{textify($media.data.Media.status) || "Unknown"}</span>
-            </Tooltip>
+            <span>&#183;</span>
+            {#if $media.data.Media.status === MediaStatus.RELEASING && $media.data.Media.nextAiringEpisode} 
+              {@const next = $media.data.Media.nextAiringEpisode}
+              {@const date = new Date(next.airingAt * 1000)}
+              <Tooltip placement="top">
+                <div slot="content">
+                  <span>Ep {next.episode}: {readableTime(parseSeconds(next.timeUntilAiring), { includeSeconds: false, includeWeeks: true })}</span>
+                  <br>
+                  <time class="font-normal" datetime={date.toString()}>{date.toLocaleDateString()} at {date.toLocaleTimeString(undefined, { timeStyle: "short" })}</time>
+                </div>
+                <span class="uppercase">{textify($media.data.Media.status) || "Unknown"}</span>
+              </Tooltip>
+            {:else}
+              <Tooltip placement="top" content="Release Status">
+                <span class="uppercase">{textify($media.data.Media.status) || "Unknown"}</span>
+              </Tooltip>
+            {/if}
             {#if $media.data.Media.averageScore}
               <span>&#183;</span> 
               <Tooltip placement="top" content="{$media.data.Media.averageScore}% Average Rating">

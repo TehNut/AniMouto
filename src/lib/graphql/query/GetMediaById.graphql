@@ -22,6 +22,11 @@ query GetMediaById($id: Int!) {
     status(version: 2)
     type
     averageScore
+    nextAiringEpisode {
+      episode
+      airingAt
+      timeUntilAiring
+    }
     externalLinks {
       type
       site
