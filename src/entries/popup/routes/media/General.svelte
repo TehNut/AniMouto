@@ -43,8 +43,8 @@
 </script>
 
 {#if $media.data.Media.description}
-  <Section title="Description" maxContentHeight={300}>
-    <div class="prose">
+  <Section title="Description" maxContentHeight={250}>
+    <div class="prose text-text-400">
       {@html $media.data.Media.description}
     </div>
   </Section>
