@@ -25,6 +25,7 @@
     "@fortawesome/free-regular-svg-icons": "6.1.1",
     "@fortawesome/free-solid-svg-icons": "6.1.1",
     "@tailwindcss/line-clamp": "0.4.0",
+    "@tailwindcss/typography": "^0.5.4",
     "@urql/exchange-graphcache": "4.4.3",
     "@urql/svelte": "2.0.2",
     "graphql": "16.5.0",

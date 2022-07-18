@@ -16,7 +16,7 @@ query GetMediaById($id: Int!) {
       status
     }
     siteUrl
-    description(asHtml: true)
+    description
     isFavorite: isFavourite
     format
     status(version: 2)

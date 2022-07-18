@@ -43,8 +43,10 @@
 </script>
 
 {#if $media.data.Media.description}
-  <Section title="Description" maxContentHeight={400}>
-    {@html $media.data.Media.description.replace(/<br><br \/>/g, '<br>').replace(/\\n/g, '')}
+  <Section title="Description" maxContentHeight={300}>
+    <div class="prose">
+      {@html $media.data.Media.description}
+    </div>
   </Section>
 {/if}
 {#if $media.data.Media.relations?.edges.length > 0}
