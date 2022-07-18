@@ -78,7 +78,7 @@
 >
   <slot />
   {#if shown}
-    <div transition:fly={transitionProps} class="absolute w-max z-50 py-2 px-3 bg-black/90 text-white backdrop-blur-sm border-black border font-medium text-xs rounded-md pointer-events-none shadow-md" use:floatingContent>
+    <div transition:fly|local={transitionProps} class="absolute w-max z-50 py-2 px-3 bg-black/90 text-white backdrop-blur-sm border-black border font-medium text-xs rounded-md pointer-events-none shadow-md" use:floatingContent>
       <slot name="content">
         {content}
       </slot>
