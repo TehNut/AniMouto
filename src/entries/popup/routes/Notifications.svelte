@@ -22,7 +22,7 @@
   }
 </script>
 
-<div class="absolute top-3 right-3 flex space-x-2 text-text-200">
+<div class="absolute z-10 top-3 right-3 flex space-x-2 text-text-200">
   <Tooltip content="Refresh" placement="left">
     <button class="hover:text-accent transition-colors" on:click={reset}>
       <Icon icon={faRedo} />
