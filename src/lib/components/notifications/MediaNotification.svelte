@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Link } from "svelte-navigator";
   import { format } from "timeago.js";
-  import { NotificationType, type MediaFragment, type MediaTitle, type MediaCoverImage, type AiringNotification, type RelatedMediaAdditionNotification, type MediaDataChangeNotification } from "@anilist/graphql";
+  import { NotificationType, type MediaFragment, type AiringNotification, type RelatedMediaAdditionNotification, type MediaDataChangeNotification } from "@anilist/graphql";
   import { hexToRgb } from "$lib/util";
 
   export let notification: Pick<AiringNotification | RelatedMediaAdditionNotification | MediaDataChangeNotification, "createdAt" | "type"> & {
@@ -21,7 +21,7 @@
   class="relative p-2 flex items-center bg-foreground rounded-md border-r-4 { unread ? "border-r-accent" : "border-r-transparent" }"
   style="--color-variable:{hexToRgb(notification.media.img.color) || "--color-accent"}"
 >
-  <Link to="/media/{notification.media.id}" target="_blank" class="flex-none">
+  <Link to="/media/{notification.media.id}" class="flex-none">
     <img src={notification.media.img.large} alt="Key visual" class="w-12 mr-4 object-center object-cover aspect-[3/4]" />
   </Link>
   <Link to="/media/{notification.media.id}" class="line-clamp-3 mr-6 flex-1">

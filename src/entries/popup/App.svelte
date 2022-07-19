@@ -31,7 +31,21 @@
       await storage.local.set({ unreadNotificationCount: $unreadNotifications });
     }
   });
+
+  function handleClick(e: MouseEvent) {
+    if (e.button === 1 && e.target instanceof Element) {
+      const anchor = document.querySelector("a:hover") as HTMLAnchorElement;
+      if (!anchor?.target) {
+        history.navigate("/" + anchor.getAttribute("href"));
+        e.preventDefault();
+      }
+    }
+  }
 </script>
+
+<svelte:window
+  on:auxclick={handleClick}
+/>
 
 <div 
   class="root {$extensionConfig.theme.wide ? "w-[716px]" : "w-[525px]"} h-[600px] flex theme-{$extensionConfig.theme.primary} text-base" style="--color-accent:var(--color-{$extensionConfig.theme.accent})">
