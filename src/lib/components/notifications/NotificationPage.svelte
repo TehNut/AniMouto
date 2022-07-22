@@ -13,7 +13,7 @@
     client: getContextClient(),
     query: GetNotificationsDocument, 
     variables: { 
-      reset: false,
+      reset: page === 1,
       page
     }, 
     requestPolicy: "network-only"
