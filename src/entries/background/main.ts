@@ -1,9 +1,9 @@
 import { runtime } from "webextension-polyfill";
 import { beginAuthentication } from "./auth";
-import { setupAlarms } from "./notifications";
+import { setupAlarms, updateNotificationCount } from "./notifications";
 
 type Message = { 
-  type: "AUTH" | "RESET_ALARMS",
+  type: "AUTH" | "RESET_ALARMS" | "UPDATE_NOTIFICATION_COUNT",
   data: any
 };
 
@@ -14,6 +14,7 @@ runtime.onMessage.addListener(async (message: Message, sender) => {
   switch (message.type) {
     case "AUTH": return await beginAuthentication();
     case "RESET_ALARMS": return await setupAlarms();
+    case "UPDATE_NOTIFICATION_COUNT": return await updateNotificationCount();
   }
 });
 

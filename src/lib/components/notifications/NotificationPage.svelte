@@ -20,6 +20,8 @@
   });
 
   notifications.subscribe(r => {
+    $unreadNotifications = r.data?.Viewer.unreadNotificationCount;
+    
     if (r.data && !r.data.Page.pageInfo.hasNextPage)
       dispatch("last-page")
   });

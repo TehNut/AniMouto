@@ -33,6 +33,12 @@ export async function setupAlarms() {
     notifications.onClicked.addListener(handleNotificationClick)
 }
 
+export async function updateNotificationCount() {
+  const { unreadNotificationCount } = await storage.local.get() as { unreadNotificationCount: number };
+  await action.setBadgeText({ text: unreadNotificationCount ? unreadNotificationCount.toString() : "" });
+  await action.setBadgeBackgroundColor({ color: [61, 180, 242, Math.floor(255 * 0.8)] });
+}
+
 alarms.onAlarm.addListener(alarm => {
   if (alarm.name === "notifications")
     checkForNotifications();

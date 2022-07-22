@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import { storage } from "webextension-polyfill";
+import { runtime, storage } from "webextension-polyfill";
 import App from "./App.svelte";
 import type { ExtensionConfiguration, User } from "$lib/model";
 import { extensionConfig, lastPage, token, user, unreadNotifications } from "$lib/store";
@@ -52,6 +52,10 @@ async function loadToken() {
 
   token.subscribe(token => storage.local.set({ token }));
   user.subscribe(user => storage.local.set({ cachedUser: user }));
+  unreadNotifications.subscribe(count => {
+    storage.local.set({ unreadNotificationCount: count})
+    runtime.sendMessage({ type: "UPDATE_NOTIFICATION_COUNT" });
+  });
 }
 
 bootstrap();
