@@ -19,8 +19,13 @@
     requestPolicy: "network-only"
   });
 
+  let unread = 0;
+
   notifications.subscribe(r => {
-    $unreadNotifications = r.data?.Viewer.unreadNotificationCount;
+    if (r.data?.Viewer.unreadNotificationCount !== undefined) {
+      unread = r.data?.Viewer.unreadNotificationCount;
+      $unreadNotifications = page === 1 ? 0 : r.data?.Viewer.unreadNotificationCount;
+    }
     
     if (r.data && !r.data.Page.pageInfo.hasNextPage)
       dispatch("last-page")
@@ -59,7 +64,7 @@
 <QueryContainer query={notifications}>
   <div class="flex flex-col space-y-2">
     {#each $notifications.data.Page.notifications as notification, i (notification.id)}
-      <svelte:component this={getNotificationComponent(notification.type)} {notification} unread={i + ((page - 1) * 50) < $unreadNotifications} />
+      <svelte:component this={getNotificationComponent(notification.type)} {notification} unread={i + ((page - 1) * 50) < unread} />
     {/each}
   </div>
 </QueryContainer>

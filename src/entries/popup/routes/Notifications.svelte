@@ -18,7 +18,7 @@
   }
 
   function loadMore() {
-    pages = [...pages, pages.length];
+    pages = [ ...pages, pages.length ];
   }
 </script>
 
