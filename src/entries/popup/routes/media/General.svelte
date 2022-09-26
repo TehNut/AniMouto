@@ -99,7 +99,7 @@
           </a>
           <div class="flex flex-col justify-between" slot="content">
             <h3 class="text-base font-semibold">{staff.node.name.userPreferred}</h3>
-            <span>{staff.role.replace("_", "")}</span>
+            <span class="max-w-[200px]">{staff.role.replace("_", "")}</span>
           </div>
         </Tooltip>
       {/each}
