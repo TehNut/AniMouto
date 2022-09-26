@@ -29,6 +29,7 @@ export const client = createClient({
         MediaStats: () => null,
         StatusDistribution: () => null,
         ScoreDistribution: () => null,
+        FuzzyDate: () => null,
       },
       updates: {
         Mutation: {

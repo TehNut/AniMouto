@@ -10,7 +10,23 @@ query GetMediaById($id: Int!) {
     bannerImage
     title {
       userPreferred
+      native
+      romaji
+      english
     }
+    synonyms
+    startDate {
+      day
+      month
+      year
+    }
+    endDate {
+      day
+      month
+      year
+    }
+    season
+    seasonYear
     mediaListEntry {
       id
       status
@@ -22,6 +38,9 @@ query GetMediaById($id: Int!) {
     status(version: 2)
     type
     averageScore
+    meanScore
+    popularity
+    favorites: favourites
     nextAiringEpisode {
       episode
       airingAt
@@ -53,6 +72,16 @@ query GetMediaById($id: Int!) {
       year
       season
       allTime
+    }
+    studios {
+      edges {
+        isMain
+        node {
+          id
+          name
+          siteUrl
+        }
+      }
     }
     relations {
       edges {
