@@ -1,11 +1,10 @@
 <script lang="ts">
   import type { OperationResultStore } from "@urql/svelte/dist/types/common";
-  import Icon from "Svelte-fa";
+  import Icon from "svelte-fa";
   import { faHeart, faStar } from "@fortawesome/free-solid-svg-icons";
   import { type GetMediaByIdQuery, type MediaRank, MediaListStatus, MediaRankType } from "@anilist/graphql";
   import Button from "$lib/components/Button.svelte";
   import Section from "$lib/components/Section.svelte";
-import { find } from "webextension-polyfill";
 
   export let media: OperationResultStore<GetMediaByIdQuery>;
 
