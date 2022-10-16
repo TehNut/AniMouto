@@ -42,9 +42,9 @@
 
     return extensionConfig.subscribe(c => {
       if (
-        c.notifications.enablePolling !== $previousExtensionConfig.notifications.enablePolling ||
-        c.notifications.pollingInterval !== $previousExtensionConfig.notifications.pollingInterval ||
-        c.notifications.desktopNotifications !== $previousExtensionConfig.notifications.desktopNotifications
+        c.notifications.enablePolling !== $previousExtensionConfig?.notifications.enablePolling ||
+        c.notifications.pollingInterval !== $previousExtensionConfig?.notifications.pollingInterval ||
+        c.notifications.desktopNotifications !== $previousExtensionConfig?.notifications.desktopNotifications
       )
         runtime.sendMessage({ type: "RESET_ALARMS" });
     })
