@@ -1,32 +1,22 @@
 <script lang="ts">
   import { Link } from "svelte-navigator";
-  import { format } from "timeago.js";
-  import type { MediaMergeNotification, MediaTitle, MediaCoverImage, MediaFragment } from "@anilist/graphql";
+  import type { MediaMergeNotification, MediaFragment } from "@anilist/graphql";
+  import NotificationContainer from "./NotificationContainer.svelte";
   import { hexToRgb } from "$lib/util";
 
   export let notification: Pick<MediaMergeNotification, "createdAt" | "deletedMediaTitles" | "context"> & {
     media?: MediaFragment
   };
   export let unread = false;
-
-  const creationDate = new Date(notification.createdAt * 1000);
-  let displayDate = format(creationDate);
-  displayDate = displayDate.substring(0, displayDate.indexOf(" ") + 2).replace(" ", ""); 
 </script>
 
-<div 
-  class="relative p-2 flex items-center bg-foreground rounded-md border-r-4 { unread ? "border-r-accent" : "border-r-transparent" }"
-  style="--color-variable:{hexToRgb(notification.media.img.color) || "--color-accent"}"
->
+<NotificationContainer {unread} createdAt={notification.createdAt}>
   <Link to="/media/{notification.media.url}" class="flex-none">
     <img src={notification.media.img.large} alt="Key visual" class="w-12 mr-4 object-center object-cover aspect-[3/4]" />
   </Link>
-  <Link to="/media/{notification.media.id}" class="line-clamp-3 mr-6 flex-1">
+  <Link to="/media/{notification.media.id}" class="line-clamp-3 mr-6 flex-1" --color-variable={hexToRgb(notification.media.img.color) || "--color-accent"}>
     {notification.deletedMediaTitles.join(", ")}
     {notification.context}
     {notification.media.title.userPreferred}
   </Link>
-  <time class="absolute top-1 right-2 text-xs" datetime={creationDate.toISOString()} title={creationDate.toLocaleString()}>
-    {displayDate}
-  </time>
-</div>
+</NotificationContainer>
