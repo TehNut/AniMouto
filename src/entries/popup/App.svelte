@@ -26,7 +26,7 @@
       scrollAnchor.scrollIntoView({ behavior: "smooth" })
     });
     if ($loggedIn) {
-      const { data } = await client.query("{ Viewer { id unreadNotificationCount } }").toPromise();
+      const { data } = await client.query("{ Viewer { id unreadNotificationCount } }", null).toPromise();
       $unreadNotifications = data.Viewer.unreadNotificationCount;
       await storage.local.set({ unreadNotificationCount: $unreadNotifications });
     }
