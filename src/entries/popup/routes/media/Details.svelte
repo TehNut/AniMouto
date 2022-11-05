@@ -38,21 +38,23 @@
 </script>
 
 
-<Section raise={false} title="Dates">
-  <div class="grid grid-cols-3 gap-4">
-    {#if !isManga}
-      <MediaDetail title="Season" data="{textify($media.data.Media.season)} {$media.data.Media.seasonYear}" />
-    {/if}
-    {#if startDate}
-      <MediaDetail title="Start Date" data={startDate} />
-    {/if}
-    {#if endDate}
-      <MediaDetail title="End Date" data={endDate} />
-    {/if}
-  </div>
-</Section>
+{#if startDate || endDate || $media.data.Media.season || $media.data.Media.seasonYear}
+  <Section raise={false} title="Dates">
+    <div class="grid grid-cols-3 gap-4">
+      {#if !isManga && ($media.data.Media.season || $media.data.Media.seasonYear)}
+        <MediaDetail title="Season" data="{textify($media.data.Media.season) || ""} {$media.data.Media.seasonYear || ""}" />
+      {/if}
+      {#if startDate}
+        <MediaDetail title="Start Date" data={startDate} />
+      {/if}
+      {#if endDate}
+        <MediaDetail title="End Date" data={endDate} />
+      {/if}
+    </div>
+  </Section>
+{/if}
 
-{#if !isManga}
+{#if !isManga && (studios.length > 0 || producers.length > 0)}
   <Section raise={false} title="Production">
     <div class="grid {studios.length > 1 || producers.length > 1 ? "grid-cols-2" : "grid-cols-4"} gap-4">
       {#if studios.length > 0}
@@ -67,8 +69,8 @@
       {#if producers.length > 0}
         <MediaDetail class="col-span-2" title="Producers">
           <div class="flex flex-col">
-            {#each producers as studio}
-              <a class="line-clamp-1 hover:text-accent transition-colors" href={studio.siteUrl} target="_blank">{studio.name}</a>
+            {#each producers as producer}
+              <a class="line-clamp-1 hover:text-accent transition-colors" href={producer.siteUrl} target="_blank">{producer.name}</a>
             {/each}
           </div>
         </MediaDetail>
@@ -77,22 +79,24 @@
   </Section>
 {/if}
 
-<Section raise={false} title="Community">
-  <div class="grid grid-cols-4 gap-4">
-    {#if $media.data.Media.averageScore}
-      <MediaDetail title="Average Score" data={$media.data.Media.averageScore + "%"} description="This is a weighted score." />
-    {/if}
-    {#if $media.data.Media.meanScore}
-      <MediaDetail title="Mean Score" data={$media.data.Media.meanScore + "%"} />
-    {/if}
-    {#if $media.data.Media.favorites}
-      <MediaDetail title="Favorites" data={$media.data.Media.favorites.toLocaleString()} />
-    {/if}
-    {#if $media.data.Media.popularity}
-      <MediaDetail title="Popularity" data={$media.data.Media.popularity.toLocaleString()} />
-    {/if}
-  </div>
-</Section>
+{#if $media.data.Media.averageScore || $media.data.Media.meanScore || $media.data.Media.favorites || $media.data.Media.popularity}
+  <Section raise={false} title="Community">
+    <div class="grid grid-cols-4 gap-4">
+      {#if $media.data.Media.averageScore}
+        <MediaDetail title="Average Score" data={$media.data.Media.averageScore + "%"} description="This is a weighted score." />
+      {/if}
+      {#if $media.data.Media.meanScore}
+        <MediaDetail title="Mean Score" data={$media.data.Media.meanScore + "%"} />
+      {/if}
+      {#if $media.data.Media.favorites}
+        <MediaDetail title="Favorites" data={$media.data.Media.favorites.toLocaleString()} />
+      {/if}
+      {#if $media.data.Media.popularity}
+        <MediaDetail title="Popularity" data={$media.data.Media.popularity.toLocaleString()} />
+      {/if}
+    </div>
+  </Section>
+{/if}
 
 <Section raise={false} title="Titles">
   <div class="grid grid-cols-3 gap-4">
