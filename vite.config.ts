@@ -11,6 +11,21 @@ export default defineConfig(({ mode }) => {
   const configEnv = loadEnv(mode, process.cwd(), "");
 
   const manifest = configEnv.MANIFEST_VERSION === "3" ? ManifestV3 : ManifestV2;
+  
+  switch (mode) {
+    case "chromium": {
+      if (configEnv.EXTENSION_KEY)
+        // @ts-ignore
+        manifest.key = configEnv.EXTENSION_KEY;
+      break;
+    }
+    case "firefox": {
+      if (configEnv.EXTENSION_KEY)
+        // @ts-ignore
+        manifest.browser_specific_settings = { gecko: { id: configEnv.EXTENSION_KEY } };
+      break;
+    }
+  }
 
   return {
     build: {
