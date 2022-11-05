@@ -1,0 +1,30 @@
+# TODO job for attaching release notes for the new version from a full changelog file
+# TODO job for publishing to Chrome Webstore: https://github.com/mnao305/chrome-extension-upload
+# TODO job for publishing to Mozilla Webstore: https://github.com/trmcnvn/firefox-addon
+
+name: Upload Release Artifacts
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  publish:
+    if: "contains(github.event.head_commit.message, '[RELEASE]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Assemble package
+        run: |
+          npm ci
+          npm run package:chromium
+          npm run package:firefox
+      - name: Create release and push archives
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: 'dist/*.zip'
