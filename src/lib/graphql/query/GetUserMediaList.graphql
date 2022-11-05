@@ -1,0 +1,31 @@
+query GetUserMediaList($id: Int!, $type: MediaType!, $starred: [Int!]) {
+  Page {
+    mediaList(userId: $id, type: $type, mediaId_in: $starred, status_in: [ CURRENT, REPEATING ], sort: [UPDATED_TIME_DESC]) {
+      id
+      progress
+      status
+      media {
+        id
+        status
+        format
+        episodes
+        duration
+        chapters
+        volumes
+        title {
+          userPreferred
+        }
+        coverImage {
+          extraLarge
+          large
+          medium
+          color
+        }
+        nextAiringEpisode {
+          episode
+          timeUntilAiring
+        }
+      }
+    }
+  }
+}

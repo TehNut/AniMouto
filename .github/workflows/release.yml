@@ -1,0 +1,44 @@
+# TODO job for attaching release notes for the new version from a full changelog file
+# TODO job for publishing to Chrome Webstore: https://github.com/mnao305/chrome-extension-upload
+# TODO job for publishing to Mozilla Webstore: https://github.com/trmcnvn/firefox-addon
+
+name: Upload Release Artifacts
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Setup ENV
+        run: echo "TAG=${GITHUB_REF:10}" >> $GITHUB_ENV
+      - name: Assemble packages
+        run: |
+          npm ci
+          npm run package:chromium
+          npm run package:firefox
+      - name: Upload release assets
+        id: upload_release_assets
+        uses: AButler/upload-release-assets@v2.0
+        with:
+          release-tag: ${{ env.TAG }}
+          repo-token: ${{ github.token }}
+          files: 'dist/*.zip'

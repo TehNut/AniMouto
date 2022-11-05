@@ -1,0 +1,18 @@
+query GetRecentMedia($perPage: Int, $sort: [MediaSort], $type: MediaType, $formatIn: [MediaFormat]) {
+  Page(perPage: $perPage) {
+    media(sort: $sort, type: $type, format_in: $formatIn, isAdult: false) {
+      id
+      siteUrl
+      format
+      status(version: 2)
+      title {
+        userPreferred
+      }
+      coverImage {
+        color
+        extraLarge
+        large
+      }
+    }
+  }
+}

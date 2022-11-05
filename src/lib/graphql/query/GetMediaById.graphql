@@ -1,0 +1,159 @@
+query GetMediaById($id: Int!) {
+  Media(id: $id) {
+    id
+    coverImage {
+      color
+      extraLarge
+      large
+      medium
+    }
+    bannerImage
+    title {
+      userPreferred
+      native
+      romaji
+      english
+    }
+    synonyms
+    startDate {
+      day
+      month
+      year
+    }
+    endDate {
+      day
+      month
+      year
+    }
+    season
+    seasonYear
+    mediaListEntry {
+      id
+      status
+    }
+    siteUrl
+    description
+    isFavorite: isFavourite
+    format
+    status(version: 2)
+    type
+    averageScore
+    meanScore
+    popularity
+    isAdult
+    favorites: favourites
+    nextAiringEpisode {
+      episode
+      airingAt
+      timeUntilAiring
+    }
+    externalLinks {
+      type
+      site
+      url
+      icon
+      language
+      color
+    }
+    stats {
+      scoreDistribution {
+        amount
+        score
+      }
+      statusDistribution {
+        amount
+        status
+      }
+    }
+    rankings {
+      format
+      context
+      type
+      rank
+      year
+      season
+      allTime
+    }
+    studios {
+      edges {
+        isMain
+        node {
+          id
+          name
+          siteUrl
+        }
+      }
+    }
+    relations {
+      edges {
+        relationType
+        node {
+          ...SimpleMedia
+        }
+      }
+    }
+    staff(perPage: 12, sort: [RELEVANCE, ID]) {
+      edges {
+        id
+        role
+        node {
+          id
+          name {
+            userPreferred
+          }
+          image {
+            large
+          }
+          siteUrl
+        }
+      }
+      pageInfo {
+        hasNextPage
+      }
+    }
+    characters(perPage: 12, sort: [ROLE, RELEVANCE, ID]) {
+      edges {
+        id
+        role
+        node {
+          id
+          name {
+            userPreferred
+          }
+          image {
+            large
+          }
+          siteUrl
+        }
+      }
+      pageInfo {
+        hasNextPage
+      }
+    }
+    recommendations(perPage: 8, sort: [ RATING_DESC, ID ]) {
+      pageInfo {
+        hasNextPage
+      }
+      nodes {
+        id
+        rating
+        mediaRecommendation {
+          ...SimpleMedia
+        }
+      }
+    }
+  }
+}
+
+fragment SimpleMedia on Media {
+  id
+  title {
+    userPreferred
+  }
+  format
+  status
+  coverImage {
+    color
+    large
+  }
+}
