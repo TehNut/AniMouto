@@ -40,6 +40,7 @@ query GetMediaById($id: Int!) {
     averageScore
     meanScore
     popularity
+    isAdult
     favorites: favourites
     nextAiringEpisode {
       episode

@@ -1,6 +1,6 @@
 <script lang="ts">
   import Icon from "svelte-fa";
-  import { faLink, faInfoCircle, faComments, faTv, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+  import { faLink, faInfoCircle, faComments, faTv, faThumbsUp, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
   import type { OperationResultStore } from "@urql/svelte/dist/types/common";
   import type { GetMediaByIdQuery } from "@anilist/graphql";
   import Section from "$lib/components/Section.svelte";
@@ -41,6 +41,15 @@
     .filter(r => r.mediaRecommendation)
     .filter(r => r.rating > 1);
 </script>
+
+{#if $media.data.Media.isAdult}
+  <div class="flex items-center w-full px-3 py-2 bg-red text-white rounded-md">
+    <Icon icon={faCircleInfo} class="flex-none mr-2 text-2xl" />
+    <p class="flex-1 font-medium text-sm">
+      This entry contains content intended for adult viewers only.
+    </p>
+  </div>
+{/if}
 
 {#if $media.data.Media.description}
   <Section title="Description" maxContentHeight={250}>
