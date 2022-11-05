@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
       - name: Create release
         id: create_release
         uses: actions/create-release@v1
@@ -33,6 +33,7 @@ jobs:
       - name: Assemble packages
         run: |
           npm ci
+          npm run codegen:graphql
           npm run package:chromium
           npm run package:firefox
       - name: Upload release assets
