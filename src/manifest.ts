@@ -32,7 +32,7 @@ export const ManifestV2 = {
   },
   browser_action: browserAction,
   manifest_version: 2,
-  permissions: [...sharedManifest.permissions, "*://*/*"],
+  permissions: [...sharedManifest.permissions],
 };
 
 export const ManifestV3 = {
@@ -41,6 +41,5 @@ export const ManifestV3 = {
   background: {
     service_worker: "src/entries/background/serviceWorker.ts",
   },
-  host_permissions: ["*://*/*"],
   manifest_version: 3,
 };
