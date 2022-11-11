@@ -18,6 +18,7 @@ export enum Accent {
 }
 
 export type ListConfiguration = {
+  preventOverProgression: boolean;
   combineAnime: boolean;
   showStarred: boolean;
   starredMedia: number[];

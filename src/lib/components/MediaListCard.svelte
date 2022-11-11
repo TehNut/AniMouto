@@ -1,6 +1,7 @@
 <script lang="ts">
   import { getContextClient, mutationStore } from "@urql/svelte";
   import { UpdateMediaListProgressDocument, MediaListStatus, type GetUserMediaListQuery } from "@anilist/graphql";
+  import { extensionConfig } from "$lib/store";
   import { readableTime, parseSeconds } from "$lib/util";
   import MediaCard from "./MediaCard.svelte";
 
@@ -9,10 +10,14 @@
 
   const client = getContextClient();
 
+  $: willOverProgress = $extensionConfig.list.preventOverProgression && listEntry.progress + 1 > listEntry.media.nextAiringEpisode?.episode - 1;
   $: behindCount = listEntry.media.nextAiringEpisode ? listEntry.media.nextAiringEpisode?.episode - 1 - listEntry.progress : 0;
   $: maxProgress = listEntry.media.episodes || listEntry.media.chapters || "";
 
   async function incrementProgress() {
+    if (willOverProgress)
+      return;
+
     const maxProgress = listEntry.media.episodes || listEntry.media.chapters;
     const willFinish = listEntry.progress + 1 >= (maxProgress || Infinity);
     mutationStore({
@@ -38,7 +43,10 @@
   </svelte:fragment>
   <div class="absolute w-full bottom-0 px-2 bg-overlay/70 text-white backdrop-blur-sm font-semibold text-center text-xs opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-all">
     <button on:click|stopPropagation|preventDefault={incrementProgress} class="px-2 py-2 hover:font-bold hover:text-variable transition-all">
-      {listEntry.progress}{maxProgress ? "/" + maxProgress : ""} +
+      {listEntry.progress}{maxProgress ? "/" + maxProgress : ""}
+      {#if !willOverProgress}
+        +
+      {/if}
     </button>
   </div>
   {#if listEntry.media.nextAiringEpisode}

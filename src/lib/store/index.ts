@@ -9,6 +9,7 @@ export const queryCount = writable(90); // 90 is the per-minute rate limit that 
 
 const [ currentExtensionConfig_, previousExtensionConfig_ ] = withPrevious<ExtensionConfiguration>({
   list: {
+    preventOverProgression: false,
     combineAnime: false,
     showStarred: false,
     starredMedia: []

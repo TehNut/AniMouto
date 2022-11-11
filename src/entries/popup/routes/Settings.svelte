@@ -123,6 +123,17 @@
     </label>
   </Section>
   {#if $loggedIn}
+    <Section title="Media List">
+      <label class="flex items-center mt-4 text-lg cursor-pointer">
+        <input 
+          type="checkbox"
+          class="w-5 h-5"
+          bind:checked={$extensionConfig.list.preventOverProgression} 
+        >
+        <span class="ml-2">Prevent Over-progression</span>
+      </label>
+      <p>Prevents you from progressing beyond the latest episode on airing series.</p>
+    </Section>
     <Section title="Notifications">
       <label class="flex items-center mt-4 text-lg cursor-pointer">
         <input 
