@@ -33,19 +33,10 @@ export const client = createClient({
       },
       updates: {
         Mutation: {
-          SaveMediaListEntry: (result, args, cache, info) => {
-            cache.link(
-              { __typename: "Media", id: info.variables.media as number }, 
-              "mediaListEntry", 
-              // @ts-ignore
-              { __typename: "MediaList", id: result.SaveMediaListEntry.id as number }
-            );
-          },
           DeleteMediaListEntry: (result, args, cache, info) => {
             cache.invalidate({ __typename: "MediaList", id: args.id as number });
           },
           ToggleFavourite: (result, args, cache, info) => {
-            console.log("foo")
             const data = cache.readFragment(gql`fragment _ on Media { isFavourite }`, {
               id: args.mangaId || args.animeId,
             });
