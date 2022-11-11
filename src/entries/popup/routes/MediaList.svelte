@@ -35,13 +35,16 @@
   $: showStarred = $extensionConfig.list?.showStarred;
   $: combineAnime = $extensionConfig.list?.combineAnime || showStarred;
   $: airingAnime = !combineAnime ? ($animeList.data?.Page?.mediaList || [])
+    .filter(l => l != null)
     .filter(l => l.media.status === "RELEASING")
     .filter(l => l.status !== "COMPLETED")
     .sort((a, b) => a.media.nextAiringEpisode?.timeUntilAiring - b.media.nextAiringEpisode?.timeUntilAiring) as MediaList[] : [];
   $: watchingAnime = combineAnime ? ($animeList.data?.Page.mediaList || []) as MediaList[] : ($animeList.data?.Page?.mediaList || [])
+    .filter(l => l != null)
     .filter(l => l.media.status !== "RELEASING")
     .filter(l => l.status !== "COMPLETED") as MediaList[];
   $: reading = ($mangaList.data?.Page.mediaList || [])
+    .filter(l => l != null)
     .filter(l => l.status !== "COMPLETED");
   $: airingBehind = getTotalBehind(airingAnime || []);
   $: watchingBehind = getTotalBehind(watchingAnime || []);
