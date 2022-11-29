@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getContextClient, mutationStore } from "@urql/svelte";
+  import ripple from "svelte-ripple";
   import { UpdateMediaListProgressDocument, MediaListStatus, type GetUserMediaListQuery } from "@anilist/graphql";
   import { extensionConfig } from "$lib/store";
   import { readableTime, parseSeconds } from "$lib/util";
@@ -41,13 +42,15 @@
     {/if}
     <span class="justify-self-end">Progress: {listEntry.progress}{maxProgress ? "/" + maxProgress : ""}</span>
   </svelte:fragment>
-  <div class="absolute w-full bottom-0 px-2 bg-overlay/70 text-white backdrop-blur-sm font-semibold text-center text-xs opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-all">
-    <button on:click|stopPropagation|preventDefault={incrementProgress} class="px-2 py-2 hover:font-bold hover:text-variable transition-all">
-      {listEntry.progress}{maxProgress ? "/" + maxProgress : ""}
-      {#if !willOverProgress}
-        +
-      {/if}
-    </button>
+  <div class="absolute w-full bottom-0 bg-overlay/70 text-white backdrop-blur-sm font-semibold text-center text-xs opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-all">
+    <div class="w-full h-full" use:ripple>
+      <button on:click|stopPropagation|preventDefault={incrementProgress} class="px-2 py-2 hover:font-bold hover:text-variable transition-all" >
+        {listEntry.progress}{maxProgress ? "/" + maxProgress : ""}
+        {#if !willOverProgress}
+          +
+        {/if}
+      </button>
+    </div>
   </div>
   {#if listEntry.media.nextAiringEpisode}
     <div class="absolute w-full bottom-0 p-2 bg-overlay/70 text-white backdrop-blur-sm font-medium text-center text-xs group-hover:opacity-0 group-focus-within:opacity-0 pointer-events-none transition-all">

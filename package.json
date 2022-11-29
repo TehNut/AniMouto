@@ -36,6 +36,7 @@
     "svelte-lazy": "1.1.0",
     "svelte-navigator": "3.2.2",
     "svelte-previous": "2.1.1",
+    "svelte-ripple": "0.1.1",
     "timeago.js": "4.0.2",
     "webext-storage-cache": "5.1.0",
     "webextension-polyfill": "0.10.0"
