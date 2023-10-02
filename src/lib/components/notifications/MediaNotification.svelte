@@ -24,7 +24,7 @@
       {notification.contexts[1]}
       <span class="font-medium hover:text-variable transition-colors">{notification.media.title.userPreferred}</span>
       {notification.contexts[2]}
-    {:else if notification.type === NotificationType.RELATED_MEDIA_ADDITION}
+    {:else}
       <span class="font-medium hover:text-variable transition-colors">{notification.media.title.userPreferred}</span>
       {notification.context}
     {/if}
