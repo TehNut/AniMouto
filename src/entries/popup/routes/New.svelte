@@ -43,7 +43,7 @@
     <Section raise={false}>
       <a slot="title" class="hover:text-accent transition-colors" href="https://anilist.co/search/anime/new" target="_blank">New Anime</a>
       <div class="grid gap-x-2 gap-y-4 {$extensionConfig.theme.wide ? "grid-cols-6" : "grid-cols-4"}">
-        {#each $recentAnime.data.Page.media as media (media.id)}
+        {#each $recentAnime.data.Page.media || [] as media (media.id)}
           <MediaCard {media} />
         {/each}
       </div>
@@ -54,7 +54,7 @@
     <Section raise={false}>
       <a slot="title" class="hover:text-accent transition-colors" href="https://anilist.co/search/manga?format=MANGA&format=ONE_SHOT&sort=ID_DESC" target="_blank">New Manga</a>
       <div class="grid gap-x-2 gap-y-4 {$extensionConfig.theme.wide ? "grid-cols-6" : "grid-cols-4"}">
-        {#each $recentManga.data.Page.media as media (media.id)}
+        {#each $recentManga.data.Page.media || [] as media (media.id)}
           <MediaCard {media} />
         {/each}
       </div>
@@ -65,7 +65,7 @@
     <Section raise={false}>
       <a slot="title" class="hover:text-accent transition-colors" href="https://anilist.co/search/manga?format=NOVEL&sort=ID_DESC" target="_blank">New Light Novels</a>
       <div class="grid gap-x-2 gap-y-4 {$extensionConfig.theme.wide ? "grid-cols-6" : "grid-cols-4"}">
-        {#each $recentNovels.data.Page.media as media (media.id)}
+        {#each $recentNovels.data.Page.media || [] as media (media.id)}
           <MediaCard {media} />
         {/each}
       </div>
