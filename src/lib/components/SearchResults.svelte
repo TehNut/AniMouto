@@ -1,4 +1,4 @@
-<script type="ts">
+<script lang="ts">
   import { getContextClient, mutationStore } from "@urql/svelte";
   import { Link } from "svelte-navigator";
   import Icon from "svelte-fa";
