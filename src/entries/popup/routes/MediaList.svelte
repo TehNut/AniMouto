@@ -50,7 +50,7 @@
   $: watchingBehind = getTotalBehind(watchingAnime || []);
 
   function refreshLists() {
-    queryStore({
+    animeList = queryStore({
       client,
       query: GetUserMediaListDocument,
       variables: {
@@ -59,7 +59,7 @@
       },
       requestPolicy: "network-only"
     });
-    queryStore({
+    mangaList = queryStore({
       client,
       query: GetUserMediaListDocument,
       variables: {
@@ -99,7 +99,7 @@
   {/if}
   <Tooltip placement="bottom" content="Refresh list">
     <button class="hover:text-accent transition-colors" on:click={() => refreshLists() }>
-      <Icon icon={faRedo} spin={$animeList.fetching || $mangaList.fetching} />
+      <Icon icon={faRedo} spin={$animeList.stale || $mangaList.stale} />
     </button>
   </Tooltip>
 </div>
