@@ -6,6 +6,7 @@
     "module": "esnext",
     "resolveJsonModule": true,
     "baseUrl": ".",
+    "strict": false,
     "paths": {
       "$lib/*": ["src/lib/*"],
       "$assets/*": ["src/assets/*"],

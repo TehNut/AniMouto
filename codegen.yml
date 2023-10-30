@@ -9,6 +9,8 @@ generates:
       - typescript
       - typescript-operations
       - typed-document-node
+    config:
+      useTypeImports: true
   ./src/lib/graphql/introspection.json:
     plugins:
       - urql-introspection
